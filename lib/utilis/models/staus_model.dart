@@ -1,0 +1,4 @@
+enum  StatusModel{
+  success,
+  error,
+}
