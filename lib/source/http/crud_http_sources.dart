@@ -10,19 +10,27 @@ import '../../utilis/models/staus_model.dart';
 import '../../utilis/result/result.dart';
 
 
-class AppCategoryHttpSources extends ICommerceResultBaseCRUDSource<BaseDataModel>   {
+class DataSourceCRUDHttpSources extends IResultBaseCRUDSource<BaseDataModel>   {
   BaseDataModel? data;
   MultipartFile? file;
   String imagfileld="image";
+  String baseUrl = "";
+  String url = "";
   // factory
-  factory AppCategoryHttpSources.inputs(
-      BaseDataModel dataModyle, MultipartFile? file) {
-    return AppCategoryHttpSources()
+  factory DataSourceCRUDHttpSources.inputs( String   baseUrl , String url    ,
+      {  required BaseDataModel dataModyle, MultipartFile? file}) {
+
+
+    return DataSourceCRUDHttpSources(baseUrl , url)
       ..data = dataModyle
       ..file = file
       .. imagfileld = "image";
   }
-  AppCategoryHttpSources();
+  DataSourceCRUDHttpSources(  String  baseUrl,String  url )
+  {
+    this.baseUrl = baseUrl;
+    this.url = url;
+  }
 
   @override
   Future<Result<RemoteBaseModel, RemoteBaseModel<String>  >>
@@ -93,7 +101,7 @@ class AppCategoryHttpSources extends ICommerceResultBaseCRUDSource<BaseDataModel
       var resultdata = result.data!.data["data"]  as List<dynamic> ;
       List<BaseDataModel> listData = [];
       resultdata.map((e) => {
-        listData.add(BaseDataModel.fromJson(e))
+        listData.add(BaseDataModel.fromJson(e , e["id"]))
       }).toList();
       return  Result<RemoteBaseModel, RemoteBaseModel<List<BaseDataModel>>>    (data: RemoteBaseModel(data: listData));
   }
@@ -114,7 +122,7 @@ class AppCategoryHttpSources extends ICommerceResultBaseCRUDSource<BaseDataModel
 
   @override
   Future<Result<RemoteBaseModel, RemoteBaseModel>>
-  updateDataItem(String id) {
+  editeDataItem(String id) {
     var result = JoDijaHttpClient(userToken: true).sendRequest(
         method: HttpMethod.PUT,
         url: "ApiUrls.category  id",

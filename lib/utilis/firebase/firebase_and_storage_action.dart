@@ -59,14 +59,14 @@ class FirestoreAndStorageActions extends FireStoreAction with StorageActions {
   }
 
   Future<String> addDataCloudFirestorWithUpload(
-      {required String collection,
+      {required String path,
       String? id,
       required Map<String, dynamic> mymap,
       Object? file,
       String dir = "",
       String? filedowloadurifieldname = "imguri"}) async {
     String iddoc =
-        await addDataCloudFirestore(id: id, path: collection, mymap: mymap);
+        await addDataCloudFirestore(id: id, path: path, mymap: mymap);
 
     if (file != null) {
       await uploadToStoreage(file);
@@ -78,7 +78,7 @@ class FirestoreAndStorageActions extends FireStoreAction with StorageActions {
         docId = id;
       }
       editDataCloudFirestore(
-          path: collection,
+          path: path,
           id: docId,
           mymap: {filedowloadurifieldname!: download});
     }
@@ -171,16 +171,18 @@ class FirestoreAndStorageActions extends FireStoreAction with StorageActions {
   }
 
   Future<void> editeDataCloudFirestorWithUploadAndReplacement(
-      {required String collection,
+      {required String path,
       String dir = "",
       required String id,
       required Map<String, dynamic> mymap,
       Object? file,
-      String? filedowloadurifieldname = "imguri",
+      String? imageField = "imgur",
       String? oldurl}) {
+
+   String  imgfield  = imageField!;
     return editDataCloudFirestore(
       id: id,
-      path: collection,
+      path: path,
       mymap: mymap,
     ).then((value) {
       if (file != null) {
@@ -190,9 +192,9 @@ class FirestoreAndStorageActions extends FireStoreAction with StorageActions {
         uploadToStoreage(file, dir: dir).then((value) {
           downloadURLStoreage().then((value) {
             editDataCloudFirestore(
-                path: collection,
+                path: path,
                 id: id,
-                mymap: {filedowloadurifieldname!: value});
+                mymap: {imgfield!: value});
           });
         });
       }

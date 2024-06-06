@@ -1,7 +1,7 @@
 import '../../../utilis/models/remote_base_model.dart';
 import '../../../utilis/result/result.dart';
 
-abstract class IEductionalHttpSource{
+abstract class IHttpSource{
   Future<Result<RemoteBaseModel , Map<String ,dynamic>>>  addSortDepartmant(String depId , int sort)  ;
   Future<Result<RemoteBaseModel , Map<String ,dynamic>>>  createDepartmant(String depName  )  ;
   Future<Result<RemoteBaseModel , Map<String ,dynamic>>>  addDepartmantMony(String depId , int mony)  ;

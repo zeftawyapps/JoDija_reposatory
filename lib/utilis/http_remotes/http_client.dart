@@ -33,9 +33,9 @@ class JoDijaHttpClient {
   JoDijaHttpClient({this.baseUrl   , userToken = false}) {
     baseUrl = HttpUrlsEnveiroment().baseUrl!;
     BaseOptions _options = BaseOptions(
-      connectTimeout: Duration(milliseconds: 30000),
-      receiveTimeout: Duration(milliseconds: 30000),
-      sendTimeout: Duration(milliseconds: 30000),
+      connectTimeout: Duration(milliseconds: 60000),
+      receiveTimeout: Duration(milliseconds: 60000),
+      sendTimeout: Duration(milliseconds: 60000),
       responseType: ResponseType.json,
       baseUrl: baseUrl!,
     );
@@ -47,15 +47,9 @@ class JoDijaHttpClient {
           headderAuth.usertoken;
       _client.options.headers["Authorization"] = authorizationHeader;
       _client.options.headers["Content-Type"] = "application/json";
-
-      _client.options.headers["Accept"] = "*/*";
-      _client.options.headers["Accept-Encoding"] = "gzip, deflate, br";
-      _client.options.headers["Connection"] = "keep-alive";
-      _client.options.headers["Content-Length"] = "0";
-      _client.options.headers["Access-Control-Allow-Origin"] = "*";
-
-      // _client.options.headers["Content-Type"] = "application/json";
     }
+
+
   }
 
   Future< T  >  sendRequestValue<T>({
@@ -213,9 +207,6 @@ class JoDijaHttpClient {
       return Result. error(RemoteBaseModel(message: e.toString()));
     }
   }
-
-
-
   Future<Result<RemoteBaseModel,  RemoteBaseModel >> sendRequest ({
     required HttpMethod method,
     required String url,
@@ -399,9 +390,6 @@ class JoDijaHttpClient {
       throw e ;
     }
   }
-
-
-
   Future<Result<RemoteBaseModel, T>> upload<T>({
     required String url,
     required String fileKey,
@@ -465,10 +453,6 @@ class JoDijaHttpClient {
       return  Result.error( RemoteBaseModel(message: e.toString() ,));
     }
   }
-
-
-
-
   Future<Result<RemoteBaseModel, Map<String ,dynamic> >> uploadMapResultWithMap<  T >({
     required String url,
     required String fileKey,

@@ -1,11 +1,15 @@
 class BaseDataModel{
+
+  String? id ;
   // create to json method and factory forJson
   Map<String, dynamic> toJson(){return {} ; }
 
-  BaseDataModel( );
-  factory BaseDataModel.fromJson(Map<String, dynamic> json  ) {
+  BaseDataModel({String ?id } ){
+    this.id = id;
+  }
+  factory BaseDataModel.fromJson(Map<String, dynamic> json , String? id ) {
 
-    return BaseDataModel( )
+    return BaseDataModel(id: id )
       .. map = json;
 
   }

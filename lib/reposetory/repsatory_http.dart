@@ -5,8 +5,8 @@ import '../utilis/models/staus_model.dart';
 import '../utilis/result/result.dart';
 
 class CRUDrepo<T extends BaseDataModel> {
-  ICommerceResultBaseCRUDSource? _inputSource;
-  CRUDrepo({ICommerceResultBaseCRUDSource<T>? inputSource}) {
+  IResultBaseCRUDSource? _inputSource;
+  CRUDrepo({IResultBaseCRUDSource<T>? inputSource}) {
     _inputSource = inputSource;
   }
   Future<Result<RemoteBaseModel, RemoteBaseModel>> addData() async {
@@ -30,7 +30,7 @@ class CRUDrepo<T extends BaseDataModel> {
     }
   }
 
-  Future<Result<RemoteBaseModel, RemoteBaseModel>> getAllData() async {
+  Future<Result<RemoteBaseModel, RemoteBaseModel>> getListData() async {
     var result = await _inputSource!.getDataList();
 
     return Result<RemoteBaseModel, RemoteBaseModel>(
@@ -51,7 +51,7 @@ class CRUDrepo<T extends BaseDataModel> {
 
   Future<Result<RemoteBaseModel, RemoteBaseModel>> updateData(String id) async {
     try {
-      var result = await _inputSource!.updateDataItem(
+      var result = await _inputSource!.editeDataItem(
         id,
       );
 
