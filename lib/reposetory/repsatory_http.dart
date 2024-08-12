@@ -4,9 +4,9 @@ import '../utilis/models/remote_base_model.dart';
 import '../utilis/models/staus_model.dart';
 import '../utilis/result/result.dart';
 
-class CRUDrepo<T extends BaseDataModel> {
-  IResultBaseCRUDSource? _inputSource;
-  CRUDrepo({IResultBaseCRUDSource<T>? inputSource}) {
+class DataSourceRepo<T extends BaseDataModel> {
+  IResultBaseCRUDSource<T>? _inputSource;
+  DataSourceRepo({ required  IResultBaseCRUDSource<T>    inputSource}) {
     _inputSource = inputSource;
   }
   Future<Result<RemoteBaseModel, RemoteBaseModel>> addData() async {
@@ -30,19 +30,18 @@ class CRUDrepo<T extends BaseDataModel> {
     }
   }
 
-  Future<Result<RemoteBaseModel, RemoteBaseModel>> getListData() async {
-    var result = await _inputSource!.getDataList();
+  Future<Result<RemoteBaseModel, RemoteBaseModel<List<T>>>> getListData() async {
+    var result = await _inputSource!.getDataList( );
 
-    return Result<RemoteBaseModel, RemoteBaseModel>(
-        data: result.data, error: result.error);
+    return Result<RemoteBaseModel, RemoteBaseModel<List<T>>>(
+        data:  result.data  , error: result.error);
   }
 
-  Future<Result<RemoteBaseModel, Map<String, dynamic>>> getSingleData(
+  Future<Result<RemoteBaseModel, RemoteBaseModel<BaseDataModel>>> getSingleData(
       String id) async {
     try {
-      var result = await _inputSource!.getSingleData(id) as BaseDataModel;
-
-      return Result(data: result.toJson());
+      var result = await _inputSource!.getSingleData(id)  ;
+      return Result(data: result.data);
     } catch (e) {
       return Result.error(
           RemoteBaseModel(message: e.toString(), status: StatusModel.error));

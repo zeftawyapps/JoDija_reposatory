@@ -17,18 +17,18 @@ class DataSourceCRUDHttpSources extends IResultBaseCRUDSource<BaseDataModel>   {
   String baseUrl = "";
   String url = "";
   // factory
-  factory DataSourceCRUDHttpSources.inputs( String   baseUrl , String url    ,
-      {  required BaseDataModel dataModyle, MultipartFile? file}) {
+  factory DataSourceCRUDHttpSources.inputs( {String?   baseUrl="" , required   String url    ,
+       required BaseDataModel dataModyle, MultipartFile? file}) {
 
 
-    return DataSourceCRUDHttpSources(baseUrl , url)
+    return DataSourceCRUDHttpSources(baseUrl: baseUrl, url: url)
       ..data = dataModyle
       ..file = file
       .. imagfileld = "image";
   }
-  DataSourceCRUDHttpSources(  String  baseUrl,String  url )
+  DataSourceCRUDHttpSources({String? baseUrl="", required  String url})
   {
-    this.baseUrl = baseUrl;
+    this.baseUrl = baseUrl?? ApiUrls.BASE_URL;
     this.url = url;
   }
 
@@ -36,11 +36,12 @@ class DataSourceCRUDHttpSources extends IResultBaseCRUDSource<BaseDataModel>   {
   Future<Result<RemoteBaseModel, RemoteBaseModel<String>  >>
   addDataItem() async {
     if (file == null) {
+      var body = data!.toJson();
       var result = await JoDijaHttpClient(userToken: true)
           .sendRequest(
           method: HttpMethod.POST,
-          url: "ApiUrls.category",
-          body: data!.toJson(),
+          url: ApiUrls.BASE_URL +"/" + url,
+          body: body,
           cancelToken: CancelToken());
  if (result.data!.status == StatusModel.success) {
    var resultdata = result.data!.data! ["data"] as String;
@@ -96,7 +97,7 @@ class DataSourceCRUDHttpSources extends IResultBaseCRUDSource<BaseDataModel>   {
   getDataList() async {
       var result = await JoDijaHttpClient(userToken: true).sendRequest(
           method: HttpMethod.GET,
-          url: "ApiUrls .category",
+          url: ApiUrls.BASE_URL + "/" + url ,
           cancelToken: CancelToken());
       var resultdata = result.data!.data["data"]  as List<dynamic> ;
       List<BaseDataModel> listData = [];

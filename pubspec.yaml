@@ -24,9 +24,7 @@ dependencies:
   http_parser: ^4.0.0
   dartz: ^0.10.0-nullsafety.2
   pretty_dio_logger: ^1.0.0
-  google_sign_in: ^5.0.4
-
-
+  google_sign_in: ^6.2.1
 
 dev_dependencies:
   flutter_test:

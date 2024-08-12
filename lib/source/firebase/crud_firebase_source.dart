@@ -10,7 +10,7 @@ import '../../utilis/firebase/firebase.dart';
 import '../../utilis/firebase/firebase_and_storage_action.dart';
 import '../../utilis/models/base_data_model.dart';
 
-class DataSourceCRUDFirebaseSource
+class DataSourceFirebaseSource<T extends  BaseDataModel >
     implements IResultBaseCRUDSource<BaseDataModel> {
   late FirestoreAndStorageActions _fireStoreAction;
   late FirebaseLoadingData _firebaseLoadingData;
@@ -20,37 +20,49 @@ class DataSourceCRUDFirebaseSource
   String? deleteUrl = "";
   String? imageField = "image";
   Query Function(Query query)? _query;
+ T Function(Map<String, dynamic>? jsondata, String docId)? dataBuilder
+
+  ;
 
 
-  DataSourceCRUDFirebaseSource(String path , { Query Function(Query query)? query}) {
+      DataSourceFirebaseSource(String path , { Query Function(Query query)? query}) {
     _fireStoreAction = FirestoreAndStorageActions();
     _firebaseLoadingData = FirebaseLoadingData();
     _path = path;
     _query = query;
   }
-  factory DataSourceCRUDFirebaseSource.insert(
+
+  factory DataSourceFirebaseSource.get(
+      {required String path, Query Function(Query query)? query
+      , required T Function(Map<String, dynamic>? jsondata, String docId) builder
+      }) {
+    return DataSourceFirebaseSource(path , query: query)
+      ..dataBuilder = builder ;
+  }
+
+  factory DataSourceFirebaseSource.insert(
       {required BaseDataModel dataModel, required String path, Object? file
       , String? imageField = "image"
       }) {
-    return DataSourceCRUDFirebaseSource(path).._data = dataModel
+    return DataSourceFirebaseSource(path).._data = dataModel
     .._file = file
     ..imageField = imageField!
     ;}
 
-  factory DataSourceCRUDFirebaseSource.edit(
+  factory DataSourceFirebaseSource.edit(
       {required BaseDataModel dataModel, required String path, Object? file , String? oldImg=""
       , String? imageField = "image"
       }) {
-    return DataSourceCRUDFirebaseSource(path).._data = dataModel
+    return DataSourceFirebaseSource(path).._data = dataModel
       .._file = file
       ..imageField = imageField!
     ..deleteUrl = oldImg!
     ;}
 
 
-  factory DataSourceCRUDFirebaseSource.delete(
+  factory DataSourceFirebaseSource.delete(
       {  required String path,  String? oldImg}) {
-    return DataSourceCRUDFirebaseSource(path)..deleteUrl = oldImg??"";}
+    return DataSourceFirebaseSource(path)..deleteUrl = oldImg??"";}
   @override
   Future<Result<RemoteBaseModel, RemoteBaseModel>> addDataItem() async {
     try {
@@ -115,25 +127,29 @@ class DataSourceCRUDFirebaseSource
   }
 
   @override
-  Future<Result<RemoteBaseModel, RemoteBaseModel<List<BaseDataModel>>>>
+  Future<Result<RemoteBaseModel, RemoteBaseModel<List<T>>>>
       getDataList() async {
     try {
-      var product = await _firebaseLoadingData.loadDataWithQuery(
+this.dataBuilder ??= (data, documentId) => BaseDataModel.fromJson(data!, documentId) as T;
+      var product = await _firebaseLoadingData.loadDataWithQuery<T>(
           queryBuilder: _query ,
-          path: _path, builder: (data, id) => BaseDataModel.fromJson(data! , id ));
-      return Result.data(RemoteBaseModel(data: product));
+          path: _path, builder:this.dataBuilder!);
+      return Result.data(RemoteBaseModel(data: product as List<T>));
     } on Exception catch (e) {
       return Result.error(RemoteBaseModel(message: e.toString()));
     }
   }
 
   @override
-  Future<Result<RemoteBaseModel, RemoteBaseModel<BaseDataModel>>> getSingleData(
+  Future<Result<RemoteBaseModel, RemoteBaseModel<T>>> getSingleData(
       String id) async {
     try {
+   var buid =    this.dataBuilder ??  (data, documentId) => BaseDataModel.fromJson(data!, documentId) as T;
+
+
       var data = await _firebaseLoadingData.loadSingleDocData(_path, id);
 
-      return Result.data(RemoteBaseModel(data: BaseDataModel.fromJson(data!, id )));
+      return Result.data(RemoteBaseModel(data:  buid(data, id) ));
     } on Exception catch (e) {
       return Result.error(RemoteBaseModel(message: e.toString()));
     }

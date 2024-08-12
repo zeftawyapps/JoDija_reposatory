@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../utilis/models/base_data_model.dart';
 
 
-abstract class IEductionalBaseSource<T  extends BaseDataModel> {
+abstract class IBaseSource<T  extends BaseDataModel> {
   T? data;
   Future   addDataItem(  );
   Future   updateDataItem(   String id  );
