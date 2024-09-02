@@ -4,12 +4,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'https/http_urls.dart';
-abstract class DataSourceConfigration {
 
+abstract class DataSourceConfigration {
   Future FirebaseInit(String path) async {
     try {
-
-
       WidgetsFlutterBinding.ensureInitialized();
 
       var data = await JsonAssetReader(path: path).data;
@@ -38,8 +36,7 @@ abstract class DataSourceConfigration {
     }
   }
 
-
-  Future backenRoutsdInit(String path ) async {
+  Future backenRoutsdInit(String path) async {
     WidgetsFlutterBinding.ensureInitialized();
 
     var data = await JsonAssetReader(path: "").data;
@@ -54,17 +51,13 @@ abstract class DataSourceConfigration {
     HttpUrlsEnveiroment(baseUrl: BaseUrl);
   }
 
-
   AppType appType = AppType.App;
 
   BackendState backendState = BackendState.remote;
 
-
   EnvType envType = EnvType.dev;
-
-
-
 }
+
 enum AppType { DashBord, App }
 
 enum EnvType { localDev, dev, prod }
