@@ -1,6 +1,6 @@
 // This is a generated file; do not edit or check into version control.
 FLUTTER_ROOT=G:\mobile1\flutter
-FLUTTER_APPLICATION_PATH=F:\z_apps\products\pruduct_under_work\jodija_data_souce_module
+FLUTTER_APPLICATION_PATH=F:\z_apps\tools\jodija-flutter\jodija_data_souce_module
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_TARGET=lib\main.dart
 FLUTTER_BUILD_DIR=build
