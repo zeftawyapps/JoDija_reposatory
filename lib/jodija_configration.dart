@@ -5,7 +5,7 @@ abstract class DataSourceConfigration {
     EnvType envType = EnvType.dev;
     BackendState backendState = BackendState.remote;
 
-    Future FirebaseInit() ;
+    Future FirebaseInit(String path) ;
   Future backenRoutsdInit() ;
 
 
