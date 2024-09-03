@@ -5,8 +5,8 @@ import '../utilis/models/staus_model.dart';
 import '../utilis/result/result.dart';
 
 class DataSourceRepo<T extends BaseDataModel> {
-  IResultBaseCRUDSource<T>? _inputSource;
-  DataSourceRepo({ required  IResultBaseCRUDSource<T>    inputSource}) {
+  IBaseDataActionsSource<T>? _inputSource;
+  DataSourceRepo({ required  IBaseDataActionsSource<T>    inputSource}) {
     _inputSource = inputSource;
   }
   Future<Result<RemoteBaseModel, RemoteBaseModel>> addData() async {

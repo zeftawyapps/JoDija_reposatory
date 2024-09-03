@@ -10,23 +10,23 @@ import '../../utilis/models/staus_model.dart';
 import '../../utilis/result/result.dart';
 
 
-class DataSourceCRUDHttpSources extends IResultBaseCRUDSource<BaseDataModel>   {
+class DataSourceDataActionsHttpSources extends IBaseDataActionsSource<BaseDataModel>   {
   BaseDataModel? data;
   MultipartFile? file;
   String imagfileld="image";
   String baseUrl = "";
   String url = "";
   // factory
-  factory DataSourceCRUDHttpSources.inputs( {String?   baseUrl="" , required   String url    ,
+  factory DataSourceDataActionsHttpSources.inputs( {String?   baseUrl="" , required   String url    ,
        required BaseDataModel dataModyle, MultipartFile? file}) {
 
 
-    return DataSourceCRUDHttpSources(baseUrl: baseUrl, url: url)
+    return DataSourceDataActionsHttpSources(baseUrl: baseUrl, url: url)
       ..data = dataModyle
       ..file = file
       .. imagfileld = "image";
   }
-  DataSourceCRUDHttpSources({String? baseUrl="", required  String url})
+  DataSourceDataActionsHttpSources({String? baseUrl="", required  String url})
   {
     this.baseUrl = baseUrl?? ApiUrls.BASE_URL;
     this.url = url;

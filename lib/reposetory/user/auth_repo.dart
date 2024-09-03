@@ -1,4 +1,4 @@
-import 'dart:io';
+
 
 import 'package:JoDija_DataSource/https/http_urls.dart';
 import 'package:JoDija_DataSource/utilis/result/result.dart';
@@ -15,10 +15,10 @@ import '../../utilis/firebase/fireBase_exception_consts.dart';
 import '../../utilis/models/remote_base_model.dart';
 import '../../utilis/models/staus_model.dart';
 
-class AuthRepo {
+class BaseAuthRepo {
   IBaseAccountActions? _accountActions;
   late IBaseAuthentication _account;
-  AuthRepo(IBaseAuthentication account) {
+  BaseAuthRepo(IBaseAuthentication account) {
     _account = account;
   }
 

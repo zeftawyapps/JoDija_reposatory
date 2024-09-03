@@ -4,7 +4,7 @@ import '../../utilis/models/base_data_model.dart';
 import '../../utilis/models/remote_base_model.dart';
 import '../../utilis/result/result.dart';
 
-abstract class IResultBaseCRUDSource<T extends BaseDataModel>   {
+abstract class IBaseDataActionsSource<T extends BaseDataModel>   {
 
   Future<Result<RemoteBaseModel, RemoteBaseModel>> addDataItem();
   Future <Result<RemoteBaseModel, RemoteBaseModel>> editeDataItem(String id);

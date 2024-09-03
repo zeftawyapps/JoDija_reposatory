@@ -10,7 +10,7 @@ import '../../utilis/firebase/firebase_and_storage_action.dart';
 import '../../utilis/firebase/firestore_inputs.dart';
 
 
-class UsersSources  {
+class BaseUsersActionsSources  {
   FirestoreAndStorageActions? _firestoreAndStorageActions;
   FireStoreAction? _fireStoreAction;
   FirebaseLoadingData? _firebaseLoadingData;

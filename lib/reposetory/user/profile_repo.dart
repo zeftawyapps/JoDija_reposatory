@@ -10,11 +10,11 @@ import '../../utilis/result/result.dart';
 import '../../utilis/shardeprefrance/shard_check.dart';
 
 
-class ProfilRebo{
+class BaseProfilRebo{
 
   SharedPrefranceChecking ? _sharedRefrance ;
  late IBaseAccountActions _accountActions;
-  ProfilRebo(IBaseAccountActions accountActions){
+  BaseProfilRebo(IBaseAccountActions accountActions){
     _sharedRefrance = SharedPrefranceChecking();
      _accountActions = accountActions;
   }

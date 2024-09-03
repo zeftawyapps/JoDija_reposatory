@@ -5,13 +5,13 @@ import '../../utilis/models/remote_base_model.dart';
 import '../../utilis/result/result.dart';
 
 
-class UsersRepo {
+class BaseUsersRepo {
   final UserModule _usersApi;
 
-  UsersRepo(this._usersApi);
+  BaseUsersRepo(this._usersApi);
 
   Future<  Result< RemoteBaseModel, List<UserModule>>> getUsersUserFirebase() async {
-    UsersSources  usersSources = UsersSources();
+    BaseUsersActionsSources  usersSources = BaseUsersActionsSources();
     var data = await usersSources.getUsers();
     return  Result(data: data , error: null);
   }

@@ -11,7 +11,7 @@ import '../../utilis/firebase/firebase_and_storage_action.dart';
 import '../../utilis/models/base_data_model.dart';
 
 class DataSourceFirebaseSource<T extends  BaseDataModel >
-    implements IResultBaseCRUDSource<BaseDataModel> {
+    implements IBaseDataActionsSource<BaseDataModel> {
   late FirestoreAndStorageActions _fireStoreAction;
   late FirebaseLoadingData _firebaseLoadingData;
   BaseDataModel? _data;
