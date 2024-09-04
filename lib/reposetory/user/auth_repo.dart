@@ -75,7 +75,7 @@ class BaseAuthRepo {
       UsersBaseModel usersModel =
           UsersBaseModel.formJson(await _accountActions!.getData(user.uid!));
       HttpHeader().setAuthHeader( user.token  ?? "");
-      return Result.data(user);
+      return Result.data(usersModel);
     } on FirebaseException catch (e) {
       return Result.error(
           RemoteBaseModel(message: handilExcepstons(e.code), status: StatusModel.error));
