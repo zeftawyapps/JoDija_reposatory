@@ -16,14 +16,14 @@ class ResultDataHelper<T extends BaseDataModel  > {
   }
 
     RemoteBaseModel<List<T>> getResultOfListData( RemoteBaseModel  result,
-      T? Function(Map<String, dynamic>? data, ) builder
+      T? Function(BaseDataModel? data, ) builder
       ) {
     if (result.error == null) {
       List<BaseDataModel> listData = result.data  as List<BaseDataModel>;
 
       List<T> list = [];
       for (var item in listData) {
-        T data = builder(item.map) as T;
+        T data = builder(item) as T;
         list.add(data ) ;
       }
       return RemoteBaseModel(data: list, status: StatusModel.success);
