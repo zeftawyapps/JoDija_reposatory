@@ -11,12 +11,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^2.15.0
-  cloud_firestore: ^4.17.2
+  firebase_core: ^3.4.1
+  cloud_firestore: ^5.4.1
   firebase_auth:
   firebase_storage:
-  firebase_auth_web: ^5.7.0
-  firebase_core_web: ^2.7.0
+  firebase_auth_web: ^5.13.0
+  firebase_core_web: ^2.18.0
   flutter_bloc: ^8.1.1
   freezed_annotation: ^1.1.0
   shared_preferences: ^2.0.18
