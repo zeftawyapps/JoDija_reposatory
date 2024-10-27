@@ -142,6 +142,8 @@ class BaseAuthRepo {
           UsersBaseModel(uid: user.uid, email: user.email, name: name);
       usersModel.uid = busersModel.uid;
       usersModel.email = busersModel.email;
+      usersModel.name = busersModel.name;
+      usersModel.token = user.token;
       _accountActions = UserProfileFirebaseActions();
 
       await _accountActions!
