@@ -1,9 +1,10 @@
-import 'package:JoDija_DataSource/utilis/shardeprefrance/shardPrfrance.dart';
+ import 'package:JoDija_DataSource/utilis/shardeprefrance/shardPrfrance.dart';
 import 'package:JoDija_DataSource/utilis/shardeprefrance/user_data_stored.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../model/user/base_model/inhertid_models/shardUserModel.dart';
+
 
 
 class SharedPrefranceChecking {

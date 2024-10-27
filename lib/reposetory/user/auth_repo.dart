@@ -36,7 +36,7 @@ class BaseAuthRepo {
   }
 
   Future<Result< RemoteBaseModel, UsersBaseModel>> createAccount(
-      {UsersBaseModel? usersModel}) async {
+      ) async {
     try {
       if (_account is IHttpAuthentication) {
         return _createAccountHttp();

@@ -8,6 +8,8 @@ class UserModule extends UsersBaseModel {
   String? address;
   String? phone;
   int? type = 0;
+
+
   UserModule(
       {this.address =  "",
 
@@ -15,8 +17,9 @@ class UserModule extends UsersBaseModel {
       this.type = 0,
       String? id,
       String? name,
+        String? token = "",
       String? email})
-      : super(email: email, uid: id, name: name);
+      : super(email: email, uid: id, name: name , token: token );
 
   UserModule.formJson(Map<String, dynamic> json) {
     uid = json['uid'] == null ? null : json['uid'];
@@ -25,6 +28,7 @@ class UserModule extends UsersBaseModel {
     address = json['address'] == null ? null : json['address'];
     phone = json['phone'] == null ? null : json['phone'];
     type = json['type'] == null ? 0 : json['type'];
+    token = json['token'] == null ? "" : json['token'];
   }
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
@@ -34,6 +38,7 @@ class UserModule extends UsersBaseModel {
     _data['address'] = address;
     _data['phone'] = phone;
     _data['type'] = type ?? 0;
+    _data['token'] = token;
 
     return _data;
   }
