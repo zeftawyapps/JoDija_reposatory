@@ -36,7 +36,7 @@ abstract class DataSourceConfigration {
     }
   }
 
-  Future backenRoutsdInit(String path) async {
+  Future backendRoutedInit(String path) async {
     WidgetsFlutterBinding.ensureInitialized();
 
     var data = await JsonAssetReader(path: "").data;
@@ -45,15 +45,17 @@ abstract class DataSourceConfigration {
 
     if (backendState == BackendState.local) {
       BaseUrl = baseUrls['local'];
+    } else if (backendState == BackendState.remote_dev) {
+      BaseUrl = baseUrls['remote_dev'];
     } else {
-      BaseUrl = baseUrls['remote'];
+      BaseUrl = baseUrls['remote_prod'];
     }
     HttpUrlsEnveiroment(baseUrl: BaseUrl);
   }
 
   AppType appType = AppType.App;
 
-  BackendState backendState = BackendState.remote;
+  BackendState backendState = BackendState.remote_dev ;
 
   EnvType envType = EnvType.dev;
 }
@@ -62,4 +64,4 @@ enum AppType { DashBord, App }
 
 enum EnvType { localDev, dev, prod }
 
-enum BackendState { local, remote }
+enum BackendState { local, remote_dev, remote_prod }
