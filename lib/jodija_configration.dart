@@ -39,7 +39,7 @@ abstract class DataSourceConfigration {
   Future backendRoutedInit(String path) async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    var data = await JsonAssetReader(path: "").data;
+    var data = await JsonAssetReader(path: path).data;
     var baseUrls = data['baseUrls'];
     String BaseUrl;
 
