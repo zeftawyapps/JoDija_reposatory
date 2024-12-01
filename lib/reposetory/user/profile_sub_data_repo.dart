@@ -32,9 +32,4 @@ class BaseProfileSubDataRebo {
            RemoteBaseModel(message: handilExcepstons(e.code), status:  StatusModel.error));
     }
   }
-
-
-
-
-
 }
