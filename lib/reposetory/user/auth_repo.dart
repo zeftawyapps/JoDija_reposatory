@@ -76,6 +76,7 @@ class BaseAuthRepo {
           UsersBaseModel.formJson(await _accountActions!.getData(user.uid!));
       HttpHeader().setAuthHeader( user.token  ?? "");
       usersModel.token = user.token;
+      usersModel.uid = user.uid; 
       return Result.data(usersModel);
     } on FirebaseException catch (e) {
       return Result.error(
