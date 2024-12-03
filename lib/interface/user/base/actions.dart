@@ -5,7 +5,7 @@ abstract class IBaseAccountActions{
   Future<Map<String , dynamic>> updateProfileData({ required  String id  , Map<String , dynamic >?mapData
   , Object? file
   });
-  Future<Map<String , dynamic>>getData(String id );
+  Future<Map<String , dynamic>>getDataByDoc(String id );
 }
 
 abstract class IProfileSubDataActions{

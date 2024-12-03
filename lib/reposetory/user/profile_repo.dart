@@ -21,7 +21,7 @@ class BaseProfilRebo{
     try {
       String uid =  await _sharedRefrance!.getUid();
 
-      var profileMapData =    await _accountActions!.getData(uid );
+      var profileMapData =    await _accountActions!.getDataByDoc(uid );
       UsersBaseModel  usersModel = UsersBaseModel . formJson(profileMapData);
       return  Result.data(usersModel);
     } on FirebaseException catch (e) {

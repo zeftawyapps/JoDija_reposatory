@@ -26,7 +26,21 @@ class ProfileActions implements IBaseAccountActions {
   }
 
   @override
-  Future<Map<String, dynamic>> getData(String uid) async {
+  Future<Map<String, dynamic>> getDataByDoc(String uid) async {
+    _firebaseLoadingData = FirebaseLoadingData();
+  var data  = await    _firebaseLoadingData!.loadSingleDocData(
+         CollectionsName.usersAccountData, uid);
+     if (data == null) {
+       return {};
+     } else {
+       return data;
+     }
+
+  }
+
+
+  @override
+  Future<Map<String, dynamic>> SearchDataById(String uid) async {
     CollectionReference firebaseCollection;
     firebaseCollection =
         FirebaseFirestore.instance.collection(CollectionsName.usersAccountData);
@@ -42,6 +56,7 @@ class ProfileActions implements IBaseAccountActions {
     }
   }
 
+
   @override
   Future<Map<String, dynamic>> updateProfileData(
       {required String id,    Map<String, dynamic>? mapData ,
@@ -53,6 +68,6 @@ class ProfileActions implements IBaseAccountActions {
         mymap: mapData!,
         file: file,
         filedowloadurifieldname: "imguri");
-    return getData(id);
+    return getDataByDoc(id);
   }
 }

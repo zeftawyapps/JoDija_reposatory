@@ -72,7 +72,7 @@ class BaseAuthRepo {
       var user = await _account.logIn();
 
       _accountActions = ProfileActions();
- var data =      await _accountActions!.getData(user.uid!);
+ var data =      await _accountActions!.getDataByDoc(user.uid!);
       UsersBaseModel usersModel =
           UsersBaseModel.formJson(  data );
       HttpHeader().setAuthHeader( user.token  ?? "");
@@ -115,7 +115,7 @@ class BaseAuthRepo {
       var user = await _account.createAccount();
 
       _accountActions = ProfileActions();
-      var profileMapData = await _accountActions!.getData(user.uid!);
+      var profileMapData = await _accountActions!.getDataByDoc(user.uid!);
       if (profileMapData.isEmpty || profileMapData.length == 0) {
         await _accountActions!
             .createProfileData(id: user.uid!, data: user.toJson());
