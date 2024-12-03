@@ -72,8 +72,9 @@ class BaseAuthRepo {
       var user = await _account.logIn();
 
       _accountActions = ProfileActions();
+ var data =      await _accountActions!.getData(user.uid!);
       UsersBaseModel usersModel =
-          UsersBaseModel.formJson(await _accountActions!.getData(user.uid!));
+          UsersBaseModel.formJson(  data );
       HttpHeader().setAuthHeader( user.token  ?? "");
       usersModel.token = user.token;
       usersModel.uid = user.uid; 
