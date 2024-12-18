@@ -7,15 +7,12 @@ import '../../utilis/firebase/fireBase_exception_consts.dart';
 import '../../utilis/models/remote_base_model.dart';
 import '../../utilis/models/staus_model.dart';
 import '../../utilis/result/result.dart';
-import '../../utilis/shardeprefrance/shard_check.dart';
 
 
 class BaseProfileSubDataRebo {
-  SharedPrefranceChecking? _sharedRefrance;
-  late IProfileSubDataActions _Actions;
+   late IProfileSubDataActions _Actions;
   BaseProfileSubDataRebo(IProfileSubDataActions accountActions) {
-    _sharedRefrance = SharedPrefranceChecking();
-    _Actions = accountActions;
+     _Actions = accountActions;
   }
 
 

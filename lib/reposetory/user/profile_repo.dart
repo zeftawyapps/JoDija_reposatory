@@ -6,20 +6,18 @@ import '../../utilis/firebase/fireBase_exception_consts.dart';
 import '../../utilis/models/remote_base_model.dart';
 import '../../utilis/models/staus_model.dart';
 import '../../utilis/result/result.dart';
-import '../../utilis/shardeprefrance/shard_check.dart';
 
 
 class BaseProfilRebo{
 
-  SharedPrefranceChecking ? _sharedRefrance ;
- late IBaseAccountActions _accountActions;
+  late IBaseAccountActions _accountActions;
   BaseProfilRebo(IBaseAccountActions accountActions){
-    _sharedRefrance = SharedPrefranceChecking();
+
      _accountActions = accountActions;
   }
-   Future<Result<RemoteBaseModel, UsersBaseModel >> getProfile(  ) async {
+   Future<Result<RemoteBaseModel, UsersBaseModel >> getProfile( String  uid   ) async {
     try {
-      String uid =  await _sharedRefrance!.getUid();
+
 
       var profileMapData =    await _accountActions!.getDataByDoc(uid );
       UsersBaseModel  usersModel = UsersBaseModel . formJson(profileMapData);
