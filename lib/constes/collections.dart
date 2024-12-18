@@ -1,8 +1,8 @@
 class CollectionsName{
-  static String prodeuctData = "productData";
+  static const  String prodeuctData = "productData";
   //department
-  static String departmentData = "departmentData";
-  static String categoryData = "categoryData";
-  static String orderData = "orderData";
-  static String usersAccountData = "usersAccountData";
+  static const  String departmentData = "departmentData";
+  static  const String categoryData = "categoryData";
+  static const  String orderData = "orderData";
+  static const  String usersAccountData1 = "usersAccountData";
 }

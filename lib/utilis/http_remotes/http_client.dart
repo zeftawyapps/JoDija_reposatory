@@ -3,11 +3,8 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'package:http_parser/http_parser.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-
-
 import '../../https/http_urls.dart';
 import '../errors/http_errors/errors/connection_error.dart';
 import '../errors/http_errors/errors/forbidden_error.dart';
@@ -25,11 +22,9 @@ import 'http_methos_enum.dart';
 
 class JoDijaHttpClient {
   static late Dio _client;
-
   Dio get instance => _client;
   String? baseUrl;
   bool? userToken;
-
   JoDijaHttpClient({this.baseUrl   , userToken = false}) {
     baseUrl = HttpUrlsEnveiroment().baseUrl!;
     BaseOptions _options = BaseOptions(
@@ -51,8 +46,7 @@ class JoDijaHttpClient {
 
 
   }
-
-  Future< T  >  sendRequestValue<T>({
+  Future<T>  sendRequestValue<T>({
     required HttpMethod method,
     required String url,
     Map<String, dynamic>? headers,
@@ -110,8 +104,6 @@ class JoDijaHttpClient {
       throw e ;
     }
   }
-
-
   Future<Result<RemoteBaseModel, Map<String , dynamic> >> sendRequestResultWithMap ({
     required HttpMethod method,
     required String url,
@@ -298,8 +290,6 @@ class JoDijaHttpClient {
       return Result. error(RemoteBaseModel(message: e.toString()));
     }
   }
-
-
   Future< Map<String ,dynamic >> sendRequestJsonMap({
     required HttpMethod method,
     required String url,
@@ -406,7 +396,6 @@ class JoDijaHttpClient {
     if (data != null) {
       dataMap.addAll(data);
     }
-
     dataMap.addAll({
       fileKey: await MultipartFile.fromFile(
         filePath,

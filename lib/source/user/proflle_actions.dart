@@ -14,22 +14,22 @@ class ProfileActions implements IBaseAccountActions {
   FireStoreAction? _fireStoreAction = FireStoreAction();
   FirebaseLoadingData? _firebaseLoadingData = FirebaseLoadingData();
 
+String path = CollectionsName.usersAccountData1;
 
-
-  ProfileActions() ;
+  ProfileActions({this.path = CollectionsName.usersAccountData1}) ;
 
   @override
   Future createProfileData(
       {required String id, required Map<String, dynamic> data}) async {
     await _fireStoreAction!.addDataCloudFirestore(
-        id: id, path: CollectionsName.usersAccountData, mymap: data);
+        id: id, path: path, mymap: data);
   }
 
   @override
   Future<Map<String, dynamic>> getDataByDoc(String uid) async {
     _firebaseLoadingData = FirebaseLoadingData();
   var data  = await    _firebaseLoadingData!.loadSingleDocData(
-         CollectionsName.usersAccountData, uid);
+      path, uid);
      if (data == null) {
        return {};
      } else {
@@ -43,7 +43,7 @@ class ProfileActions implements IBaseAccountActions {
   Future<Map<String, dynamic>> SearchDataById(String uid) async {
     CollectionReference firebaseCollection;
     firebaseCollection =
-        FirebaseFirestore.instance.collection(CollectionsName.usersAccountData);
+        FirebaseFirestore.instance.collection(path);
     QuerySnapshot doc =
     await firebaseCollection.where("uid", isEqualTo: uid).limit(1).get();
 
@@ -63,7 +63,7 @@ class ProfileActions implements IBaseAccountActions {
       Object ? file
       }) async {
     await _firestoreAndStorageActions!.editeDataCloudFirestorWithUpload(
-        collection: CollectionsName.usersAccountData,
+        collection:  path ,
         id: id,
         mymap: mapData!,
         file: file,

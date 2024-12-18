@@ -17,8 +17,8 @@ class BaseUsersActionsSources  {
 
   File? file;
   Map<String, dynamic>? data;
-
-  UserProfileFirebaseActions( ) {
+String path = CollectionsName.usersAccountData1;
+  BaseUsersActionsSources({this.path =  CollectionsName.usersAccountData1} ) {
     _fireStoreAction = FireStoreAction();
     _firebaseLoadingData = FirebaseLoadingData();
     _firestoreAndStorageActions = FirestoreAndStorageActions();
@@ -28,7 +28,7 @@ class BaseUsersActionsSources  {
   Future<List<UserModule>> getUsers() async {
     CollectionReference firebaseCollection;
     firebaseCollection =
-        FirebaseFirestore.instance.collection(CollectionsName.usersAccountData);
+        FirebaseFirestore.instance.collection(path );
     QuerySnapshot doc =
         await firebaseCollection.get();
 
