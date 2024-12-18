@@ -14,9 +14,9 @@ class ProfileActions implements IBaseAccountActions {
   FireStoreAction? _fireStoreAction = FireStoreAction();
   FirebaseLoadingData? _firebaseLoadingData = FirebaseLoadingData();
 
-String path = CollectionsName.usersAccountData1;
+String path = CollectionsName.usersAccountData;
 
-  ProfileActions({this.path = CollectionsName.usersAccountData1}) ;
+  ProfileActions({this.path = CollectionsName.usersAccountData}) ;
 
   @override
   Future createProfileData(

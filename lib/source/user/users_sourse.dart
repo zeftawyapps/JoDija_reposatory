@@ -17,8 +17,8 @@ class BaseUsersActionsSources  {
 
   File? file;
   Map<String, dynamic>? data;
-String path = CollectionsName.usersAccountData1;
-  BaseUsersActionsSources({this.path =  CollectionsName.usersAccountData1} ) {
+String path = CollectionsName.usersAccountData;
+  BaseUsersActionsSources({this.path =  CollectionsName.usersAccountData} ) {
     _fireStoreAction = FireStoreAction();
     _firebaseLoadingData = FirebaseLoadingData();
     _firestoreAndStorageActions = FirestoreAndStorageActions();

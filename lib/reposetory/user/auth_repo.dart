@@ -16,10 +16,13 @@ import '../../utilis/models/remote_base_model.dart';
 import '../../utilis/models/staus_model.dart';
 
 class BaseAuthRepo {
-  IBaseAccountActions? _accountActions;
+ late  IBaseAccountActions _accountActions;
   late IBaseAuthentication _account;
-  BaseAuthRepo(IBaseAuthentication account) {
+       BaseAuthRepo(IBaseAuthentication account  ,
+      {IBaseAccountActions? accountActions}) {
+
     _account = account;
+    _accountActions = accountActions ?? ProfileActions();
   }
 
   Future< Result< RemoteBaseModel, UsersBaseModel>> logIn() async {
@@ -71,7 +74,7 @@ class BaseAuthRepo {
     try {
       var user = await _account.logIn();
 
-      _accountActions = ProfileActions();
+
  var data =      await _accountActions!.getDataByDoc(user.uid!);
       UsersBaseModel usersModel =
           UsersBaseModel.formJson(  data );
@@ -114,7 +117,7 @@ class BaseAuthRepo {
     try {
       var user = await _account.createAccount();
 
-      _accountActions = ProfileActions();
+
       var profileMapData = await _accountActions!.getDataByDoc(user.uid!);
       if (profileMapData.isEmpty || profileMapData.length == 0) {
         await _accountActions!
@@ -147,7 +150,7 @@ class BaseAuthRepo {
       usersModel.email = busersModel.email;
       usersModel.name = busersModel.name;
       usersModel.token = user.token;
-      _accountActions = ProfileActions();
+
 
       await _accountActions!
           .createProfileData(id: usersModel.uid!, data: usersModel.toJson());
