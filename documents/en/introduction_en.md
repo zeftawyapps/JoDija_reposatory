@@ -1,7 +1,7 @@
 ## What is the Jodija data source
 It  manages the data flow that we receive or send to servers via APIs or any server platform like Firebase. It reshapes the data to align with business logic for display to the user if the data is coming from the server, or formats it as JSON when sending it to the servers.
-## how Jodija data source works ?: 
-this  library  devides to three parts : 
+## how Jodija data source works ?:
+this  library  devides to three parts :
 # Library Architecture: Repository, Data Source Connector, and Data Source Util
 
 This document outlines the architecture of a library divided into three key parts: the repository, data source connector, and data source util. This structure promotes separation of concerns, testability, and maintainability.
@@ -59,7 +59,7 @@ This document outlines the architecture of a library divided into three key part
 *   **Examples:**
     *   A `FirebaseAccount` might provide functions for creating, updating, and deleting user accounts in Firebase.
     *   A `JoDijaHttpClient`  might provide functions for making HTTP requests using Dio or http package.
-   
+
 *   **Benefits:**
     *   **Code Reusability:** Avoids code duplication by providing common logic in a single place.
     *   **Maintainability:** Makes it easier to update common logic across multiple data sources.
@@ -100,9 +100,9 @@ This document outlines two primary types of app solutions, categorized by their 
 *   **Architecture:**
     *   Mobile App (Flutter) called Ui selution
     *   Web App (Flutter) called Ui selution
-    *   Desktop App (Flutter) called Ui selution 
+    *   Desktop App (Flutter) called Ui selution
     *   Middle Package (Business Logic) called Business Logic
-   
+
     *   Jodija Data Source (YAML-based)
 
 ### 2. Single-Solution Apps
@@ -118,10 +118,10 @@ This document outlines two primary types of app solutions, categorized by their 
     *   Mobile App
     *   Control Panel (React.js, Angular.js, etc.)
     *   Integrated Packages and Business Logic
-    *   Jodija Data Source (YAML-based) on  _Integrated Packages_  
+    *   Jodija Data Source (YAML-based) on  _Integrated Packages_
 
 
-## Usage 
+## Usage
 
 before you start using the library you need to determine the type of your app solution and the architecture you will use, then you can start using the library by following the steps below:
 1. install the library by adding the following line to your pubspec.yaml file:
@@ -138,7 +138,7 @@ import 'package:jodija_data_source/jodija_data_source.dart';
 ```
 3.   Configration the data soruce by following the   below:
 * if you are building a multi-solution app,  then the configuration file should be located within the Business Logic package.
- so you will add this code to the configuration file:
+  so you will add this code to the configuration file:
 ```dart
 import 'package:JoDija_DataSource/jodija_configration.dart';
 
@@ -192,15 +192,10 @@ class AppConfigration  extends LogicConfigration  {
 to Know more about the configurations and use the library you in multi-solution app you can visit the [Multi solution app usage ]()
 
 * if you are building a single-solution app, then the configuration file should be located within the App package.
-    so you will add this code to the configuration file:
+  so you will add this code to the configuration file:
     ```dart
   class AppConfigration  extends DataSourceConfigration  {
        // this is the enums that you will use in the configuration file
      }
     ```
-    to Know more about the configurations and use the library you in single-solution app you can visit the [Single solution app usage ]()
-
-    
- 
-
-     
+  to Know more about the configurations and use the library you in single-solution app you can visit the [Single solution app usage ]()
