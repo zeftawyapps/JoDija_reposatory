@@ -1,41 +1,41 @@
 to understand this library, you need to know the following classes:
+
 - `Configrastion`: Represents a document.
 - `Results`: it has 3 classes:
-  * `Result`: Represents a document.
-  * `ResultDataHelper`: Represents a document.
-  * `UserResult`: Represents a document.
+  - `Result`: Represents a document.
+  - `ResultDataHelper`: Represents a document.
+  - `UserResult`: Represents a document.
 - `Base Model`:
--  **`BaseModel`**: Represents a document.
--  **`remoteBaseModelData`**: Represents a document.
-- `abstract class`: 
-  * `IBaseDataSourceRepo`:
-  * `IBaseSource`:
-  * `IBaseStream`:
-  * `IBaseDataActionsSource`:
-  * `Authintications`:
-     * `abstract class`:
-       - `IBaseAuthentication`:
-       - `IBaseAccountActions`:
-       - `IFirebaseAuthentication`:
-       - `IHttpAuthentication`:
+- **`BaseModel`**: Represents a document.
+- **`remoteBaseModelData`**: Represents a document.
+- `abstract class`:
+  - `IBaseDataSourceRepo`:
+  - `IBaseSource`:
+  - `IBaseStream`:
+  - `IBaseDataActionsSource`:
+  - `Authintications`:
+    - `abstract class`:
+      - `IBaseAuthentication`:
+      - `IBaseAccountActions`:
+      - `IFirebaseAuthentication`:
+      - `IHttpAuthentication`:
 - `repsatory`:
-  * `Authintications`:
+  - `Authintications`:
     - `BaseAuthRepo`:
     - `BaseProfilRebo`:
-  * `DataSourceRepo`
+  - `DataSourceRepo`
 - `source`:
-   * `DataSourceFirebaseSource`:
-   * `StreamFirebaseDataSource`:
-   * `DataSourceDataActionsHttpSources`: 
-   * `AuthHttpSource`:
-   * `EmailPassowrdAuthSource`:
-   * `GoogleAuthSoucre`:
+  - `DataSourceFirebaseSource`:
+  - `StreamFirebaseDataSource`:
+  - `DataSourceDataActionsHttpSources`:
+  - `AuthHttpSource`:
+  - `EmailPassowrdAuthSource`:
+  - `GoogleAuthSoucre`:
 - `utils`:
-    * `Firebase`:
-      - `FirebaseLoadingData`
-      - `FirestoreAndStorageActions`
-      - `FireStoreActions`
-      - `StorageActions`
-    * `Http`: 
-      - `JoDijaHttpClient`
-      - `HttpLoadingData`
+  - `Firebase`:
+    - `FirebaseLoadingData`
+    - `FirestoreAndStorageActions`
+    - `FireStoreActions`
+    - `StorageActions` \* `Http`:
+    - `JodijaHttpClient`
+    - `HttpLoadingData`

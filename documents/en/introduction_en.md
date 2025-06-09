@@ -1,8 +1,8 @@
-## What is the Jodija data source
+## What is the jodija repsatory
 
 It manages the data flow that we receive or send to servers via APIs or any server platform like Firebase. It reshapes the data to align with business logic for display to the user if the data is coming from the server, or formats it as JSON when sending it to the servers.
 
-## how Jodija data source works ?:
+## how jodija repsatory works ?:
 
 this library devides to three parts :
 
@@ -68,7 +68,7 @@ This document outlines the architecture of a library divided into three key part
 - **Examples:**
 
   - A `FirebaseAccount` might provide functions for creating, updating, and deleting user accounts in Firebase.
-  - A `JoDijaHttpClient` might provide functions for making HTTP requests using Dio or http package.
+  - A `JodijaHttpClient` might provide functions for making HTTP requests using Dio or http package.
 
 - **Benefits:**
   - **Code Reusability:** Avoids code duplication by providing common logic in a single place.
@@ -102,10 +102,9 @@ This document outlines two primary types of app solutions, categorized by their 
 
 - **Description:** These apps offer multiple user interfaces (solutions) across different platforms, all connected to the same backend. A common example is a mobile app, a web app, and a desktop app that share data and business logic.
 - **Technology Example:** A mobile app and a control panel built using Flutter, connected to the same server and database.
-- **Key Characteristics:**
-  - **Multiple Frontends:** Provides user interfaces for various platforms (e.g., mobile, web, desktop).
+- **Key Characteristics:** - **Multiple Frontends:** Provides user interfaces for various platforms (e.g., mobile, web, desktop).
   - **Shared Backend:** All frontends connect to a single server and database.
-  - **Data Source Dependency:** The data source (e.g., Jodija) relies on a YAML configuration file.
+  - **Data Source Dependency:** The data source (e.g., jodija) relies on a YAML configuration file.
 - **Architecture:**
 
   - Mobile App (Flutter) called Ui selution
@@ -113,22 +112,20 @@ This document outlines two primary types of app solutions, categorized by their 
   - Desktop App (Flutter) called Ui selution
   - Middle Package (Business Logic) called Business Logic
 
-  - Jodija Data Source (YAML-based)
+  - jodija repsatory (YAML-based)
 
 ### 2. Single-Solution Apps
 
 - **Description:** These apps provide a single user interface, typically a mobile app, with a control panel built using a different technology.
 - **Technology Example:** A mobile app with a control panel built using React.js, Angular.js, or another web technology.
-- **Key Characteristics:**
-  - **Single Frontend:** Primarily focuses on a single user interface (e.g., a mobile app).
+- **Key Characteristics:** - **Single Frontend:** Primarily focuses on a single user interface (e.g., a mobile app).
   - **Separate Control Panel:** A control panel is built using a different technology.
   - **Integrated Logic:** All packages and business logic are contained within the same package.
-  - **Data Source Dependency:** The data source (e.g., Jodija) relies on a YAML configuration file.
-- **Architecture:**
-  - Mobile App
+  - **Data Source Dependency:** The data source (e.g., jodija) relies on a YAML configuration file.
+- **Architecture:** - Mobile App
   - Control Panel (React.js, Angular.js, etc.)
   - Integrated Packages and Business Logic
-  - Jodija Data Source (YAML-based) on _Integrated Packages_
+  - jodija repsatory (YAML-based) on _Integrated Packages_
 
 ## Usage
 
@@ -143,10 +140,10 @@ dependencies:
   url: https://github.com/zeftawyapps/jodija_data_souce_module.git
 ```
 
-> **Note:** If you are building a multi-solution app, you need to depend the JoDija data source on a YAML file located within the Business Logic package, and the Business Logic package on a YAML file located within the App. 2. import the library in your dart file:
+> **Note:** If you are building a multi-solution app, you need to depend the jodija repsatory on a YAML file located within the Business Logic package, and the Business Logic package on a YAML file located within the App. 2. import the library in your dart file:
 
 ```dart
-import 'package:jodija_data_source/jodija_data_source.dart';
+import 'package:jodija_repsatory/jodija_repsatory.dart';
 ```
 
 3.  Configration the data soruce by following the below:
