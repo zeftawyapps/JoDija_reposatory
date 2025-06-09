@@ -1,12 +1,51 @@
-## What is the jodija repsatory
+# Jodija Repository
 
-It manages the data flow that we receive or send to servers via APIs or any server platform like Firebase. It reshapes the data to align with business logic for display to the user if the data is coming from the server, or formats it as JSON when sending it to the servers.
+## Overview
 
-## how jodija repsatory works ?:
+Jodija Repository is a Flutter data management library that handles data flow between your application and backend services like REST APIs or Firebase. It standardizes the way data is processed: transforming incoming server data to match your application's business logic and formatting outgoing data as JSON for server communication.
 
-this library devides to three parts :
+## Architecture
 
-# Library Architecture: Repository, Data Source Connector, and Data Source Util
+Jodija uses a three-layer architecture that promotes separation of concerns, testability, and maintainability:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Application Business Logic               │
+│          (View Models, Use Cases, State Management)         │
+└───────────────────────────┬─────────────────────────────────┘
+                           │
+                           │ Data requests/responses
+                           ▼
+┌─────────────────────────────────────────────────────────────┐
+│                     Repository Layer                        │
+│                                                             │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌──────────────┐ │
+│  │  AuthRepository │  │ ProfileRepository│  │ DataRepository│ │
+│  └────────┬────────┘  └────────┬────────┘  └───────┬──────┘ │
+└──────────┬────────────────────┬────────────────────┬────────┘
+           │                    │                    │
+           │                    │                    │
+┌──────────┼────────────────────┼────────────────────┼────────┐
+│          │  Data Source Connector Layer            │        │
+│          │                    │                    │        │
+│  ┌───────▼─────┐     ┌────────▼────┐      ┌────────▼────┐   │
+│  │ Firebase    │     │ HTTP         │      │ LocalStorage │   │
+│  │ Connectors  │     │ Connectors   │      │ Connectors   │   │
+│  └───────┬─────┘     └────────┬────┘      └────────┬────┘   │
+└──────────┼─────────────────────┼─────────────────────┼──────┘
+           │                     │                     │
+           │                     │                     │
+┌──────────┼─────────────────────┼─────────────────────┼──────┐
+│          │    Data Source Utility Layer              │      │
+│          │                     │                     │      │
+│  ┌───────▼─────┐     ┌─────────▼───┐      ┌─────────▼───┐   │
+│  │ Firebase    │     │ HTTP        │      │ File        │   │
+│  │ Utilities   │     │ Utilities   │      │ Utilities   │   │
+│  └─────────────┘     └─────────────┘      └─────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 1. Repository Layer
 
 This document outlines the architecture of a library divided into three key parts: the repository, data source connector, and data source util. This structure promotes separation of concerns, testability, and maintainability.
 
@@ -75,141 +114,168 @@ This document outlines the architecture of a library divided into three key part
   - **Maintainability:** Makes it easier to update common logic across multiple data sources.
   - **Consistency:** Ensures that data is handled consistently across the application.
 
-## How These Layers Work Together
+### How These Layers Work Together
 
-1.  **Business Logic (e.g., View Model) requests data from the Repository.**
-2.  **The Repository determines which data source(s) to use.**
-3.  **The Repository uses the appropriate Data Source Connector to retrieve or store data.**
-4.  **The Data Source Connector uses Data Source Util classes for common tasks.**
-5.  **The Data Source Connector returns the data to the Repository.**
-6.  **The Repository may transform or aggregate the data before returning it to the Business Logic.**
+1. Business logic (view models, etc.) requests data from the Repository
+2. Repository determines which data source(s) to use
+3. Repository uses appropriate Data Source Connector to retrieve/store data
+4. Data Source Connector uses Utility classes for common tasks
+5. Data flows back up through the layers, potentially with transformations at each step
 
-## Benefits of This Architecture
+## Application Types
 
-- **Separation of Concerns:** Each layer has a specific responsibility, making the code easier to understand, maintain, and test.
-- **Testability:** Each layer can be tested independently using mocks or stubs.
-- **Maintainability:** Changes to one layer have minimal impact on other layers.
-- **Flexibility:** You can easily add or remove data sources without affecting the rest of the application.
-- **Reusability:** Data source connectors and util classes can be reused across different parts of the application.
+Jodija supports two types of application architectures:
 
-This layered architecture is a powerful way to manage data in complex applications. By separating concerns and providing clear interfaces between layers, you can create a more robust, maintainable, and testable application.
+### 1. Multi-Solution Applications
 
-## Types of App Solutions
+**Description:** Applications with multiple user interfaces across different platforms, all connected to the same backend.
+
+**Architecture:**
+
+```
+┌─────────────┐   ┌─────────────┐   ┌─────────────┐
+│ Mobile App  │   │  Web App    │   │ Desktop App │
+│  (Flutter)  │   │  (Flutter)  │   │  (Flutter)  │
+└──────┬──────┘   └──────┬──────┘   └──────┬──────┘
+       │                 │                 │
+       └─────────┬───────┴─────────┬───────┘
+                 │                 │
+         ┌───────┴─────────┐       │
+         │  Business Logic │       │
+         │     Package     │       │
+         └───────┬─────────┘       │
+                 │                 │
+                 ▼                 ▼
+         ┌─────────────────────────────┐
+         │     Jodija Repository       │
+         │    (YAML Configuration)     │
+         └─────────────────────────────┘
+```
 
 This document outlines two primary types of app solutions, categorized by their architecture and scope.
 
-### 1. Multi-Solution Apps
+- Multiple UI platforms (mobile, web, desktop)
+- Shared business logic package
+- YAML-based configuration
 
-- **Description:** These apps offer multiple user interfaces (solutions) across different platforms, all connected to the same backend. A common example is a mobile app, a web app, and a desktop app that share data and business logic.
-- **Technology Example:** A mobile app and a control panel built using Flutter, connected to the same server and database.
-- **Key Characteristics:** - **Multiple Frontends:** Provides user interfaces for various platforms (e.g., mobile, web, desktop).
-  - **Shared Backend:** All frontends connect to a single server and database.
-  - **Data Source Dependency:** The data source (e.g., jodija) relies on a YAML configuration file.
-- **Architecture:**
+### 2. Single-Solution Applications
 
-  - Mobile App (Flutter) called Ui selution
-  - Web App (Flutter) called Ui selution
-  - Desktop App (Flutter) called Ui selution
-  - Middle Package (Business Logic) called Business Logic
+**Description:** Applications with a primary UI (typically mobile) and possibly a control panel built with different technology.
 
-  - jodija repsatory (YAML-based)
+**Architecture:**
 
-### 2. Single-Solution Apps
+```
+┌─────────────┐   ┌─────────────────────┐
+│ Mobile App  │   │    Control Panel    │
+│  (Flutter)  │   │ (Web Technologies)  │
+└──────┬──────┘   └─────────┬───────────┘
+       │                    │
+       │           ┌────────┴────────┐
+       │           │ Integrated      │
+       └───────────► Business Logic  │
+                   └────────┬────────┘
+                           │
+                           ▼
+                   ┌───────────────┐
+                   │    Jodija     │
+                   │   Repository  │
+                   └───────────────┘
+```
 
-- **Description:** These apps provide a single user interface, typically a mobile app, with a control panel built using a different technology.
-- **Technology Example:** A mobile app with a control panel built using React.js, Angular.js, or another web technology.
-- **Key Characteristics:** - **Single Frontend:** Primarily focuses on a single user interface (e.g., a mobile app).
-  - **Separate Control Panel:** A control panel is built using a different technology.
-  - **Integrated Logic:** All packages and business logic are contained within the same package.
-  - **Data Source Dependency:** The data source (e.g., jodija) relies on a YAML configuration file.
-- **Architecture:** - Mobile App
-  - Control Panel (React.js, Angular.js, etc.)
-  - Integrated Packages and Business Logic
-  - jodija repsatory (YAML-based) on _Integrated Packages_
+- Single primary UI with optional control panel
+- Integrated business logic
+- YAML-based configuration
 
-## Usage
+## Getting Started
 
-before you start using the library you need to determine the type of your app solution and the architecture you will use, then you can start using the library by following the steps below:
+### Installation
 
-1. install the library by adding the following line to your pubspec.yaml file:
+Add Jodija Repository to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  JoDija_reposatory:
-  git:
-  url: https://github.com/zeftawyapps/jodija_data_souce_module.git
+  jodija_repository:
+    git:
+      url: https://github.com/zeftawyapps/jodija_data_souce_module.git
 ```
 
-> **Note:** If you are building a multi-solution app, you need to depend the jodija repsatory on a YAML file located within the Business Logic package, and the Business Logic package on a YAML file located within the App. 2. import the library in your dart file:
+### Import
 
 ```dart
-import 'package:jodija_repsatory/jodija_repsatory.dart';
+import 'package:jodija_repository/jodija.dart';
 ```
 
-3.  Configration the data soruce by following the below:
+### Configuration
 
-- if you are building a multi-solution app, then the configuration file should be located within the Business Logic package.
-  so you will add this code to the configuration file:
+#### For Multi-Solution Apps
+
+Create a configuration file in your Business Logic package:
 
 ```dart
-import 'package:JoDija_reposatory/jodija_configration.dart';
+import 'package:jodija_repository/jodija_configration.dart';
 
-class LogicConfigration extends DataSourceConfigration {
+class LogicConfiguration extends DataSourceConfigration {
   /**
-   * Constructor for initializing the service environment.
+   * Initializes the service environment configuration.
    *
-   * @param senvType The environment type (e.g., `prod`, `dev`).
-   * @param sBackendState The backend state (e.g., `local`, `remote_dev`, `remote_prod`).
-   *                      This parameter determines whether the backend is local or remote.
-   * @param app The application type (e.g., `App`, `Dashboard`).
-   *            This parameter specifies the UI solution, such as a user website or an admin control panel, and is used to configure routes.
+   * @param envType The environment type ('prod' or 'dev')
+   * @param backendState The backend state ('local', 'remote_dev', 'remote_prod')
+   * @param appType The application type ('App' or 'Dashboard')
    */
-  setAppConfigration(ServiceEnvType senvType
-     ,   SerViceBackendState sBackendState) {
-    envType = senvType == ServiceEnvType.prod ? EnvType.prod : EnvType.dev;
-    appType = app == SerViceAppType.App ? AppType.App : AppType.DashBord;
-    switch (sBackendState) {
+  void setAppConfiguration(
+    ServiceEnvType envType,
+    SerViceBackendState backendState,
+    [SerViceAppType appType = SerViceAppType.App]
+  ) {
+    this.envType = envType == ServiceEnvType.prod ? EnvType.prod : EnvType.dev;
+    this.appType = appType == SerViceAppType.App ? AppType.App : AppType.DashBord;
+
+    switch (backendState) {
       case SerViceBackendState.local:
-        backendState = BackendState.local;
+        this.backendState = BackendState.local;
         break;
       case SerViceBackendState.remote_dev:
-        backendState = BackendState.remote_dev;
+        this.backendState = BackendState.remote_dev;
         break;
       case SerViceBackendState.remote_prod:
-        backendState = BackendState.remote_prod;
+        this.backendState = BackendState.remote_prod;
         break;
     }
   }
-
 
   BackendState isRemote() {
     return backendState;
   }
 }
-// this is the enums that you will use in the configuration file
+
+// Configuration enums
 enum ServiceEnvType { prod, dev }
-
 enum SerViceAppType { App, Dashboard }
-
 enum SerViceBackendState { local, remote_dev, remote_prod }
-
 ```
 
-and in the Ui solution you will add this code to the configuration file:
+Then create an app configuration in your UI solution:
 
 ```dart
-class AppConfigration  extends LogicConfigration  {
-// this is the enums that you will use in the configuration file
-  }
+class AppConfiguration extends LogicConfiguration {
+  // App-specific configuration options
+}
 ```
 
-to Know more about the configurations and use the library you in multi-solution app you can visit the [Multi solution app usage ]()
+#### For Single-Solution Apps
 
-- if you are building a single-solution app, then the configuration file should be located within the App package.
-  so you will add this code to the configuration file:
-  ```dart
-  class AppConfigration  extends DataSourceConfigration  {
-     // this is the enums that you will use in the configuration file
-   }
-  ```
-  to Know more about the configurations and use the library you in single-solution app you can visit the [Single solution app usage ]()
+Create a configuration file in your app package:
+
+```dart
+class AppConfiguration extends DataSourceConfigration {
+  // App-specific configuration options
+}
+```
+
+## Documentation
+
+For detailed documentation on using Jodija Repository in your projects:
+
+- [Multi-solution App Usage](documents/en/multi%20selution%20app/README.md)
+- [Single-solution App Usage](documents/en/single%20selution%20app/README.md)
+- [Class Documentation](documents/en/the%20head%20lines%20.md)
