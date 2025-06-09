@@ -276,6 +276,4 @@ class AppConfiguration extends DataSourceConfigration {
 
 For detailed documentation on using Jodija Repository in your projects:
 
-- [Multi-solution App Usage](documents/en/multi%20selution%20app/README.md)
-- [Single-solution App Usage](documents/en/single%20selution%20app/README.md)
 - [Class Documentation](documents/en/the%20head%20lines%20.md)
