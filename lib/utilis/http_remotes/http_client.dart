@@ -20,12 +20,21 @@ import '../models/staus_model.dart';
 import '../result/result.dart';
 import 'http_methos_enum.dart';
 
-class JoDijaHttpClient {
+/// A class that handles HTTP client operations using the Dio package.
+class HttpClient {
   static late Dio _client;
+
+  /// Returns the Dio instance.
   Dio get instance => _client;
+
   String? baseUrl;
   bool? userToken;
-  JoDijaHttpClient({this.baseUrl   , userToken = false}) {
+
+  /// Constructor for HttpClient.
+  ///
+  /// [baseUrl] is the base URL for the HTTP client.
+  /// [userToken] indicates whether to use a user token for authorization.
+  HttpClient({this.baseUrl, userToken = false}) {
     baseUrl = HttpUrlsEnveiroment().baseUrl!;
     BaseOptions _options = BaseOptions(
       connectTimeout: Duration(milliseconds: 60000),
@@ -38,15 +47,21 @@ class JoDijaHttpClient {
     _client.interceptors.add(PrettyDioLogger());
     if (userToken) {
       var headderAuth = HttpHeader();
-      String authorizationHeader =
-          headderAuth.usertoken;
+      String authorizationHeader = headderAuth.usertoken;
       _client.options.headers["Authorization"] = authorizationHeader;
       _client.options.headers["Content-Type"] = "application/json";
     }
-
-
   }
-  Future<T>  sendRequestValue<T>({
+
+  /// Sends an HTTP request and returns the response data.
+  ///
+  /// [method] is the HTTP method to use.
+  /// [url] is the endpoint URL.
+  /// [headers] are the request headers.
+  /// [queryParameters] are the query parameters.
+  /// [body] is the request body.
+  /// [cancelToken] is the cancel token for the request.
+  Future<T> sendRequestValue<T>({
     required HttpMethod method,
     required String url,
     Map<String, dynamic>? headers,
@@ -54,10 +69,9 @@ class JoDijaHttpClient {
     Map<String, dynamic>? body,
     required CancelToken cancelToken,
   }) async {
-    // Get the response from the server
     Response response;
     if (headers == null) {
-      headers = _client.options.headers??{};
+      headers = _client.options.headers ?? {};
     }
     try {
       switch (method) {
@@ -99,12 +113,20 @@ class JoDijaHttpClient {
       }
 
       return response.data;
-    }  catch (e) {
-
-      throw e ;
+    } catch (e) {
+      throw e;
     }
   }
-  Future<Result<RemoteBaseModel, Map<String , dynamic> >> sendRequestResultWithMap ({
+
+  /// Sends an HTTP request and returns a result with a map.
+  ///
+  /// [method] is the HTTP method to use.
+  /// [url] is the endpoint URL.
+  /// [headers] are the request headers.
+  /// [queryParameters] are the query parameters.
+  /// [body] is the request body.
+  /// [cancelToken] is the cancel token for the request.
+  Future<Result<RemoteBaseModel, Map<String, dynamic>>> sendRequestResultWithMap({
     required HttpMethod method,
     required String url,
     Map<String, dynamic>? headers,
@@ -112,10 +134,9 @@ class JoDijaHttpClient {
     Map<String, dynamic>? body,
     required CancelToken cancelToken,
   }) async {
-    // Get the response from the server
-    Response<Map<String , dynamic>> response;
+    Response<Map<String, dynamic>> response;
     if (headers == null) {
-      headers = _client.options.headers??{};
+      headers = _client.options.headers ?? {};
     }
     try {
       switch (method) {
@@ -156,50 +177,39 @@ class JoDijaHttpClient {
           break;
       }
       try {
-        /// dismiss progress dialog
-
-        // Get the decoded json
         print("response.data ${response.data} ");
-        Map<String ,dynamic> data = { "status" : "success" , "data": response.data??"" } ;
-        return Result.data ( data );
+        Map<String, dynamic> data = {"status": "success", "data": response.data ?? ""};
+        return Result.data(data);
       } on FormatException catch (e) {
-        /// dismiss progress dialog
-
         debugPrint(e.toString());
-        return  Result. error (RemoteBaseModel(message: e.message));
+        return Result.error(RemoteBaseModel(message: e.message));
       } catch (e) {
-        /// dismiss progress dialog
-
         debugPrint(e.toString());
-        return Result. error(RemoteBaseModel(error: e , message: e.toString() , status:  StatusModel.error  , data:  null ));
+        return Result.error(RemoteBaseModel(error: e, message: e.toString(), status: StatusModel.error, data: null));
       }
-    }
-    // Handling errors
-    on DioError catch (e) {
-      /// dismiss progress dialog
-
+    } on DioError catch (e) {
       print("e.response ${e}");
-      var error = {"massage": e };
-      return Result. error(RemoteBaseModel(message: error["massage"]!.message , status: StatusModel.error , data:  "null"));
-    }
-
-    // Couldn't reach out the server
-    on SocketException catch (e) {
-      /// dismiss progress dialog
-
-      return Result. error(RemoteBaseModel(message: e.message));
+      var error = {"massage": e};
+      return Result.error(RemoteBaseModel(message: error["massage"]!.message, status: StatusModel.error, data: "null"));
+    } on SocketException catch (e) {
+      return Result.error(RemoteBaseModel(message: e.message));
     } on HttpException catch (e) {
-      /// dismiss progress dialog
-
-      return Result. error(RemoteBaseModel(message: e.message));
+      return Result.error(RemoteBaseModel(message: e.message));
     } catch (e, s) {
-      /// dismiss progress dialog
-
       print('catch error s$s');
-      return Result. error(RemoteBaseModel(message: e.toString()));
+      return Result.error(RemoteBaseModel(message: e.toString()));
     }
   }
-  Future<Result<RemoteBaseModel,  RemoteBaseModel >> sendRequest ({
+
+  /// Sends an HTTP request and returns a result with a RemoteBaseModel.
+  ///
+  /// [method] is the HTTP method to use.
+  /// [url] is the endpoint URL.
+  /// [headers] are the request headers.
+  /// [queryParameters] are the query parameters.
+  /// [body] is the request body.
+  /// [cancelToken] is the cancel token for the request.
+  Future<Result<RemoteBaseModel, RemoteBaseModel>> sendRequest({
     required HttpMethod method,
     required String url,
     Map<String, dynamic>? headers,
@@ -207,10 +217,9 @@ class JoDijaHttpClient {
     Map<String, dynamic>? body,
     required CancelToken cancelToken,
   }) async {
-    // Get the response from the server
     Response response;
     if (headers == null) {
-      headers = _client.options.headers??{};
+      headers = _client.options.headers ?? {};
     }
     try {
       switch (method) {
@@ -251,46 +260,38 @@ class JoDijaHttpClient {
           break;
       }
       try {
-       var data = RemoteBaseModel(data: response.data??"" , status: StatusModel.success ,message: "" );
-        return Result.data ( data );
+        var data = RemoteBaseModel(data: response.data ?? "", status: StatusModel.success, message: "");
+        return Result.data(data);
       } on FormatException catch (e) {
-        /// dismiss progress dialog
-
         debugPrint(e.toString());
-        return  Result. error (RemoteBaseModel(message: e.message));
+        return Result.error(RemoteBaseModel(message: e.message));
       } catch (e) {
-        /// dismiss progress dialog
-
         debugPrint(e.toString());
-        return Result. error(RemoteBaseModel(error: e , message: e.toString() , status: StatusModel.error  , data:  null ));
+        return Result.error(RemoteBaseModel(error: e, message: e.toString(), status: StatusModel.error, data: null));
       }
-    }
-    // Handling errors
-    on DioError catch (e) {
-      /// dismiss progress dialog
-
+    } on DioError catch (e) {
       print("e.response ${e}");
-      var error = {"massage": e };
-      return Result. error(RemoteBaseModel(message: error["massage"]!.message , status: StatusModel.error , data:  "null"));
-    }
-
-    // Couldn't reach out the server
-    on SocketException catch (e) {
-      /// dismiss progress dialog
-
-      return Result. error(RemoteBaseModel(message: e.message));
+      var error = {"massage": e};
+      return Result.error(RemoteBaseModel(message: error["massage"]!.message, status: StatusModel.error, data: "null"));
+    } on SocketException catch (e) {
+      return Result.error(RemoteBaseModel(message: e.message));
     } on HttpException catch (e) {
-      /// dismiss progress dialog
-
-      return Result. error(RemoteBaseModel(message: e.message));
+      return Result.error(RemoteBaseModel(message: e.message));
     } catch (e, s) {
-      /// dismiss progress dialog
-
       print('catch error s$s');
-      return Result. error(RemoteBaseModel(message: e.toString()));
+      return Result.error(RemoteBaseModel(message: e.toString()));
     }
   }
-  Future< Map<String ,dynamic >> sendRequestJsonMap({
+
+  /// Sends an HTTP request and returns the response data as a JSON map.
+  ///
+  /// [method] is the HTTP method to use.
+  /// [url] is the endpoint URL.
+  /// [headers] are the request headers.
+  /// [queryParameters] are the query parameters.
+  /// [body] is the request body.
+  /// [cancelToken] is the cancel token for the request.
+  Future<Map<String, dynamic>> sendRequestJsonMap({
     required HttpMethod method,
     required String url,
     Map<String, dynamic>? headers,
@@ -298,10 +299,9 @@ class JoDijaHttpClient {
     Map<String, dynamic>? body,
     required CancelToken cancelToken,
   }) async {
-    // Get the response from the server
-    Response<Map<String , dynamic >> response;
+    Response<Map<String, dynamic>> response;
     if (headers == null) {
-      headers = _client.options.headers??{};
+      headers = _client.options.headers ?? {};
     }
     try {
       switch (method) {
@@ -342,44 +342,39 @@ class JoDijaHttpClient {
           break;
       }
       try {
-
-        return response.data!  as Map<String ,dynamic >;
+        return response.data! as Map<String, dynamic>;
       } on FormatException catch (e) {
-        /// dismiss progress dialog
-
         debugPrint(e.toString());
-        throw e ;
+        throw e;
       } catch (e) {
-        /// dismiss progress dialog
-
         debugPrint(e.toString());
-        throw e ;
+        throw e;
       }
-    }
-    // Handling errors
-    on DioError catch (e) {
-      /// dismiss progress dialog
-
+    } on DioError catch (e) {
       print("e.response ${e.error}");
-      throw e ;
-    }
-
-    // Couldn't reach out the server
-    on SocketException catch (e) {
-      /// dismiss progress dialog
-
-      throw e ;
+      throw e;
+    } on SocketException catch (e) {
+      throw e;
     } on HttpException catch (e) {
-      /// dismiss progress dialog
-
-      throw e ;
+      throw e;
     } catch (e, s) {
-      /// dismiss progress dialog
-
       print('catch error s$s');
-      throw e ;
+      throw e;
     }
   }
+
+  /// Uploads a file and returns the result.
+  ///
+  /// [url] is the endpoint URL.
+  /// [fileKey] is the key for the file in the form data.
+  /// [filePath] is the path to the file.
+  /// [fileName] is the name of the file.
+  /// [mediaType] is the media type of the file.
+  /// [data] is additional form data.
+  /// [headers] are the request headers.
+  /// [onSendProgress] is the callback for send progress.
+  /// [onReceiveProgress] is the callback for receive progress.
+  /// [cancelToken] is the cancel token for the request.
   Future<Result<RemoteBaseModel, T>> upload<T>({
     required String url,
     required String fileKey,
@@ -405,7 +400,7 @@ class JoDijaHttpClient {
     });
     try {
       if (headers == null) {
-        headers = _client.options.headers??{};
+        headers = _client.options.headers ?? {};
       }
       Response<T> response = await _client.post(
         url,
@@ -417,35 +412,38 @@ class JoDijaHttpClient {
       );
 
       try {
-        // Get the decoded json
-        return  Result.data(response.data!);
+        return Result.data(response.data!);
       } on FormatException {
-        return Result.error( RemoteBaseModel(message: FormatError().toString() ,));
+        return Result.error(RemoteBaseModel(message: FormatError().toString()));
       } catch (e) {
-        return  Result.error( RemoteBaseModel(message: e.toString() ,));
+        return Result.error(RemoteBaseModel(message: e.toString()));
       }
-    }
-    // Handling errors
-    on DioError catch (e) {
-    return Result.error( RemoteBaseModel (message: e.message));
-    }
-    //  return Left(_handleDioError(e));
-
-
-    // Couldn't reach out the server
-    on SocketException {
-      return  Result.error( RemoteBaseModel(message: SocketError().toString() ,));
+    } on DioError catch (e) {
+      return Result.error(RemoteBaseModel(message: e.message));
+    } on SocketException {
+      return Result.error(RemoteBaseModel(message: SocketError().toString()));
     } on HttpException {
-      return  Result.error( RemoteBaseModel(message: ConnectionError().toString() ,));
+      return Result.error(RemoteBaseModel(message: ConnectionError().toString()));
     } catch (e, s) {
       print('catch error s$s');
-      return  Result.error( RemoteBaseModel(message: e.toString() ,));
+      return Result.error(RemoteBaseModel(message: e.toString()));
     }
   }
-  Future<Result<RemoteBaseModel, Map<String ,dynamic> >> uploadMapResultWithMap<  T >({
+
+  /// Uploads a file and returns the result with a map.
+  ///
+  /// [url] is the endpoint URL.
+  /// [fileKey] is the key for the file in the form data.
+  /// [file] is the MultipartFile object.
+  /// [data] is additional form data.
+  /// [headers] are the request headers.
+  /// [onSendProgress] is the callback for send progress.
+  /// [onReceiveProgress] is the callback for receive progress.
+  /// [cancelToken] is the cancel token for the request.
+  Future<Result<RemoteBaseModel, Map<String, dynamic>>> uploadMapResultWithMap<T>({
     required String url,
     required String fileKey,
-     required MultipartFile  file  ,
+    required MultipartFile file,
     Map<String, dynamic>? data,
     Map<String, dynamic>? headers,
     ProgressCallback? onSendProgress,
@@ -456,55 +454,56 @@ class JoDijaHttpClient {
     if (data != null) {
       dataMap.addAll(data);
     }
-    dataMap.addAll({
-      fileKey:   file});
+    dataMap.addAll({fileKey: file});
     try {
       if (headers == null) {
-        headers = _client.options.headers??{};
+        headers = _client.options.headers ?? {};
       }
 
-      Response<Map<String , dynamic >> response = await _client.post(
+      Response<Map<String, dynamic>> response = await _client.post(
         url,
-         data: FormData.fromMap(dataMap),
-
-        onSendProgress: onSendProgress?? (int sent, int total) {
+        data: FormData.fromMap(dataMap),
+        onSendProgress: onSendProgress ?? (int sent, int total) {
           print("send $sent $total");
-        } ,
-        onReceiveProgress: onReceiveProgress?? (int sent, int total) {
-          print(" rece $sent $total");
-        } ,
+        },
+        onReceiveProgress: onReceiveProgress ?? (int sent, int total) {
+          print("rece $sent $total");
+        },
         options: Options(headers: headers),
         cancelToken: cancelToken,
       );
 
-
-        // Get the decoded json
-        return  Result.data(response.data!);
-      } on FormatException {
-        return Result.error( RemoteBaseModel(message: FormatError().toString() ,));
-      } catch (e) {
-        return  Result.error( RemoteBaseModel(message: e.toString() ,));
-      }
-
-    // Handling errors
-    on DioError catch (e) {
-      return Result.error( RemoteBaseModel (message: e.message));
-    }
-
-    on SocketException {
-      return  Result.error( RemoteBaseModel(message: SocketError().toString() ,));
+      return Result.data(response.data!);
+    } on FormatException {
+      return Result.error(RemoteBaseModel(message: FormatError().toString()));
+    } catch (e) {
+      return Result.error(RemoteBaseModel(message: e.toString()));
+    } on DioError catch (e) {
+      return Result.error(RemoteBaseModel(message: e.message));
+    } on SocketException {
+      return Result.error(RemoteBaseModel(message: SocketError().toString()));
     } on HttpException {
-      return  Result.error( RemoteBaseModel(message: ConnectionError().toString() ,));
+      return Result.error(RemoteBaseModel(message: ConnectionError().toString()));
     } catch (e, s) {
       print('catch error s$s');
-      return  Result.error( RemoteBaseModel(message: e.toString() ,));
+      return Result.error(RemoteBaseModel(message: e.toString()));
     }
   }
 
-  Future<Result<RemoteBaseModel, RemoteBaseModel >> uploadMapResult<  T >({
+  /// Uploads a file and returns the result with a RemoteBaseModel.
+  ///
+  /// [url] is the endpoint URL.
+  /// [fileKey] is the key for the file in the form data.
+  /// [file] is the MultipartFile object.
+  /// [data] is additional form data.
+  /// [headers] are the request headers.
+  /// [onSendProgress] is the callback for send progress.
+  /// [onReceiveProgress] is the callback for receive progress.
+  /// [cancelToken] is the cancel token for the request.
+  Future<Result<RemoteBaseModel, RemoteBaseModel>> uploadMapResult<T>({
     required String url,
     required String fileKey,
-    required MultipartFile  file  ,
+    required MultipartFile file,
     Map<String, dynamic>? data,
     Map<String, dynamic>? headers,
     ProgressCallback? onSendProgress,
@@ -516,44 +515,36 @@ class JoDijaHttpClient {
       dataMap.addAll(data);
     }
     if (headers == null) {
-      headers = _client.options.headers??{};
+      headers = _client.options.headers ?? {};
     }
-    dataMap.addAll({
-      fileKey:   file});
+    dataMap.addAll({fileKey: file});
     try {
-      Response<Map<String , dynamic >> response = await _client.post(
+      Response<Map<String, dynamic>> response = await _client.post(
         url,
         data: FormData.fromMap(dataMap),
-
-        onSendProgress: onSendProgress?? (int sent, int total) {
+        onSendProgress: onSendProgress ?? (int sent, int total) {
           print("send $sent $total");
-        } ,
-        onReceiveProgress: onReceiveProgress?? (int sent, int total) {
-          print(" rece $sent $total");
-        } ,
+        },
+        onReceiveProgress: onReceiveProgress ?? (int sent, int total) {
+          print("rece $sent $total");
+        },
         options: Options(headers: headers),
         cancelToken: cancelToken,
       );
-      return  Result.data( RemoteBaseModel(data: response.data! , status: StatusModel.success , message: response.data!["message"] ));
+      return Result.data(RemoteBaseModel(data: response.data!, status: StatusModel.success, message: response.data!["message"]));
     } on FormatException {
-      return Result.error( RemoteBaseModel(message: FormatError().toString() ,));
+      return Result.error(RemoteBaseModel(message: FormatError().toString()));
     } catch (e) {
-      return  Result.error( RemoteBaseModel(message: e.toString() ,));
-    }
-
-    // Handling errors
-    on DioError catch (e) {
-      return Result.error( RemoteBaseModel (message: e.message));
-    }
-
-    on SocketException {
-      return  Result.error( RemoteBaseModel(message: SocketError().toString() ,));
+      return Result.error(RemoteBaseModel(message: e.toString()));
+    } on DioError catch (e) {
+      return Result.error(RemoteBaseModel(message: e.message));
+    } on SocketException {
+      return Result.error(RemoteBaseModel(message: SocketError().toString()));
     } on HttpException {
-      return  Result.error( RemoteBaseModel(message: ConnectionError().toString() ,));
+      return Result.error(RemoteBaseModel(message: ConnectionError().toString()));
     } catch (e, s) {
       print('catch error s$s');
-      return  Result.error( RemoteBaseModel(message: e.toString() ,));
+      return Result.error(RemoteBaseModel(message: e.toString()));
     }
   }
-
 }

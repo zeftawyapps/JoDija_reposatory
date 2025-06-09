@@ -1,11 +1,8 @@
-import 'package:JoDija_DataSource/utilis/json_reader/json_asset_reader.dart';
+import 'package:JoDija_reposatory/utilis/json_reader/json_asset_reader.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'https/http_urls.dart';
-
-
-
 
 /// Abstract class for configuring data sources, including Firebase and backend routing.
 ///
@@ -13,8 +10,6 @@ import 'https/http_urls.dart';
 /// from JSON files or data maps. It also includes properties to manage the application type,
 /// backend state, and environment type.
 abstract class DataSourceConfigration {
-
-
   /// Initializes Firebase with the configuration specified in the JSON file at the given path.
   ///
   /// This function reads the Firebase configuration from a JSON file and initializes Firebase
@@ -59,11 +54,11 @@ abstract class DataSourceConfigration {
   ///
   /// \[param\] path The map containing the Firebase configuration.
   /// \[throws\] Exception if an error occurs during Firebase initialization.
-   Future FirebaseInitFromDataJson(Map<String , dynamic> path) async {
+  Future FirebaseInitFromDataJson(Map<String, dynamic> path) async {
     try {
       WidgetsFlutterBinding.ensureInitialized();
 
-      var data =  path; 
+      var data = path;
       var firebaseConfig = data['firebaseConfig'];
       if (this.envType == EnvType.prod) {
         var prod = firebaseConfig['prod'];
@@ -88,8 +83,6 @@ abstract class DataSourceConfigration {
       print(e);
     }
   }
-
-
 
   /// Initializes the backend routing with the base URL specified in the JSON file at the given path.
   ///
@@ -158,8 +151,6 @@ abstract class DataSourceConfigration {
   set envType(EnvType value) {
     _envType = value;
   }
-
-
 }
 
 enum AppType { DashBord, App }

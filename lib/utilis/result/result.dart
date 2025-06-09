@@ -5,6 +5,14 @@ class Result<Error extends RemoteBaseModel, Data> {
   final Data? data;
   final Error? error;
 
+ //*
+  // *  Result class is a generic class that is used to return data from the response of the repository
+  // *  It is used to return data from the repository to the view model
+  // [data] is the data that is returned from the repository
+  // [error] is the error that is returned from the repository
+
+  // *//
+
   Result({this.data, this.error}) : assert(data != null || error != null);
 
   /// checks whether data is available
@@ -33,29 +41,8 @@ class Result<Error extends RemoteBaseModel, Data> {
     );
   }
 
-  /// returns error and data
-  factory Result.dataWithError(Data? data,Error error) {
-    return Result(
-      error: error,
-      data: data,
-    );
-  }
 
-  /// forwards the error if present else forwards the data
-  factory Result.forward(Result _result, Data? data) {
-    if (_result.hasErrorOnly) {
-      return Result.error(_result.error as Error);
-    }
-     return Result.data(data);
-  }
 
-  fold({required Result Function(Error error) onError,required Result Function(Data data) onData}) {
-    if(hasDataOnly) {
-      return onData;
-    } else {
-      return onError;
-    }
-  }
   /// Cherry pick values
   ///
   /// onError will return error, if present

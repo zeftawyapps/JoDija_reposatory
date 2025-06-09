@@ -1,18 +1,28 @@
-class BaseDataModel{
+/// A base data model class that represents a data entity with an optional ID.
+class BaseDataModel {
+  /// The unique identifier for the data entity.
+  String? id;
 
-  String? id ;
-  // create to json method and factory forJson
-  Map<String, dynamic> toJson(){return {} ; }
+  /// A map to hold additional data for the model.
+  Map<String, dynamic>? map = Map();
 
-  BaseDataModel({String ?id } ){
+  /// Constructs a [BaseDataModel] instance with an optional [id].
+  BaseDataModel({String? id}) {
     this.id = id;
   }
-  factory BaseDataModel.fromJson(Map<String, dynamic> json , String? id ) {
 
-    return BaseDataModel(id: id )
-      .. map = json;
-
+  /// Creates a [BaseDataModel] instance from a JSON map and an optional [id].
+  ///
+  /// The [json] parameter is a map containing the data to initialize the model.
+  /// The [id] parameter is an optional identifier for the model.
+  factory BaseDataModel.fromJson(Map<String, dynamic> json, String? id) {
+    return BaseDataModel(id: id)..map = json;
   }
-  Map<String, dynamic>?  map = Map();
 
+  /// Converts the [BaseDataModel] instance to a JSON map.
+  ///
+  /// Returns a map containing the data of the model.
+  Map<String, dynamic> toJson() {
+    return {};
+  }
 }

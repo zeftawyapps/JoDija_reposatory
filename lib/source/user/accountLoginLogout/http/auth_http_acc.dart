@@ -24,7 +24,7 @@ class AuthHttpSource implements IHttpAuthentication {
   Future<UsersBaseModel> createAccount({Map<String , dynamic >? body  }) async {
     Map<String , dynamic >? allBody = {"email": email , "password": pass ,    }    ;
 allBody.addAll(body!  );
-    var user = await  JoDijaHttpClient (userToken: true).sendRequestResultWithMap(
+    var user = await  HttpClient (userToken: true).sendRequestResultWithMap(
         method: HttpMethod.POST,
         url: "ApiUrls.createAccount",
         body: allBody   ,
@@ -36,7 +36,7 @@ allBody.addAll(body!  );
   @override
   Future<UsersBaseModel> logIn() async {
 
-    var user =     await JoDijaHttpClient(userToken: true).sendRequestResultWithMap(
+    var user =     await HttpClient(userToken: true).sendRequestResultWithMap(
         method: HttpMethod.POST,
         url:" ApiUrls.logIn",
         body:  {"email": email , "password": pass}   ,
@@ -60,7 +60,7 @@ allBody.addAll(body!  );
   @override
   Future<void> logOut() async {
 
-      await  JoDijaHttpClient(userToken: true).sendRequestResultWithMap(
+      await  HttpClient(userToken: true).sendRequestResultWithMap(
         method: HttpMethod.POST,
         url: "ApiUrls.logOut ",
         body:  {"email": email , "password": pass}   ,

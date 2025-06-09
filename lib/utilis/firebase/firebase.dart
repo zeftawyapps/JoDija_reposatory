@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:JoDija_DataSource/utilis/models/base_data_model.dart';
+import 'package:JoDija_reposatory/utilis/models/base_data_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -73,10 +73,10 @@ class FirebaseLoadingData {
       var result = snapshot.docs
           .map(
             (snapshot) => builder(
-          snapshot.data() as Map<String, dynamic>,
-          snapshot.id,
-        ),
-      )
+              snapshot.data() as Map<String, dynamic>,
+              snapshot.id,
+            ),
+          )
           .toList();
       if (sort != null) {
         result.sort(sort);
@@ -105,7 +105,7 @@ class FirebaseLoadingData {
   /// [builder] - The function to build the data.
   /// [queryBuilder] - The function to build the query.
   /// [sort] - The function to sort the data.
-  Future<List<T  >> loadDataWithQuery<T extends BaseDataModel>({
+  Future<List<T>> loadDataWithQuery<T extends BaseDataModel>({
     required String path,
     required T Function(Map<String, dynamic>? jsondata, String docId) builder,
     Query Function(Query query)? queryBuilder,
@@ -120,10 +120,10 @@ class FirebaseLoadingData {
       final result = snapshot.docs
           .map(
             (snapshot) => builder(
-          snapshot.data() as Map<String, dynamic>,
-          snapshot.id,
-        ),
-      )
+              snapshot.data() as Map<String, dynamic>,
+              snapshot.id,
+            ),
+          )
           .where((value) => value != null)
           .toList();
       if (sort != null) {

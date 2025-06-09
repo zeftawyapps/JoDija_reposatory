@@ -37,7 +37,7 @@ class DataSourceDataActionsHttpSources extends IBaseDataActionsSource<BaseDataMo
   addDataItem() async {
     if (file == null) {
       var body = data!.toJson();
-      var result = await JoDijaHttpClient(userToken: true)
+      var result = await HttpClient(userToken: true)
           .sendRequest(
           method: HttpMethod.POST,
           url: ApiUrls.BASE_URL +"/" + url,
@@ -53,7 +53,7 @@ class DataSourceDataActionsHttpSources extends IBaseDataActionsSource<BaseDataMo
  } } else {
 
       String key = HttpHeader().tokenKey;
-      var result = await JoDijaHttpClient(userToken: true).uploadMapResult(
+      var result = await HttpClient(userToken: true).uploadMapResult(
           fileKey: imagfileld,
           file: file!,
           headers: {
@@ -78,7 +78,7 @@ class DataSourceDataActionsHttpSources extends IBaseDataActionsSource<BaseDataMo
   @override
   Future<Result<RemoteBaseModel, RemoteBaseModel >>
   deleteDataItem(String id) async {
-    var result = await JoDijaHttpClient(userToken: true). sendRequest(
+    var result = await HttpClient(userToken: true). sendRequest(
         method: HttpMethod.DELETE,
         url:" ApiUrls.category +  + id," ,
         cancelToken: CancelToken());
@@ -95,7 +95,7 @@ class DataSourceDataActionsHttpSources extends IBaseDataActionsSource<BaseDataMo
   @override
   Future<Result<RemoteBaseModel, RemoteBaseModel<List<BaseDataModel>>  >>
   getDataList() async {
-      var result = await JoDijaHttpClient(userToken: true).sendRequest(
+      var result = await HttpClient(userToken: true).sendRequest(
           method: HttpMethod.GET,
           url: ApiUrls.BASE_URL + "/" + url ,
           cancelToken: CancelToken());
@@ -109,7 +109,7 @@ class DataSourceDataActionsHttpSources extends IBaseDataActionsSource<BaseDataMo
   @override
   Future<Result<RemoteBaseModel, RemoteBaseModel<BaseDataModel>>  > getSingleData(
       String id)async {
-    var result = await JoDijaHttpClient(userToken: true).sendRequest(
+    var result = await HttpClient(userToken: true).sendRequest(
         method: HttpMethod.GET, url: "", cancelToken: CancelToken());
     if (result.data!.status == StatusModel.success) {
       var resultdata = result.data!.data! ["data"] as BaseDataModel;
@@ -124,7 +124,7 @@ class DataSourceDataActionsHttpSources extends IBaseDataActionsSource<BaseDataMo
   @override
   Future<Result<RemoteBaseModel, RemoteBaseModel>>
   editeDataItem(String id) {
-    var result = JoDijaHttpClient(userToken: true).sendRequest(
+    var result = HttpClient(userToken: true).sendRequest(
         method: HttpMethod.PUT,
         url: "ApiUrls.category  id",
         cancelToken: CancelToken());

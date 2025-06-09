@@ -1,7 +1,12 @@
 to understand this library, you need to know the following classes:
 - `Configrastion`: Represents a document.
-- `Results`: 
+- `Results`: it has 3 classes:
+  * `Result`: Represents a document.
+  * `ResultDataHelper`: Represents a document.
+  * `UserResult`: Represents a document.
 - `Base Model`:
+-  **`BaseModel`**: Represents a document.
+-  **`remoteBaseModelData`**: Represents a document.
 - `abstract class`: 
   * `IBaseDataSourceRepo`:
   * `IBaseSource`:
