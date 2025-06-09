@@ -1,41 +1,44 @@
-to understand this library, you need to know the following classes:
+# Jodija Data Source Module: Class Reference
 
-- `Configrastion`: Represents a document.
+To understand this library, you need to know the following classes:
+
+- [`Configrastion`](classes/configration.md): Configuration class for data sources.
 - `Results`: it has 3 classes:
-  - `Result`: Represents a document.
-  - `ResultDataHelper`: Represents a document.
-  - `UserResult`: Represents a document.
+  - [`Result`](classes/results/result.md): Generic result wrapper.
+  - [`ResultDataHelper`](classes/results/result_data_model.md): Helper for result data handling.
+  - [`UserResult`](classes/results/result_user_data.md): User-specific result data.
 - `Base Model`:
-- **`BaseModel`**: Represents a document.
-- **`remoteBaseModelData`**: Represents a document.
-- `abstract class`:
-  - `IBaseDataSourceRepo`:
-  - `IBaseSource`:
-  - `IBaseStream`:
-  - `IBaseDataActionsSource`:
-  - `Authintications`:
-    - `abstract class`:
-      - `IBaseAuthentication`:
-      - `IBaseAccountActions`:
-      - `IFirebaseAuthentication`:
-      - `IHttpAuthentication`:
-- `repsatory`:
-  - `Authintications`:
-    - `BaseAuthRepo`:
-    - `BaseProfilRebo`:
-  - `DataSourceRepo`
-- `source`:
-  - `DataSourceFirebaseSource`:
-  - `StreamFirebaseDataSource`:
-  - `DataSourceDataActionsHttpSources`:
-  - `AuthHttpSource`:
-  - `EmailPassowrdAuthSource`:
-  - `GoogleAuthSoucre`:
-- `utils`:
+- [`BaseDataModel`](classes/base_model/base_data_model.md): Base model for all data objects.
+- [`RemoteBaseModel`](classes/base_model/remote_base_model.md): Model for remote operations.
+- `Abstract Classes`:
+  - [`IBaseDataSourceRepo`](classes/abstract_classes/IBaseDataSourceRepo.md): Repository interface.
+  - [`IBaseSource`](classes/abstract_classes/IBaseSource.md): Basic data source interface.
+  - [`IBaseStream`](classes/abstract_classes/IBaseStream.md): Stream data interface.
+  - [`IBaseDataActionsSource`](classes/abstract_classes/IBaseDataActionsSource.md): Data actions interface.
+  - `Authentication`:
+    - `Abstract Classes`:
+      - [`IBaseAuthentication`](classes/abstract_classes/authentication/IBaseAuthentication.md): Base authentication interface.
+      - [`IBaseAccountActions`](classes/abstract_classes/authentication/IBaseAccountActions.md): Account actions interface.
+      - [`IFirebaseAuthentication`](classes/abstract_classes/authentication/IFirebaseAuthentication.md): Firebase authentication interface.
+      - [`IHttpAuthentication`](classes/abstract_classes/authentication/IHttpAuthentication.md): HTTP authentication interface.
+- `Repositories`:
+  - `Authentication`:
+    - [`BaseAuthRepo`](classes/implementations/BaseAuthRepo.md): Authentication repository.
+    - [`BaseProfilRebo`](classes/implementations/BaseProfilRebo.md): Profile repository.
+  - [`DataSourceRepo`](classes/implementations/DataSourceRepo.md): Data source repository.
+- `Sources`:
+  - [`DataSourceFirebaseSource`](classes/implementations/DataSourceFirebaseSource.md): Firebase data source.
+  - [`StreamFirebaseDataSource`](classes/implementations/StreamFirebaseDataSource.md): Firebase streaming data source.
+  - [`DataSourceDataActionsHttpSources`](classes/implementations/DataSourceDataActionsHttpSources.md): HTTP data source.
+  - [`AuthHttpSource`](classes/implementations/AuthHttpSource.md): HTTP authentication source.
+  - [`EmailPassowrdAuthSource`](classes/implementations/EmailPassowrdAuthSource.md): Email/password authentication source.
+  - [`GoogleAuthSoucre`](classes/implementations/GoogleAuthSoucre.md): Google authentication source.
+- `Utilities`:
   - `Firebase`:
-    - `FirebaseLoadingData`
-    - `FirestoreAndStorageActions`
-    - `FireStoreActions`
-    - `StorageActions` \* `Http`:
-    - `JodijaHttpClient`
-    - `HttpLoadingData`
+    - [`FirebaseLoadingData`](classes/utils/FirebaseLoadingData.md): Firebase data loading utility.
+    - [`FirestoreAndStorageActions`](classes/utils/FirestoreAndStorageActions.md): Combined Firestore and Storage operations.
+    - [`FireStoreActions`](classes/utils/FireStoreActions.md): Firestore operations.
+    - [`StorageActions`](classes/utils/StorageActions.md): Storage operations.
+  - `HTTP`:
+    - [`JodijaHttpClient`](classes/utils/JodijaHttpClient.md): HTTP client utility.
+    - [`HttpLoadingData`](classes/utils/HttpLoadingData.md): HTTP response data structure.
