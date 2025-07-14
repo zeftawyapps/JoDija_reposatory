@@ -47,7 +47,7 @@ class BaseProfilRebo {
   Future<Result<RemoteBaseModel, UsersBaseModel>> editProfile(
       {UsersBaseModel? data, String? id, Object? file}) async {
     try {
-      var result = await _accountActions.updateProfileData(id: id!, mapData: data!.map, file: file);
+      var result = await _accountActions.updateProfileData(id: id!, mapData: data!.uMap, file: file);
       UsersBaseModel usersModel = UsersBaseModel.formJson(result);
       return Result.data(usersModel);
     } on FirebaseException catch (e) {

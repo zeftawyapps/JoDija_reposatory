@@ -1,3 +1,4 @@
+import 'package:JoDija_reposatory/utilis/models/base_data_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'interface_userModel.dart';
@@ -6,7 +7,7 @@ import 'interface_userModel.dart';
 /// This class implements `IuserModel` and provides basic fields
 /// such as `uid`, `name`, `email`, and `token`. It also includes
 /// methods for JSON serialization and deserialization.
-class UsersBaseModel implements IuserModel {
+class UsersBaseModel implements IuserModel  , BaseDataModel{
   static const String idKey = "uid";
   static const String? nameKey = "name";
   static const String? emailKey = "email";
@@ -33,7 +34,9 @@ class UsersBaseModel implements IuserModel {
     name = json['name'] == null ? null : json['name'];
     email = json['email'] == null ? null : json['email'];
     token = json['token'] == null ? "" : json['token'];
-    map = json;
+   id = uid; 
+    uMap = json;
+    map = json; 
   }
 
   /// Converts the `UsersBaseModel` instance to a JSON map.
@@ -41,14 +44,21 @@ class UsersBaseModel implements IuserModel {
   /// \returns A map containing the JSON data.
   @mustBeOverridden
   Map<String, dynamic> toJson() {
-    final _data = map;
+    final _data = uMap;
     _data['uid'] = uid;
     _data['name'] = name;
     _data['email'] = email;
     _data['token'] = token;
+    map =_data ; 
     return _data;
   }
 
   @override
-  Map<String, dynamic> map = Map();
+  Map<String, dynamic> uMap = Map();
+  
+  @override
+  String? id;
+  
+  @override
+  Map<String, dynamic>? map;
 }

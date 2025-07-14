@@ -1,3 +1,3 @@
 abstract class IuserModel{
-  Map<String , dynamic>  map =Map() ;
+  Map<String , dynamic>  uMap =Map() ;
 }
