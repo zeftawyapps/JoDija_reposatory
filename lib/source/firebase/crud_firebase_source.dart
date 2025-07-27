@@ -14,12 +14,12 @@ import '../../utilis/models/base_data_model.dart';
 /// Firebase Firestore. It also supports uploading files to Firebase Storage
 /// and handling image fields.
 ///
-/// Type parameter [T] must extend [BaseDataModel].
-class DataSourceFirebaseSource<T extends BaseDataModel>
-    implements IBaseDataActionsSource<BaseDataModel> {
+/// Type parameter [T] must extend [BaseEntityDataModel].
+class DataSourceFirebaseSource<T extends BaseEntityDataModel>
+    implements IBaseDataActionsSource<BaseEntityDataModel> {
   late FirestoreAndStorageActions _fireStoreAction;
   late FirebaseLoadingData _firebaseLoadingData;
-  BaseDataModel? _data;
+  BaseEntityDataModel? _data;
   Object? _file;
   String _path = "";
   String? deleteUrl = "";
@@ -58,7 +58,7 @@ class DataSourceFirebaseSource<T extends BaseDataModel>
   /// The [file] parameter is an optional file to upload.
   /// The [imageField] parameter specifies the field name for the image.
   factory DataSourceFirebaseSource.insert({
-    required BaseDataModel dataModel,
+    required BaseEntityDataModel dataModel,
     required String path,
     Object? file,
     String? imageField = "image",
@@ -77,7 +77,7 @@ class DataSourceFirebaseSource<T extends BaseDataModel>
   /// The [oldImg] parameter specifies the old image URL to delete.
   /// The [imageField] parameter specifies the field name for the image.
   factory DataSourceFirebaseSource.edit({
-    required BaseDataModel dataModel,
+    required BaseEntityDataModel dataModel,
     required String path,
     Object? file,
     String? oldImg = "",
@@ -195,7 +195,7 @@ class DataSourceFirebaseSource<T extends BaseDataModel>
       getDataList() async {
     try {
       this.dataBuilder ??=
-          (data, documentId) => BaseDataModel.fromJson(data!, documentId) as T;
+          (data, documentId) => BaseEntityDataModel.fromJson(data!, documentId) as T;
       var product = await _firebaseLoadingData.loadDataWithQuery<T>(
           queryBuilder: _query, path: _path, builder: this.dataBuilder!);
       return Result.data(RemoteBaseModel(data: product as List<T>));
@@ -215,7 +215,7 @@ class DataSourceFirebaseSource<T extends BaseDataModel>
       String id) async {
     try {
       var buid = this.dataBuilder ??
-          (data, documentId) => BaseDataModel.fromJson(data!, documentId) as T;
+          (data, documentId) => BaseEntityDataModel.fromJson(data!, documentId) as T;
 
       var data = await _firebaseLoadingData.loadSingleDocData(_path, id);
 

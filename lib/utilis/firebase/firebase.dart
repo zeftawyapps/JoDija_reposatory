@@ -105,7 +105,7 @@ class FirebaseLoadingData {
   /// [builder] - The function to build the data.
   /// [queryBuilder] - The function to build the query.
   /// [sort] - The function to sort the data.
-  Future<List<T>> loadDataWithQuery<T extends BaseDataModel>({
+  Future<List<T>> loadDataWithQuery<T extends BaseEntityDataModel>({
     required String path,
     required T Function(Map<String, dynamic>? jsondata, String docId) builder,
     Query Function(Query query)? queryBuilder,

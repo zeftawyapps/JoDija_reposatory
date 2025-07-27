@@ -8,7 +8,7 @@ import '../../utilis/models/base_data_model.dart';
 ///
 /// This class provides methods for adding, updating, deleting, and retrieving data items.
 /// The type parameter `T` must extend `BaseDataModel`.
-abstract class IBaseSource<T extends BaseDataModel> {
+abstract class IBaseSource<T extends BaseEntityDataModel> {
   /// The data item of type `T`.
   T? data;
 

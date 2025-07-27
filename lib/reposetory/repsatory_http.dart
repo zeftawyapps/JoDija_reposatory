@@ -8,7 +8,7 @@ import '../utilis/result/result.dart';
 ///
 /// This class provides methods to add, delete, retrieve, and update data
 /// using the provided data actions source interface.
-class DataSourceRepo<T extends BaseDataModel> {
+class DataSourceRepo<T extends BaseEntityDataModel> {
   IBaseDataActionsSource<T>? _inputSource;
 
   /// Constructs a `DataSourceRepo` instance.
@@ -58,7 +58,7 @@ class DataSourceRepo<T extends BaseDataModel> {
   ///
   /// \param id The ID of the data item to retrieve.
   /// \returns A `Result` containing either a `RemoteBaseModel` with the data item or an error message.
-  Future<Result<RemoteBaseModel, RemoteBaseModel<BaseDataModel>>> getSingleData(
+  Future<Result<RemoteBaseModel, RemoteBaseModel<BaseEntityDataModel>>> getSingleData(
       String id) async {
     try {
       var result = await _inputSource!.getSingleData(id);

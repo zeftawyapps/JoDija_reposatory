@@ -6,7 +6,7 @@ import '../models/staus_model.dart';
 
 /// this class is a helper class to help in the process of getting data from the result object
 ///
-class ResultDataHelper<T extends BaseDataModel> {
+class ResultDataHelper<T extends BaseEntityDataModel> {
   /// Retrieves a list of data from a `RemoteBaseModel` result object.
   ///
   /// This method processes the result object to extract a list of data items of type `T`.
@@ -42,10 +42,10 @@ class ResultDataHelper<T extends BaseDataModel> {
   RemoteBaseModel<List<T>> getResultOfListData(
       RemoteBaseModel result,
       T? Function(
-        BaseDataModel? data,
+        BaseEntityDataModel? data,
       ) builder) {
     if (result.error == null) {
-      List<BaseDataModel> listData = result.data as List<BaseDataModel>;
+      List<BaseEntityDataModel> listData = result.data as List<BaseEntityDataModel>;
 
       List<T> list = [];
       for (var item in listData) {
@@ -78,7 +78,7 @@ class ResultDataHelper<T extends BaseDataModel> {
         Map<String, dynamic>? data,
       ) builder) {
     if (result.error == null) {
-      BaseDataModel resultData = result.data as BaseDataModel;
+      BaseEntityDataModel resultData = result.data as BaseEntityDataModel;
       T getedData = builder(resultData.map) as T;
       return RemoteBaseModel(data: getedData, status: StatusModel.success);
     } else {

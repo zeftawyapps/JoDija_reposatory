@@ -7,7 +7,7 @@ import 'interface_userModel.dart';
 /// This class implements `IuserModel` and provides basic fields
 /// such as `uid`, `name`, `email`, and `token`. It also includes
 /// methods for JSON serialization and deserialization.
-class UsersBaseModel implements IuserModel  , BaseDataModel{
+class UsersBaseModel implements IuserModel  , BaseEntityDataModel{
   static const String idKey = "uid";
   static const String? nameKey = "name";
   static const String? emailKey = "email";
@@ -38,6 +38,20 @@ class UsersBaseModel implements IuserModel  , BaseDataModel{
     uMap = json;
     map = json; 
   }
+ //  formJson With MetaData 
+  UsersBaseModel.formJsonWithMetaData(Map<String, dynamic> json) {
+    uid = json['uid'] == null ? null : json['uid'];
+    name = json['name'] == null ? null : json['name'];
+    email = json['email'] == null ? null : json['email'];
+    token = json['token'] == null ? "" : json['token'];
+    id = uid; 
+    uMap = json;
+    map = json; 
+    isArchived =   json['isArchived'] == null ? false : json['isArchived'];
+    createdAt = DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now();
+    updatedAt = DateTime.tryParse(json['updatedAt'] ?? '') ?? DateTime.now();
+  }
+
 
   /// Converts the `UsersBaseModel` instance to a JSON map.
   ///
@@ -52,6 +66,20 @@ class UsersBaseModel implements IuserModel  , BaseDataModel{
     map =_data ; 
     return _data;
   }
+  // tojson With metaData
+  @override
+  Map<String, dynamic> toJsonWithMetaData() {
+    final _data = toJson();
+    _data['uid'] = uid;
+    _data['name'] = name;
+    _data['email'] = email;
+    _data['token'] = token;
+    _data['isArchived'] = isArchived;
+    _data['createdAt'] = createdAt;
+    _data['updatedAt'] = updatedAt;
+     map =_data ; 
+    return _data;
+  }
 
   @override
   Map<String, dynamic> uMap = Map();
@@ -61,4 +89,13 @@ class UsersBaseModel implements IuserModel  , BaseDataModel{
   
   @override
   Map<String, dynamic>? map;
+
+  @override
+  bool? isArchived;
+  
+  @override
+  DateTime? createdAt;
+  
+  @override
+  DateTime? updatedAt;
 }

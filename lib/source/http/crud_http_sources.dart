@@ -10,15 +10,15 @@ import '../../utilis/models/staus_model.dart';
 import '../../utilis/result/result.dart';
 
 
-class DataSourceDataActionsHttpSources extends IBaseDataActionsSource<BaseDataModel>   {
-  BaseDataModel? data;
+class DataSourceDataActionsHttpSources extends IBaseDataActionsSource<BaseEntityDataModel>   {
+  BaseEntityDataModel? data;
   MultipartFile? file;
   String imagfileld="image";
   String baseUrl = "";
   String url = "";
   // factory
   factory DataSourceDataActionsHttpSources.inputs( {String?   baseUrl="" , required   String url    ,
-       required BaseDataModel dataModyle, MultipartFile? file}) {
+       required BaseEntityDataModel dataModyle, MultipartFile? file}) {
 
 
     return DataSourceDataActionsHttpSources(baseUrl: baseUrl, url: url)
@@ -93,30 +93,30 @@ class DataSourceDataActionsHttpSources extends IBaseDataActionsSource<BaseDataMo
   }
 
   @override
-  Future<Result<RemoteBaseModel, RemoteBaseModel<List<BaseDataModel>>  >>
+  Future<Result<RemoteBaseModel, RemoteBaseModel<List<BaseEntityDataModel>>  >>
   getDataList() async {
       var result = await HttpClient(userToken: true).sendRequest(
           method: HttpMethod.GET,
           url: ApiUrls.BASE_URL + "/" + url ,
           cancelToken: CancelToken());
       var resultdata = result.data!.data["data"]  as List<dynamic> ;
-      List<BaseDataModel> listData = [];
+      List<BaseEntityDataModel> listData = [];
       resultdata.map((e) => {
-        listData.add(BaseDataModel.fromJson(e , e["id"]))
+        listData.add(BaseEntityDataModel.fromJson(e , e["id"]))
       }).toList();
-      return  Result<RemoteBaseModel, RemoteBaseModel<List<BaseDataModel>>>    (data: RemoteBaseModel(data: listData));
+      return  Result<RemoteBaseModel, RemoteBaseModel<List<BaseEntityDataModel>>>    (data: RemoteBaseModel(data: listData));
   }
   @override
-  Future<Result<RemoteBaseModel, RemoteBaseModel<BaseDataModel>>  > getSingleData(
+  Future<Result<RemoteBaseModel, RemoteBaseModel<BaseEntityDataModel>>  > getSingleData(
       String id)async {
     var result = await HttpClient(userToken: true).sendRequest(
         method: HttpMethod.GET, url: "", cancelToken: CancelToken());
     if (result.data!.status == StatusModel.success) {
-      var resultdata = result.data!.data! ["data"] as BaseDataModel;
-      return Result<RemoteBaseModel, RemoteBaseModel<BaseDataModel>>(
+      var resultdata = result.data!.data! ["data"] as BaseEntityDataModel;
+      return Result<RemoteBaseModel, RemoteBaseModel<BaseEntityDataModel>>(
           data: RemoteBaseModel(data: resultdata));
     }else {
-      return Result<RemoteBaseModel, RemoteBaseModel<BaseDataModel>>(
+      return Result<RemoteBaseModel, RemoteBaseModel<BaseEntityDataModel>>(
           error: RemoteBaseModel(message: result.data!.message, status: result.data!.status));
     }
   }

@@ -12,7 +12,7 @@ import '../../utilis/firebase/firebase.dart';
 /// convert JSON data into a data model of type [T].
 ///
 /// Type Parameters:
-/// - [T]: The type of the data model, which must extend [BaseDataModel].
+/// - [T]: The type of the data model, which must extend [BaseEntityDataModel].
 ///
 /// Example usage:
 /// ```dart
@@ -28,9 +28,9 @@ import '../../utilis/firebase/firebase.dart';
 ///
 /// See also:
 /// - [FirebaseLoadingData], which provides methods for loading data from Firestore.
-/// - [BaseDataModel], the base class for data models.
-class StreamFirebaseDataSource<T extends BaseDataModel>
-    implements IBaseStream<BaseDataModel> {
+/// - [BaseEntityDataModel], the base class for data models.
+class StreamFirebaseDataSource<T extends BaseEntityDataModel>
+    implements IBaseStream<BaseEntityDataModel> {
   final _fireStore = FirebaseLoadingData();
   String path;
   T Function(Map<String, dynamic>? jsondata, String docId) builder;

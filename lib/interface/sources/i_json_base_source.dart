@@ -8,7 +8,7 @@ import '../../utilis/result/result.dart';
 ///
 /// This class provides methods to perform CRUD operations on data items.
 /// The type parameter `T` represents the type of data items.
-abstract class IBaseDataActionsSource<T extends BaseDataModel> {
+abstract class IBaseDataActionsSource<T extends BaseEntityDataModel> {
   /// Adds a data item.
   ///
   /// \returns A `Future` that completes with a `Result` containing either
