@@ -107,9 +107,10 @@ class DataSourceFirebaseSource<T extends BaseEntityDataModel>
   /// If `_file` is not null, uploads the file and adds the data to Firestore.
   /// Otherwise, adds the data directly to Firestore.
   ///
+  /// @param id The optional document ID to use for the new data item.
   /// Returns a `Result` containing the added data or an error.
   @override
-  Future<Result<RemoteBaseModel, RemoteBaseModel>> addDataItem() async {
+  Future<Result<RemoteBaseModel, RemoteBaseModel>> addDataItem({String? id }) async {
     try {
       if (_data == null) {
         return Result.error(RemoteBaseModel(message: "data is null"));
@@ -118,6 +119,7 @@ class DataSourceFirebaseSource<T extends BaseEntityDataModel>
       if (_file != null) {
         var result = await _fireStoreAction
             .addDataCloudFirestorWithUploadCollectionPathes(
+          id: id ,
                 pathes: _path,
                 mymap: _data!.toJson(),
                 file: _file,
@@ -125,6 +127,7 @@ class DataSourceFirebaseSource<T extends BaseEntityDataModel>
         return Result.data(RemoteBaseModel(data: result));
       } else {
         var result = await _fireStoreAction.addDataCloudFirestore(
+          id: id ,
             path: _path, mymap: _data!.toJson());
         return Result.data(RemoteBaseModel(data: result));
       }
