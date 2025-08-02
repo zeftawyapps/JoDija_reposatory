@@ -11,9 +11,11 @@ import '../../utilis/result/result.dart';
 abstract class IBaseDataActionsSource<T extends BaseEntityDataModel> {
   /// Adds a data item.
   ///
+  /// /// \param id An optional identifier for the data item. If provided, it will be used
   /// \returns A `Future` that completes with a `Result` containing either
+
   /// a `RemoteBaseModel` on success or another `RemoteBaseModel` on error.
-  Future<Result<RemoteBaseModel, RemoteBaseModel>> addDataItem();
+  Future<Result<RemoteBaseModel, RemoteBaseModel>> addDataItem({String? id });
 
   /// Edits a data item identified by the given `id`.
   ///

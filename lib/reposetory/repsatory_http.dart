@@ -20,10 +20,11 @@ class DataSourceRepo<T extends BaseEntityDataModel> {
 
   /// Adds a data item.
   ///
+  ///  \param id An optional identifier for the data item. If provided, it will be used
   /// \returns A `Result` containing either a `RemoteBaseModel` or an error message.
-  Future<Result<RemoteBaseModel, RemoteBaseModel>> addData() async {
+  Future<Result<RemoteBaseModel, RemoteBaseModel>> addData({String? id }) async {
     try {
-      var result = await _inputSource!.addDataItem();
+      var result = await _inputSource!.addDataItem(id : id);
       return Result.data(result.data);
     } catch (e) {
       return Result.error(

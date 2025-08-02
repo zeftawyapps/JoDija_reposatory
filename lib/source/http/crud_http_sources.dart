@@ -34,7 +34,7 @@ class DataSourceDataActionsHttpSources extends IBaseDataActionsSource<BaseEntity
 
   @override
   Future<Result<RemoteBaseModel, RemoteBaseModel<String>  >>
-  addDataItem() async {
+  addDataItem({String? id }) async {
     if (file == null) {
       var body = data!.toJson();
       var result = await HttpClient(userToken: true)
