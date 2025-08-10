@@ -231,14 +231,14 @@ class BaseAuthRepo {
   ///   error: (error) => print('Failed: ${error.message}'),
   /// );
   /// ```
-  Future<Result<RemoteBaseModel, String  >> changePassword(
+  Future<Result<RemoteBaseModel, UsersBaseModel  >> changePassword(
     String email ,   String oldPassword, String newPassword) async {
     try {
       if (_account is IHttpAuthentication) {
-       return  await  _changePasswordHttp(email, oldPassword, newPassword);
-      } else {
-      return   await  _changePasswordFirebase( email ,  oldPassword, newPassword);
-      }
+         throw Exception("change password not supported in http authentication");
+      } else    {
+        return  await  _changePasswordFirebase( email ,  oldPassword, newPassword);     
+      }  
     } on FirebaseException catch (e) {
       return Result.error(RemoteBaseModel(
           message: handilExcepstons(e.code), status: StatusModel.error));
@@ -270,11 +270,11 @@ class BaseAuthRepo {
   /// [newPassword] - The new password to set.
   /// 
   /// Returns a `Result` with success message or error details.
-  Future<Result<RemoteBaseModel, String >> _changePasswordFirebase(
+  Future<Result<RemoteBaseModel, UsersBaseModel>> _changePasswordFirebase(
     String email ,   String oldPassword, String newPassword) async {
     try {
-       await _account.changePassword( email ,  oldPassword, newPassword);
-      return Result.data("done");
+     final user =   await _account.changePassword( email ,  oldPassword, newPassword);
+      return Result.data(user);
     } on FirebaseException catch (e) {
       return Result.error(RemoteBaseModel(
           message: handilExcepstons(e.code), status: StatusModel.error));
