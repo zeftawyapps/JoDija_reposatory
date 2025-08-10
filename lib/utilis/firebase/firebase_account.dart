@@ -1,5 +1,6 @@
 
- import 'package:firebase_auth/firebase_auth.dart';
+ import 'package:JoDija_reposatory/model/user/base_model/base_user_module.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 /// A class that handles Firebase authentication operations.
 class FirebaseAccount {
@@ -58,7 +59,7 @@ class FirebaseAccount {
   ///   print('Failed to change password: $e');
   /// }
   /// ```
-  Future<void> changePassword(String email ,   String oldPassword, String newPassword) async {
+  Future<UsersBaseModel> changePassword(String email ,   String oldPassword, String newPassword) async {
     try {
       // First, log in the user to verify their current credentials
       final user = await this.logIn(email, oldPassword);
@@ -72,10 +73,16 @@ class FirebaseAccount {
 
       // If re-authentication is successful, update the password
       await user.user?.updatePassword(newPassword);
+      final updatedUser = await FirebaseAuth.instance.currentUser;
 
       print('Password updated successfully!');
       // Show a success message to the user.
-
+      return UsersBaseModel(
+        name: updatedUser?.displayName,
+        email: updatedUser?.email,
+        uid: updatedUser?.uid,
+        token: await updatedUser?.getIdToken() ?? ""
+      );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'wrong-password') {
         print('The old password you entered is incorrect.');

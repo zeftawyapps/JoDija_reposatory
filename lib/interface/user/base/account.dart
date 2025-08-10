@@ -30,7 +30,7 @@ abstract class IBaseAuthentication {
   /// \param newPassword The new password to set for the user account.
   /// /// \returns A `Future` that completes when the password is changed successfully.
   /// Throws a [FirebaseAuthException] if the old password is incorrect or other Firebase errors occur.
-  Future<void> changePassword(String email, String oldPassword, String newPassword);
+  Future<UsersBaseModel> changePassword(String email, String oldPassword, String newPassword);
   
 
 }

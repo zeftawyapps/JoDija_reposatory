@@ -199,4 +199,87 @@ class BaseAuthRepo {
           RemoteBaseModel(message: e.toString(), status: StatusModel.error));
     }
   }
+
+  /// Changes the password for a user account.
+  ///
+  /// This method handles password changes for both HTTP and Firebase authentication
+  /// mechanisms. It validates the current password and updates it to the new one.
+  ///
+  /// [email] - The email address of the user whose password is being changed.
+  /// [oldPassword] - The current password of the user (required for verification).
+  /// [newPassword] - The new password to set for the user account.
+  ///
+  /// Returns:
+  /// - A `Result<RemoteBaseModel, String>` where:
+  ///   - Success: Contains "done" string indicating password was changed successfully
+  ///   - Error: Contains `RemoteBaseModel` with error details and status
+  ///
+  /// Throws:
+  /// - [FirebaseException] for Firebase-specific authentication errors
+  /// - [Exception] for general errors during HTTP authentication
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = await authRepo.changePassword(
+  ///   'user@example.com',
+  ///   'currentPassword123',
+  ///   'newSecurePassword456'
+  /// );
+  /// 
+  /// result.when(
+  ///   data: (message) => print('Password changed: $message'),
+  ///   error: (error) => print('Failed: ${error.message}'),
+  /// );
+  /// ```
+  Future<Result<RemoteBaseModel, String  >> changePassword(
+    String email ,   String oldPassword, String newPassword) async {
+    try {
+      if (_account is IHttpAuthentication) {
+       return  await  _changePasswordHttp(email, oldPassword, newPassword);
+      } else {
+      return   await  _changePasswordFirebase( email ,  oldPassword, newPassword);
+      }
+    } on FirebaseException catch (e) {
+      return Result.error(RemoteBaseModel(
+          message: handilExcepstons(e.code), status: StatusModel.error));
+    }
+  }
+
+  /// Changes password using HTTP authentication.
+  ///
+  /// [email] - The email address of the user.
+  /// [oldPassword] - The current password for verification.
+  /// [newPassword] - The new password to set.
+  /// 
+  /// Returns a `Result` with success message or error details.
+  Future<Result<RemoteBaseModel, String >> _changePasswordHttp(
+   String email ,    String oldPassword, String newPassword) async {
+    try {
+      await _account.changePassword( email ,  oldPassword, newPassword);
+      return Result.data("done");
+    } catch (e) {
+      return Result.error(
+          RemoteBaseModel(message: e.toString(), status: StatusModel.error));
+    }
+  } 
+
+  /// Changes password using Firebase authentication.
+  ///
+  /// [email] - The email address of the user.
+  /// [oldPassword] - The current password for verification.
+  /// [newPassword] - The new password to set.
+  /// 
+  /// Returns a `Result` with success message or error details.
+  Future<Result<RemoteBaseModel, String >> _changePasswordFirebase(
+    String email ,   String oldPassword, String newPassword) async {
+    try {
+       await _account.changePassword( email ,  oldPassword, newPassword);
+      return Result.data("done");
+    } on FirebaseException catch (e) {
+      return Result.error(RemoteBaseModel(
+          message: handilExcepstons(e.code), status: StatusModel.error));
+    }
+  }
+
+
 }

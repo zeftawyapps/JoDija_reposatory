@@ -43,7 +43,7 @@ usersModel = UsersBaseModel(name: user.user!.displayName, email: user.user!.emai
   }
   
   @override
-  Future<void> changePassword(String email, String oldPassword, String newPassword) {
+  Future<UsersBaseModel> changePassword(String email, String oldPassword, String newPassword) {
     return _accountRegist!.changePassword(email, oldPassword, newPassword);
   }
 
