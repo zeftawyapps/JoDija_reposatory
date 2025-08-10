@@ -23,4 +23,14 @@ abstract class IBaseAuthentication {
   ///
   /// \returns A `Future` that completes when the user is logged out.
   Future<void> logOut();
+
+  /// Changes the password for the user.
+  /// /// \param email The email address of the user whose password is being changed.
+  /// \param oldPassword The current password of the user (required for re-authentication).
+  /// \param newPassword The new password to set for the user account.
+  /// /// \returns A `Future` that completes when the password is changed successfully.
+  /// Throws a [FirebaseAuthException] if the old password is incorrect or other Firebase errors occur.
+  Future<void> changePassword(String email, String oldPassword, String newPassword);
+  
+
 }

@@ -41,4 +41,12 @@ usersModel = UsersBaseModel(name: user.user!.displayName, email: user.user!.emai
   Future<void> logOut() async {
     await _accountRegist!.logOut();
   }
+  
+  @override
+  Future<void> changePassword(String email, String oldPassword, String newPassword) {
+    return _accountRegist!.changePassword(email, oldPassword, newPassword);
+  }
+
+
+  
 }

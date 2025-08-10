@@ -77,5 +77,10 @@ class GoogleAuthSoucre extends IFirebaseAuthentication {
           throw Exception('error');
         }
       }
+      
+        @override
+        Future<void> changePassword(String email, String oldPassword, String newPassword) {
+          return _accountRegist!.changePassword(email, oldPassword, newPassword);
+        }
     }
 

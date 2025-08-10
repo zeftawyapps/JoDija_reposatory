@@ -68,4 +68,17 @@ allBody.addAll(body!  );
 
 
   }
+  
+  @override
+  Future<void> changePassword(String email, String oldPassword, String newPassword) {
+    return HttpClient(userToken: true).sendRequestResultWithMap(
+        method: HttpMethod.POST,
+        url: "ApiUrls.changePassword",
+        body: {
+          "email": email,
+          "oldPassword": oldPassword,
+          "newPassword": newPassword
+        },
+        cancelToken: CancelToken());
+  }
 }
