@@ -78,6 +78,7 @@ class FirebaseAccount {
       print('Password updated successfully!');
       // Show a success message to the user.
       return UsersBaseModel(
+
         name: updatedUser?.displayName,
         email: updatedUser?.email,
         uid: updatedUser?.uid,

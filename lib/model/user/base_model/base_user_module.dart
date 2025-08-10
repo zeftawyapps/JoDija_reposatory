@@ -24,7 +24,11 @@ class UsersBaseModel implements IuserModel  , BaseEntityDataModel{
   /// \param name The name of the user.
   /// \param email The email address of the user.
   /// \param token The token of the user.
-  UsersBaseModel({this.name, this.uid, this.email, this.token});
+  UsersBaseModel({this.name, this.uid, this.email, this.token}) {
+    id = uid;
+    uMap =  toJson();
+    map =  toJson() ;
+  }
 
   /// Constructs a `UsersBaseModel` instance from a JSON map.
   ///
