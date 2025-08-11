@@ -17,6 +17,7 @@ dependencies:
   firebase_storage:
   firebase_auth_web: ^5.13.0
   firebase_core_web: ^2.18.0
+  firebase_messaging:
   flutter_bloc: ^8.1.1
   freezed_annotation: ^1.1.0
 

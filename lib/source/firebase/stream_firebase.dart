@@ -33,7 +33,7 @@ class StreamFirebaseDataSource<T extends BaseEntityDataModel>
     implements IBaseStream<BaseEntityDataModel> {
   final _fireStore = FirebaseLoadingData();
   String path;
-  T Function(Map<String, dynamic>? jsondata, String docId) builder;
+  T Function(Map<String, dynamic>? jsondata, String docId)? builder;
 
   /// Creates a new instance of [StreamFirebaseDataSource].
   ///
@@ -41,7 +41,7 @@ class StreamFirebaseDataSource<T extends BaseEntityDataModel>
   /// The [builder] parameter is a function to build the data model from JSON.
   StreamFirebaseDataSource({
     required this.path,
-    required this.builder,
+      this.builder,
   });
 
   /// Streams a list of data items from Firebase Firestore.
@@ -52,9 +52,13 @@ class StreamFirebaseDataSource<T extends BaseEntityDataModel>
   /// Returns:
   /// - A [Stream] of [List] of [T] containing the streamed data items.
   Stream<List<T>> streamData() async* {
+
+    var varbuilder = this.builder ??
+        (json, docId) => BaseEntityDataModel.fromJson(json ?? {}, docId) as T;
+
     var dataResult = _fireStore.streamAllData(
       path: path,
-      builder: (data, documentId) => builder(data, documentId),
+      builder: (data, documentId) => varbuilder(data, documentId),
     );
     yield* dataResult!;
   }
