@@ -1,9 +1,9 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=G:\mobile1\flutter"
-export "FLUTTER_APPLICATION_PATH=F:\z_apps\tools\jodija-flutter\jodija_data_souce_module"
+export "FLUTTER_ROOT=/Users/moaz/Public/flutter"
+export "FLUTTER_APPLICATION_PATH=/Users/moaz/Desktop/delta/tools/JoDija_reposatory"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
-export "FLUTTER_TARGET=lib\main.dart"
+export "FLUTTER_TARGET=lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=0.0.1"
 export "FLUTTER_BUILD_NUMBER=0.0.1"

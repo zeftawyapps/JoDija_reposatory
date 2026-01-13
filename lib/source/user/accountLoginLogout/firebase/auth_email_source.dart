@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 
-import '../../../interface/user/firebase_acc.dart';
-import '../../../model/user/base_model/base_user_module.dart';
-import '../../../utilis/firebase/firebase_account.dart';
+import '../../../../interface/user/firebase_acc.dart';
+import '../../../../model/user/base_model/base_user_module.dart';
+import '../../../../utilis/firebase/firebase_account.dart';
 
 
 class EmailPassowrdAuthSource implements IFirebaseAuthentication {

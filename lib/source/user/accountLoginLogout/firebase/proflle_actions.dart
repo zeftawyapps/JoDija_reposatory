@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../constes/collections.dart';
-import '../../interface/user/base/actions.dart';
-import '../../model/user/base_model/base_user_module.dart';
-import '../../utilis/firebase/firebase.dart';
-import '../../utilis/firebase/firebase_and_storage_action.dart';
-import '../../utilis/firebase/firestore_inputs.dart';
+import '../../../../constes/collections.dart';
+import '../../../../interface/user/base/actions.dart';
+import '../../../../model/user/base_model/base_user_module.dart';
+import '../../../../utilis/firebase/firebase.dart';
+import '../../../../utilis/firebase/firebase_and_storage_action.dart';
+import '../../../../utilis/firebase/firestore_inputs.dart';
 
 class ProfileActions implements IBaseAccountActions {
 

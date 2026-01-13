@@ -1,14 +1,12 @@
 import 'package:JoDija_reposatory/https/http_urls.dart';
-import 'package:JoDija_reposatory/source/user/proflle_actions.dart';
+import 'package:JoDija_reposatory/source/user/accountLoginLogout/firebase/proflle_actions.dart';
 import 'package:JoDija_reposatory/utilis/result/result.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 
 import '../../interface/user/base/account.dart';
 import '../../interface/user/base/actions.dart';
 import '../../interface/user/http_acc.dart';
 import '../../model/user/base_model/base_user_module.dart';
-import '../../model/user/base_model/inhertid_models/user_model.dart';
 import '../../utilis/firebase/fireBase_exception_consts.dart';
 import '../../utilis/models/remote_base_model.dart';
 import '../../utilis/models/staus_model.dart';
