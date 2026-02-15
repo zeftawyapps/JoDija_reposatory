@@ -60,7 +60,7 @@ class DataSourceDataActionsHttpSources
 
   /// Helper method to build the request URL with an optional ID.
   String _buildUrl(String? id) {
-    if (id == null || id.isEmpty) {
+    if (id == null || id.isEmpty || id == "") {
       return "$baseUrl/$url";
     }
     return "$baseUrl/$url/$id";

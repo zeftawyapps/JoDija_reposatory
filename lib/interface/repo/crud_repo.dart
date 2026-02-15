@@ -34,7 +34,7 @@ abstract class IBaseDataSourceRepo<T extends BaseEntityDataModel> {
   ///
   /// \param id The ID of the data to retrieve.
   /// \returns A `Future` that completes with a `RemoteBaseModel` containing the data item.
-  Future<RemoteBaseModel<T>> getSingleData(String id);
+  Future<RemoteBaseModel<T>> getSingleData(String? id);
 
   /// Updates data in the data source by ID.
   ///
