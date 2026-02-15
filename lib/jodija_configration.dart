@@ -84,6 +84,10 @@ abstract class DataSourceConfigration {
     }
   }
 
+  setToHttpUrlsEnveiroment({required String baseUrl}) {
+    HttpUrlsEnveiroment(baseUrl: baseUrl);
+  }
+
   /// Initializes the backend routing with the base URL specified in the JSON file at the given path.
   ///
   /// This function reads the base URLs from a JSON file and sets the base URL
