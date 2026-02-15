@@ -29,13 +29,22 @@ class DataSourceDataActionsHttpSources
   /// The specific endpoint path relative to the base URL.
   String url = "";
 
+  /// Query parameters to be included in the request URL.
+  Map<String, dynamic>? query;
+
+  /// Additional parameters.
+  Map<String, dynamic>? params;
+
   /// Factory constructor to create an instance with initial data.
   factory DataSourceDataActionsHttpSources.inputs(
       {String? baseUrl = "",
       required String url,
       required BaseEntityDataModel dataModyle,
+      Map<String, dynamic>? query,
+      Map<String, dynamic>? params,
       MultipartFile? file}) {
-    return DataSourceDataActionsHttpSources(baseUrl: baseUrl, url: url)
+    return DataSourceDataActionsHttpSources(
+        baseUrl: baseUrl, url: url, query: query, params: params)
       ..data = dataModyle
       ..file = file
       ..imagfileld = "image";
@@ -43,20 +52,31 @@ class DataSourceDataActionsHttpSources
 
   /// Standard constructor for [DataSourceDataActionsHttpSources].
   DataSourceDataActionsHttpSources(
-      {String? baseUrl = "", required String url}) {
-    this.baseUrl = baseUrl ?? ApiUrls.BASE_URL;
+      {String? baseUrl = "", required String url, this.query, this.params}) {
+    this.baseUrl =
+        (baseUrl == null || baseUrl.isEmpty) ? ApiUrls.BASE_URL : baseUrl;
     this.url = url;
+  }
+
+  /// Helper method to build the request URL with an optional ID.
+  String _buildUrl(String? id) {
+    if (id == null || id.isEmpty) {
+      return "$baseUrl/$url";
+    }
+    return "$baseUrl/$url/$id";
   }
 
   @override
   Future<Result<RemoteBaseModel, RemoteBaseModel<String>>> addDataItem(
       {String? id}) async {
+    String requestUrl = _buildUrl(id);
     if (file == null) {
       var body = data!.toJson();
       var result = await HttpClient(userToken: true).sendRequest(
           method: HttpMethod.POST,
-          url: "${ApiUrls.BASE_URL}/$url",
+          url: requestUrl,
           body: body,
+          queryParameters: query,
           cancelToken: CancelToken());
       if (result.data!.status == StatusModel.success) {
         var resultdata = result.data!.data!["data"] as String;
@@ -77,7 +97,7 @@ class DataSourceDataActionsHttpSources
             "Accept": "*/*",
             key: HttpHeader().usertoken
           },
-          url: url,
+          url: requestUrl,
           data: data!.toJson(),
           cancelToken: CancelToken());
       if (result.data!.status == StatusModel.success) {
@@ -97,7 +117,8 @@ class DataSourceDataActionsHttpSources
       String id) async {
     var result = await HttpClient(userToken: true).sendRequest(
         method: HttpMethod.DELETE,
-        url: "${ApiUrls.BASE_URL}/$url/$id",
+        url: _buildUrl(id),
+        queryParameters: query,
         cancelToken: CancelToken());
     if (result.data!.status == StatusModel.success) {
       return Result<RemoteBaseModel, RemoteBaseModel>(data: RemoteBaseModel());
@@ -113,7 +134,8 @@ class DataSourceDataActionsHttpSources
       getDataList() async {
     var result = await HttpClient(userToken: true).sendRequest(
         method: HttpMethod.GET,
-        url: "${ApiUrls.BASE_URL}/$url",
+        url: _buildUrl(null),
+        queryParameters: query,
         cancelToken: CancelToken());
     var resultdata = result.data!.data["data"] as List<dynamic>;
     List<BaseEntityDataModel> listData = [];
@@ -129,7 +151,8 @@ class DataSourceDataActionsHttpSources
       getSingleData(String id) async {
     var result = await HttpClient(userToken: true).sendRequest(
         method: HttpMethod.GET,
-        url: "${ApiUrls.BASE_URL}/$url/$id",
+        url: _buildUrl(id),
+        queryParameters: query,
         cancelToken: CancelToken());
     if (result.data!.status == StatusModel.success) {
       var resultdata = result.data!.data!["data"] as BaseEntityDataModel;
@@ -146,7 +169,8 @@ class DataSourceDataActionsHttpSources
   Future<Result<RemoteBaseModel, RemoteBaseModel>> editeDataItem(String id) {
     var result = HttpClient(userToken: true).sendRequest(
         method: HttpMethod.PUT,
-        url: "${ApiUrls.BASE_URL}/$url/$id",
+        url: _buildUrl(id),
+        queryParameters: query,
         cancelToken: CancelToken());
     return result;
   }
