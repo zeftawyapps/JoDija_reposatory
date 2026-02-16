@@ -12,10 +12,10 @@ import '../../utilis/result/result.dart';
 /// A Dio-based implementation of [IBaseDataActionsSource] for HTTP endpoints.
 ///
 /// This class handles remote data actions by making HTTP requests to a backend API.
-class DataSourceDataActionsHttpSources
-    extends IBaseDataActionsSource<BaseEntityDataModel> {
+class DataSourceDataActionsHttpSources<T extends BaseEntityDataModel>
+    extends IBaseDataActionsSource<T> {
   /// The data model to be sent in the request body.
-  BaseEntityDataModel? data;
+  T? data;
 
   /// Optional file to be uploaded in a multipart request.
   MultipartFile? file;
@@ -35,16 +35,24 @@ class DataSourceDataActionsHttpSources
   /// Additional parameters.
   Map<String, dynamic>? params;
 
+  /// Optional builder function to construct the data model from JSON.
+  T Function(Map<String, dynamic> jsondata, String? docId)? dataBuilder;
+
   /// Factory constructor to create an instance with initial data.
   factory DataSourceDataActionsHttpSources.inputs(
       {String? baseUrl = "",
       required String url,
-      required BaseEntityDataModel dataModyle,
+      required T dataModyle,
       Map<String, dynamic>? query,
       Map<String, dynamic>? params,
+      T Function(Map<String, dynamic> jsondata, String? docId)? dataBuilder,
       MultipartFile? file}) {
-    return DataSourceDataActionsHttpSources(
-        baseUrl: baseUrl, url: url, query: query, params: params)
+    return DataSourceDataActionsHttpSources<T>(
+        baseUrl: baseUrl,
+        url: url,
+        query: query,
+        params: params,
+        dataBuilder: dataBuilder)
       ..data = dataModyle
       ..file = file
       ..imagfileld = "image";
@@ -52,7 +60,11 @@ class DataSourceDataActionsHttpSources
 
   /// Standard constructor for [DataSourceDataActionsHttpSources].
   DataSourceDataActionsHttpSources(
-      {String? baseUrl = "", required String url, this.query, this.params}) {
+      {String? baseUrl = "",
+      required String url,
+      this.query,
+      this.params,
+      this.dataBuilder}) {
     this.baseUrl =
         (baseUrl == null || baseUrl.isEmpty) ? ApiUrls.BASE_URL : baseUrl;
     this.url = url;
@@ -130,38 +142,70 @@ class DataSourceDataActionsHttpSources
   }
 
   @override
-  Future<Result<RemoteBaseModel, RemoteBaseModel<List<BaseEntityDataModel>>>>
+  Future<Result<RemoteBaseModel, RemoteBaseModel<List<T>>>>
       getDataList() async {
-    var result = await HttpClient(userToken: true).sendRequest(
-        method: HttpMethod.GET,
-        url: _buildUrl(null),
-        queryParameters: query,
-        cancelToken: CancelToken());
-    var resultdata = result.data!.data["data"] as List<dynamic>;
-    List<BaseEntityDataModel> listData = [];
-    resultdata
-        .map((e) => {listData.add(BaseEntityDataModel.fromJson(e, e["id"]))})
-        .toList();
-    return Result<RemoteBaseModel, RemoteBaseModel<List<BaseEntityDataModel>>>(
-        data: RemoteBaseModel(data: listData));
+    try {
+      var result = await HttpClient(userToken: true).sendRequest(
+          method: HttpMethod.GET,
+          url: _buildUrl(null),
+          queryParameters: query,
+          cancelToken: CancelToken());
+
+      if (result.data!.status == StatusModel.success) {
+        var resultdata = result.data!.data["data"] as List<dynamic>;
+        List<T> listData = [];
+        for (var e in resultdata) {
+          if (dataBuilder != null) {
+            listData.add(
+                dataBuilder!(e as Map<String, dynamic>, e["id"]?.toString()));
+          } else {
+            listData
+                .add(BaseEntityDataModel.fromJson(e, e["id"]?.toString()) as T);
+          }
+        }
+        return Result<RemoteBaseModel, RemoteBaseModel<List<T>>>(
+            data: RemoteBaseModel(data: listData, status: StatusModel.success));
+      } else {
+        return Result<RemoteBaseModel, RemoteBaseModel<List<T>>>(
+            error: RemoteBaseModel(
+                message: result.data!.message, status: result.data!.status));
+      }
+    } catch (e) {
+      return Result<RemoteBaseModel, RemoteBaseModel<List<T>>>(
+          error: RemoteBaseModel(
+              message: e.toString(), status: StatusModel.error));
+    }
   }
 
   @override
-  Future<Result<RemoteBaseModel, RemoteBaseModel<BaseEntityDataModel>>>
-      getSingleData(String id) async {
-    var result = await HttpClient(userToken: true).sendRequest(
-        method: HttpMethod.GET,
-        url: _buildUrl(id),
-        queryParameters: query,
-        cancelToken: CancelToken());
-    if (result.data!.status == StatusModel.success) {
-      var resultdata = result.data!.data!["data"] as BaseEntityDataModel;
-      return Result<RemoteBaseModel, RemoteBaseModel<BaseEntityDataModel>>(
-          data: RemoteBaseModel(data: resultdata));
-    } else {
-      return Result<RemoteBaseModel, RemoteBaseModel<BaseEntityDataModel>>(
+  Future<Result<RemoteBaseModel, RemoteBaseModel<T>>> getSingleData(
+      String id) async {
+    try {
+      var result = await HttpClient(userToken: true).sendRequest(
+          method: HttpMethod.GET,
+          url: _buildUrl(id),
+          queryParameters: query,
+          cancelToken: CancelToken());
+      if (result.data!.status == StatusModel.success) {
+        var resultdata = result.data!.data!["data"];
+        T dataItem;
+        if (dataBuilder != null) {
+          dataItem = dataBuilder!(resultdata as Map<String, dynamic>, id);
+        } else {
+          dataItem = BaseEntityDataModel.fromJson(
+              resultdata as Map<String, dynamic>, id) as T;
+        }
+        return Result<RemoteBaseModel, RemoteBaseModel<T>>(
+            data: RemoteBaseModel(data: dataItem, status: StatusModel.success));
+      } else {
+        return Result<RemoteBaseModel, RemoteBaseModel<T>>(
+            error: RemoteBaseModel(
+                message: result.data!.message, status: result.data!.status));
+      }
+    } catch (e) {
+      return Result<RemoteBaseModel, RemoteBaseModel<T>>(
           error: RemoteBaseModel(
-              message: result.data!.message, status: result.data!.status));
+              message: e.toString(), status: StatusModel.error));
     }
   }
 
