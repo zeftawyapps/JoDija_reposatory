@@ -84,8 +84,8 @@ abstract class DataSourceConfigration {
     }
   }
 
-  setToHttpUrlsEnveiroment({required String baseUrl}) {
-    HttpUrlsEnveiroment(baseUrl: baseUrl);
+  setToHttpUrlsEnveiroment({required String baseUrl, String? imageBaseUrl}) {
+    HttpUrlsEnveiroment(baseUrl: baseUrl, imageBaseUrl: imageBaseUrl);
   }
 
   /// Initializes the backend routing with the base URL specified in the JSON file at the given path.
@@ -100,16 +100,21 @@ abstract class DataSourceConfigration {
 
     var data = await JsonAssetReader(path: path).data;
     var baseUrls = data['baseUrls'];
+    var imageBaseUrls = data['imageBaseUrls'];
     String BaseUrl;
+    String? ImageBaseUrl;
 
     if (backendState == BackendState.local) {
       BaseUrl = baseUrls['local'];
+      ImageBaseUrl = imageBaseUrls?['local'];
     } else if (backendState == BackendState.remote_dev) {
       BaseUrl = baseUrls['remote_dev'];
+      ImageBaseUrl = imageBaseUrls?['remote_dev'];
     } else {
       BaseUrl = baseUrls['remote_prod'];
+      ImageBaseUrl = imageBaseUrls?['remote_prod'];
     }
-    HttpUrlsEnveiroment(baseUrl: BaseUrl);
+    HttpUrlsEnveiroment(baseUrl: BaseUrl, imageBaseUrl: ImageBaseUrl);
   }
 
   /// Initializes the backend routing with the base URL provided in the given data map.
@@ -123,16 +128,21 @@ abstract class DataSourceConfigration {
     WidgetsFlutterBinding.ensureInitialized();
 
     var baseUrls = data['baseUrls'];
+    var imageBaseUrls = data['imageBaseUrls'];
     String BaseUrl;
+    String? ImageBaseUrl;
 
     if (backendState == BackendState.local) {
       BaseUrl = baseUrls['local'];
+      ImageBaseUrl = imageBaseUrls?['local'];
     } else if (backendState == BackendState.remote_dev) {
       BaseUrl = baseUrls['remote_dev'];
+      ImageBaseUrl = imageBaseUrls?['remote_dev'];
     } else {
       BaseUrl = baseUrls['remote_prod'];
+      ImageBaseUrl = imageBaseUrls?['remote_prod'];
     }
-    HttpUrlsEnveiroment(baseUrl: BaseUrl);
+    HttpUrlsEnveiroment(baseUrl: BaseUrl, imageBaseUrl: ImageBaseUrl);
   }
 
   AppType _appType = AppType.App;

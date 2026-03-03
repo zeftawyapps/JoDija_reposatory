@@ -34,18 +34,21 @@ class HttpClient {
   ///
   /// [baseUrl] is the base URL for the HTTP client.
   /// [userToken] indicates whether to use a user token for authorization.
-  HttpClient({this.baseUrl, userToken = false}) {
-    baseUrl = HttpUrlsEnveiroment().baseUrl!;
+  HttpClient({String? baseUrl, this.userToken = false}) {
+    this.baseUrl = baseUrl ?? HttpUrlsEnveiroment().baseUrl;
     BaseOptions _options = BaseOptions(
       connectTimeout: Duration(milliseconds: 60000),
       receiveTimeout: Duration(milliseconds: 60000),
       sendTimeout: Duration(milliseconds: 60000),
       responseType: ResponseType.json,
-      baseUrl: baseUrl!,
+      baseUrl: this.baseUrl ?? "",
     );
     _client = Dio(_options);
-    _client.interceptors.add(PrettyDioLogger());
-    if (userToken) {
+    _client.interceptors.add(PrettyDioLogger(
+      requestHeader: true,
+      requestBody: true,
+    ));
+    if (userToken!) {
       var headderAuth = HttpHeader();
       String authorizationHeader = headderAuth.usertoken;
       _client.options.headers["Authorization"] = authorizationHeader;
@@ -126,7 +129,8 @@ class HttpClient {
   /// [queryParameters] are the query parameters.
   /// [body] is the request body.
   /// [cancelToken] is the cancel token for the request.
-  Future<Result<RemoteBaseModel, Map<String, dynamic>>> sendRequestResultWithMap({
+  Future<Result<RemoteBaseModel, Map<String, dynamic>>>
+      sendRequestResultWithMap({
     required HttpMethod method,
     required String url,
     Map<String, dynamic>? headers,
@@ -178,19 +182,29 @@ class HttpClient {
       }
       try {
         print("response.data ${response.data} ");
-        Map<String, dynamic> data = {"status": "success", "data": response.data ?? ""};
+        Map<String, dynamic> data = {
+          "status": "success",
+          "data": response.data ?? ""
+        };
         return Result.data(data);
       } on FormatException catch (e) {
         debugPrint(e.toString());
         return Result.error(RemoteBaseModel(message: e.message));
       } catch (e) {
         debugPrint(e.toString());
-        return Result.error(RemoteBaseModel(error: e, message: e.toString(), status: StatusModel.error, data: null));
+        return Result.error(RemoteBaseModel(
+            error: e,
+            message: e.toString(),
+            status: StatusModel.error,
+            data: null));
       }
     } on DioError catch (e) {
       print("e.response ${e}");
       var error = {"massage": e};
-      return Result.error(RemoteBaseModel(message: error["massage"]!.message, status: StatusModel.error, data: "null"));
+      return Result.error(RemoteBaseModel(
+          message: error["massage"]!.message,
+          status: StatusModel.error,
+          data: "null"));
     } on SocketException catch (e) {
       return Result.error(RemoteBaseModel(message: e.message));
     } on HttpException catch (e) {
@@ -260,19 +274,29 @@ class HttpClient {
           break;
       }
       try {
-        var data = RemoteBaseModel(data: response.data ?? "", status: StatusModel.success, message: "");
+        var data = RemoteBaseModel(
+            data: response.data ?? "",
+            status: StatusModel.success,
+            message: "");
         return Result.data(data);
       } on FormatException catch (e) {
         debugPrint(e.toString());
         return Result.error(RemoteBaseModel(message: e.message));
       } catch (e) {
         debugPrint(e.toString());
-        return Result.error(RemoteBaseModel(error: e, message: e.toString(), status: StatusModel.error, data: null));
+        return Result.error(RemoteBaseModel(
+            error: e,
+            message: e.toString(),
+            status: StatusModel.error,
+            data: null));
       }
     } on DioError catch (e) {
       print("e.response ${e}");
       var error = {"massage": e};
-      return Result.error(RemoteBaseModel(message: error["massage"]!.message, status: StatusModel.error, data: "null"));
+      return Result.error(RemoteBaseModel(
+          message: error["massage"]!.message,
+          status: StatusModel.error,
+          data: "null"));
     } on SocketException catch (e) {
       return Result.error(RemoteBaseModel(message: e.message));
     } on HttpException catch (e) {
@@ -386,6 +410,7 @@ class HttpClient {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
     required CancelToken cancelToken,
+    bool isUpdate = false,
   }) async {
     Map<String, dynamic> dataMap = {};
     if (data != null) {
@@ -402,14 +427,26 @@ class HttpClient {
       if (headers == null) {
         headers = _client.options.headers ?? {};
       }
-      Response<T> response = await _client.post(
-        url,
-        data: FormData.fromMap(dataMap),
-        onSendProgress: onSendProgress,
-        onReceiveProgress: onReceiveProgress,
-        options: Options(headers: headers),
-        cancelToken: cancelToken,
-      );
+      Response<T> response;
+      if (isUpdate) {
+        response = await _client.put(
+          url,
+          data: FormData.fromMap(dataMap),
+          onSendProgress: onSendProgress,
+          onReceiveProgress: onReceiveProgress,
+          options: Options(headers: headers),
+          cancelToken: cancelToken,
+        );
+      } else {
+        response = await _client.post(
+          url,
+          data: FormData.fromMap(dataMap),
+          onSendProgress: onSendProgress,
+          onReceiveProgress: onReceiveProgress,
+          options: Options(headers: headers),
+          cancelToken: cancelToken,
+        );
+      }
 
       try {
         return Result.data(response.data!);
@@ -423,7 +460,8 @@ class HttpClient {
     } on SocketException {
       return Result.error(RemoteBaseModel(message: SocketError().toString()));
     } on HttpException {
-      return Result.error(RemoteBaseModel(message: ConnectionError().toString()));
+      return Result.error(
+          RemoteBaseModel(message: ConnectionError().toString()));
     } catch (e, s) {
       print('catch error s$s');
       return Result.error(RemoteBaseModel(message: e.toString()));
@@ -440,7 +478,8 @@ class HttpClient {
   /// [onSendProgress] is the callback for send progress.
   /// [onReceiveProgress] is the callback for receive progress.
   /// [cancelToken] is the cancel token for the request.
-  Future<Result<RemoteBaseModel, Map<String, dynamic>>> uploadMapResultWithMap<T>({
+  Future<Result<RemoteBaseModel, Map<String, dynamic>>>
+      uploadMapResultWithMap<T>({
     required String url,
     required String fileKey,
     required MultipartFile file,
@@ -449,6 +488,7 @@ class HttpClient {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
     required CancelToken cancelToken,
+    bool isUpdate = false,
   }) async {
     Map<String, dynamic> dataMap = {};
     if (data != null) {
@@ -460,18 +500,38 @@ class HttpClient {
         headers = _client.options.headers ?? {};
       }
 
-      Response<Map<String, dynamic>> response = await _client.post(
-        url,
-        data: FormData.fromMap(dataMap),
-        onSendProgress: onSendProgress ?? (int sent, int total) {
-          print("send $sent $total");
-        },
-        onReceiveProgress: onReceiveProgress ?? (int sent, int total) {
-          print("rece $sent $total");
-        },
-        options: Options(headers: headers),
-        cancelToken: cancelToken,
-      );
+      Response<Map<String, dynamic>> response;
+      if (isUpdate) {
+        response = await _client.put(
+          url,
+          data: FormData.fromMap(dataMap),
+          onSendProgress: onSendProgress ??
+              (int sent, int total) {
+                print("send $sent $total");
+              },
+          onReceiveProgress: onReceiveProgress ??
+              (int sent, int total) {
+                print("rece $sent $total");
+              },
+          options: Options(headers: headers),
+          cancelToken: cancelToken,
+        );
+      } else {
+        response = await _client.post(
+          url,
+          data: FormData.fromMap(dataMap),
+          onSendProgress: onSendProgress ??
+              (int sent, int total) {
+                print("send $sent $total");
+              },
+          onReceiveProgress: onReceiveProgress ??
+              (int sent, int total) {
+                print("rece $sent $total");
+              },
+          options: Options(headers: headers),
+          cancelToken: cancelToken,
+        );
+      }
 
       return Result.data(response.data!);
     } on FormatException {
@@ -483,7 +543,8 @@ class HttpClient {
     } on SocketException {
       return Result.error(RemoteBaseModel(message: SocketError().toString()));
     } on HttpException {
-      return Result.error(RemoteBaseModel(message: ConnectionError().toString()));
+      return Result.error(
+          RemoteBaseModel(message: ConnectionError().toString()));
     } catch (e, s) {
       print('catch error s$s');
       return Result.error(RemoteBaseModel(message: e.toString()));
@@ -509,6 +570,7 @@ class HttpClient {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
     required CancelToken cancelToken,
+    bool isUpdate = false,
   }) async {
     Map<String, dynamic> dataMap = {};
     if (data != null) {
@@ -519,19 +581,42 @@ class HttpClient {
     }
     dataMap.addAll({fileKey: file});
     try {
-      Response<Map<String, dynamic>> response = await _client.post(
-        url,
-        data: FormData.fromMap(dataMap),
-        onSendProgress: onSendProgress ?? (int sent, int total) {
-          print("send $sent $total");
-        },
-        onReceiveProgress: onReceiveProgress ?? (int sent, int total) {
-          print("rece $sent $total");
-        },
-        options: Options(headers: headers),
-        cancelToken: cancelToken,
-      );
-      return Result.data(RemoteBaseModel(data: response.data!, status: StatusModel.success, message: response.data!["message"]));
+      Response<Map<String, dynamic>> response;
+      if (isUpdate) {
+        response = await _client.put(
+          url,
+          data: FormData.fromMap(dataMap),
+          onSendProgress: onSendProgress ??
+              (int sent, int total) {
+                print("send $sent $total");
+              },
+          onReceiveProgress: onReceiveProgress ??
+              (int sent, int total) {
+                print("rece $sent $total");
+              },
+          options: Options(headers: headers),
+          cancelToken: cancelToken,
+        );
+      } else {
+        response = await _client.post(
+          url,
+          data: FormData.fromMap(dataMap),
+          onSendProgress: onSendProgress ??
+              (int sent, int total) {
+                print("send $sent $total");
+              },
+          onReceiveProgress: onReceiveProgress ??
+              (int sent, int total) {
+                print("rece $sent $total");
+              },
+          options: Options(headers: headers),
+          cancelToken: cancelToken,
+        );
+      }
+      return Result.data(RemoteBaseModel(
+          data: response.data!,
+          status: StatusModel.success,
+          message: response.data!["message"]));
     } on FormatException {
       return Result.error(RemoteBaseModel(message: FormatError().toString()));
     } catch (e) {
@@ -541,7 +626,8 @@ class HttpClient {
     } on SocketException {
       return Result.error(RemoteBaseModel(message: SocketError().toString()));
     } on HttpException {
-      return Result.error(RemoteBaseModel(message: ConnectionError().toString()));
+      return Result.error(
+          RemoteBaseModel(message: ConnectionError().toString()));
     } catch (e, s) {
       print('catch error s$s');
       return Result.error(RemoteBaseModel(message: e.toString()));

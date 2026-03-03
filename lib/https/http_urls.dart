@@ -37,10 +37,11 @@ class HttpHeader {
   /// Internal constructor for singleton pattern.
   HttpHeader._internal();
 }
-/// A singleton class to manage the environment URLs for HTTP requests.
+
 class HttpUrlsEnveiroment {
   /// The base URL for the HTTP requests.
   String? baseUrl = "https://eventapp-api.herokuapp.com/api/v1";
+  String? imageBaseUrl = "https://eventapp-api.herokuapp.com/api/v1";
 
   /// The singleton instance of the class.
   static final HttpUrlsEnveiroment _baseUrlEnvet =
@@ -48,8 +49,9 @@ class HttpUrlsEnveiroment {
 
   /// Factory constructor to get the singleton instance.
   /// Optionally sets the base URL if provided.
-  factory HttpUrlsEnveiroment({String? baseUrl}) {
+  factory HttpUrlsEnveiroment({String? baseUrl, String? imageBaseUrl}) {
     if (baseUrl != null) _baseUrlEnvet.baseUrl = baseUrl;
+    if (imageBaseUrl != null) _baseUrlEnvet.imageBaseUrl = imageBaseUrl;
 
     return _baseUrlEnvet;
   }
@@ -61,8 +63,10 @@ class HttpUrlsEnveiroment {
   /// Optionally sets the base URL if provided.
   factory HttpUrlsEnveiroment.urls({
     String? baseUrl,
+    String? imageBaseUrl,
   }) {
-    _baseUrlEnvet.baseUrl = baseUrl;
+    if (baseUrl != null) _baseUrlEnvet.baseUrl = baseUrl;
+    if (imageBaseUrl != null) _baseUrlEnvet.imageBaseUrl = imageBaseUrl;
 
     return _baseUrlEnvet;
   }
