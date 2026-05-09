@@ -6,6 +6,8 @@ class HttpHeader {
   String _contentTypeKey = '';
   String _tokenKey = '';
   String _tokenType = '';
+  String _langKey = 'x-lang';
+  String? _langValue;
 
   /// The singleton instance of the class.
   static final HttpHeader _instance = HttpHeader._internal();
@@ -27,12 +29,26 @@ class HttpHeader {
     // _contentTypeKey = contentTypeKey ;
   }
 
+  /// Sets the language header.
+  /// 
+  /// [lang] is the language value (e.g., 'ar', 'en'). Can be null.
+  /// [key] is the header key, defaults to 'x-lang'.
+  void setLangHeader({
+    String? lang,
+    String key = "x-lang",
+  }) {
+    _langValue = lang;
+    _langKey = key;
+  }
+
   // Getters for the private fields.
   String get tokenKey => _tokenKey;
   String get tokenType => _tokenType;
   String get contentTypeKey => _contentTypeKey;
   String get contentType => _contentType;
   String get usertoken => _usertoken;
+  String get langKey => _langKey;
+  String? get langValue => _langValue;
 
   /// Internal constructor for singleton pattern.
   HttpHeader._internal();

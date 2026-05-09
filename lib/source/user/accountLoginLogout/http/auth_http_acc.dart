@@ -6,7 +6,8 @@ import '../../../../model/user/base_model/base_user_module.dart';
 import '../../../../utilis/http_remotes/http_client.dart';
 import '../../../../utilis/http_remotes/http_methos_enum.dart';
 import '../../../../utilis/models/staus_model.dart';
-
+import '../../../../utilis/models/staus_model.dart';
+import '../../../../utilis/functions/jd_repo_console.dart';
 
 /// HTTP-based implementation of authentication source.
 /// 
@@ -171,9 +172,9 @@ class AuthHttpSource implements IHttpAuthentication {
   /// ```dart
   /// try {
   ///   var user = await authSource.logIn();
-  ///   print("Logged in with token: ${user.token}");
+  ///   jdRepoConsole("Logged in with token: ${user.token}");
   /// } catch (e) {
-  ///   print("Login failed: $e");
+  ///   jdRepoConsole("Login failed: $e");
   /// }
   /// ```
   @override
@@ -212,9 +213,9 @@ class AuthHttpSource implements IHttpAuthentication {
   /// ```dart
   /// try {
   ///   await authSource.logOut();
-  ///   print("Successfully logged out");
+  ///   jdRepoConsole("Successfully logged out");
   /// } catch (e) {
-  ///   print("Logout failed: $e");
+  ///   jdRepoConsole("Logout failed: $e");
   /// }
   /// ```
   @override
@@ -256,9 +257,9 @@ class AuthHttpSource implements IHttpAuthentication {
   ///     "oldPassword123",
   ///     "newPassword456"
   ///   );
-  ///   print("Password changed successfully");
+  ///   jdRepoConsole("Password changed successfully");
   /// } catch (e) {
-  ///   print("Password change failed: $e");
+  ///   jdRepoConsole("Password change failed: $e");
   /// }
   /// ```
   @override

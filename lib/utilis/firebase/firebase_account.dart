@@ -1,6 +1,7 @@
 
  import 'package:JoDija_reposatory/model/user/base_model/base_user_module.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../functions/jd_repo_console.dart';
 
 /// A class that handles Firebase authentication operations.
 class FirebaseAccount {
@@ -75,7 +76,7 @@ class FirebaseAccount {
       await user.user?.updatePassword(newPassword);
       final updatedUser = await FirebaseAuth.instance.currentUser;
 
-      print('Password updated successfully!');
+      jdRepoConsole('Password updated successfully!');
       // Show a success message to the user.
       return UsersBaseModel(
 
@@ -86,21 +87,21 @@ class FirebaseAccount {
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'wrong-password') {
-        print('The old password you entered is incorrect.');
+        jdRepoConsole('The old password you entered is incorrect.');
         // Handle incorrect password error.
       } else if (e.code == 'user-not-found') {
-        print('No user found with this email address.');
+        jdRepoConsole('No user found with this email address.');
         // Handle user not found error.
       } else if (e.code == 'weak-password') {
-        print('The new password is too weak.');
+        jdRepoConsole('The new password is too weak.');
         // Handle weak password error.
       } else {
-        print('An error occurred: ${e.message}');
+        jdRepoConsole('An error occurred: ${e.message}');
         // Handle other Firebase errors.
       }
       rethrow; // Re-throw the exception so calling code can handle it
     } catch (e) {
-      print('An unexpected error occurred: $e');
+      jdRepoConsole('An unexpected error occurred: $e');
       rethrow; // Re-throw the exception so calling code can handle it
     }
   }

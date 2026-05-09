@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import '../functions/jd_repo_console.dart';
 
 /// A service class for handling Firebase Cloud Messaging (FCM) operations.
 ///
@@ -52,24 +53,24 @@ class FCMService {
 
       if (settings.authorizationStatus == AuthorizationStatus.authorized) {
         if (kDebugMode) {
-          print('User granted permission');
+          jdRepoConsole('User granted permission');
         }
       } else {
         if (kDebugMode) {
-          print('User declined or has not accepted permission');
+          jdRepoConsole('User declined or has not accepted permission');
         }
       }
 
       // Get the token
       String? token = await messaging.getToken();
       if (kDebugMode) {
-        print("FCM Token: $token");
+        jdRepoConsole("FCM Token: $token");
       }
 
       // Handle foreground messages
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         if (kDebugMode) {
-          print('Received a foreground message: ${message.notification?.title}');
+          jdRepoConsole('Received a foreground message: ${message.notification?.title}');
         }
         // Handle the notification in foreground
         _handleForegroundMessage(message);
@@ -81,14 +82,14 @@ class FCMService {
       // Handle notification when app is opened from background
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
         if (kDebugMode) {
-          print('App opened from notification: ${message.notification?.title}');
+          jdRepoConsole('App opened from notification: ${message.notification?.title}');
         }
         _handleNotificationTap(message);
       });
 
     } catch (e) {
       if (kDebugMode) {
-        print('Error initializing FCM: $e');
+        jdRepoConsole('Error initializing FCM: $e');
       }
     }
   }
@@ -186,7 +187,7 @@ class FCMService {
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   if (kDebugMode) {
-    print('Handling a background message: ${message.notification?.title}');
+    jdRepoConsole('Handling a background message: ${message.notification?.title}');
   }
   // You can add your custom logic here
 }

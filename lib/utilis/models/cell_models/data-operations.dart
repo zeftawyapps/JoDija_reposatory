@@ -2,6 +2,7 @@
 import 'cell.dart';
  import 'modulscreateor.dart';
 import 'row_cells.dart';
+import '../../functions/jd_repo_console.dart';
 
 class TableOfCells<T extends Model> {
   late    List<Map<String , dynamic >>  mapList ;
@@ -47,9 +48,9 @@ T? model ;
     }
 
 
-    print(ss);
+    jdRepoConsole(ss);
     var distinctIds = ss.toSet().toList();
-    print(distinctIds);
+    jdRepoConsole(distinctIds);
     return distinctIds ;
   }
 
@@ -79,7 +80,7 @@ T? model ;
       newdata.add(m);
       i++;
     }while(i<c);
-    print(newdata);
+    jdRepoConsole(newdata);
     return newdata ;
   }
 

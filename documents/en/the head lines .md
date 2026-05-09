@@ -40,5 +40,6 @@ To understand this library, you need to know the following classes:
     - [`FireStoreActions`](classes/utils/FireStoreActions.md): Firestore operations.
     - [`StorageActions`](classes/utils/StorageActions.md): Storage operations.
   - `HTTP`:
+    - [`HttpHeader`](classes/utils/HttpHeader.md): HTTP headers management utility.
     - [`JodijaHttpClient`](classes/utils/JodijaHttpClient.md): HTTP client utility.
     - [`HttpLoadingData`](classes/utils/HttpLoadingData.md): HTTP response data structure.

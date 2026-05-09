@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +18,7 @@ import '../models/remote_base_model.dart';
 import '../models/staus_model.dart';
 import '../result/result.dart';
 import 'http_methos_enum.dart';
+import '../functions/jd_repo_console.dart';
 
 /// A class that handles HTTP client operations using the Dio package.
 class HttpClient {
@@ -39,7 +39,7 @@ class HttpClient {
     BaseOptions _options = BaseOptions(
       connectTimeout: Duration(milliseconds: 60000),
       receiveTimeout: Duration(milliseconds: 60000),
-      sendTimeout: Duration(milliseconds: 60000),
+      sendTimeout: kIsWeb ? null : Duration(milliseconds: 60000),
       responseType: ResponseType.json,
       baseUrl: this.baseUrl ?? "",
     );
@@ -48,8 +48,11 @@ class HttpClient {
       requestHeader: true,
       requestBody: true,
     ));
+    var headderAuth = HttpHeader();
+    if (headderAuth.langValue != null) {
+      _client.options.headers[headderAuth.langKey] = headderAuth.langValue;
+    }
     if (userToken!) {
-      var headderAuth = HttpHeader();
       String authorizationHeader = headderAuth.usertoken;
       _client.options.headers["Authorization"] = authorizationHeader;
       _client.options.headers["Content-Type"] = "application/json";
@@ -64,6 +67,9 @@ class HttpClient {
   /// [queryParameters] are the query parameters.
   /// [body] is the request body.
   /// [cancelToken] is the cancel token for the request.
+  ///
+  /// The response should follow the format: { "success": bool, "message": string, "data": Any, "timestamp": string }
+  /// or be compatible with jodija server.
   Future<T> sendRequestValue<T>({
     required HttpMethod method,
     required String url,
@@ -104,6 +110,15 @@ class HttpClient {
             cancelToken: cancelToken,
           );
           break;
+        case HttpMethod.PATCH:
+          response = await _client.patch(
+            url,
+            data: body,
+            queryParameters: queryParameters,
+            options: Options(headers: headers),
+            cancelToken: cancelToken,
+          );
+          break;
         case HttpMethod.DELETE:
           response = await _client.delete(
             url,
@@ -129,6 +144,9 @@ class HttpClient {
   /// [queryParameters] are the query parameters.
   /// [body] is the request body.
   /// [cancelToken] is the cancel token for the request.
+  ///
+  /// The response should follow the format: { "success": bool, "message": string, "data": Any, "timestamp": string }
+  /// or be compatible with jodija server.
   Future<Result<RemoteBaseModel, Map<String, dynamic>>>
       sendRequestResultWithMap({
     required HttpMethod method,
@@ -170,6 +188,15 @@ class HttpClient {
             cancelToken: cancelToken,
           );
           break;
+        case HttpMethod.PATCH:
+          response = await _client.patch(
+            url,
+            data: body,
+            queryParameters: queryParameters,
+            options: Options(headers: headers),
+            cancelToken: cancelToken,
+          );
+          break;
         case HttpMethod.DELETE:
           response = await _client.delete(
             url,
@@ -181,17 +208,36 @@ class HttpClient {
           break;
       }
       try {
-        print("response.data ${response.data} ");
+        final responseData = response.data;
+        jdRepoConsole("response.data $responseData ");
+
+        // التحقق من حالة النجاح من داخل الـ JSON
+        if (responseData != null && responseData['success'] == false) {
+          final errorMessage = responseData['message'] ?? "Unknown API Error";
+          // لوج للمطورين فقط
+          JDRepoConsole.error("API Error Response: $errorMessage",
+              context:
+                  LogContext(module: 'HttpClient', metadata: responseData));
+
+          return Result.error(RemoteBaseModel(
+            message: errorMessage,
+            status: StatusModel.error,
+            data: responseData,
+          ));
+        }
+
         Map<String, dynamic> data = {
           "status": "success",
-          "data": response.data ?? ""
+          "data": responseData ?? ""
         };
         return Result.data(data);
       } on FormatException catch (e) {
-        debugPrint(e.toString());
+        JDRepoConsole.error("Format Error: ${e.message}",
+            context: LogContext(module: 'HttpClient', metadata: e));
         return Result.error(RemoteBaseModel(message: e.message));
       } catch (e) {
-        debugPrint(e.toString());
+        JDRepoConsole.error("Unexpected Error: $e",
+            context: LogContext(module: 'HttpClient', metadata: e));
         return Result.error(RemoteBaseModel(
             error: e,
             message: e.toString(),
@@ -199,18 +245,31 @@ class HttpClient {
             data: null));
       }
     } on DioError catch (e) {
-      print("e.response ${e}");
-      var error = {"massage": e};
+      // استخراج رسالة الخطأ العربية من الـ Response إذا وجدت
+      String message = e.message ?? "Unknown Error";
+      if (e.response?.data != null && e.response?.data is Map) {
+        message = e.response?.data['message'] ?? message;
+      }
+
+      // لوج مفصل للمطور فقط يشمل الـ Response بالكامل
+      JDRepoConsole.error("DioError [${e.response?.statusCode}]: ${e.message}",
+          context:
+              LogContext(module: 'HttpClient', metadata: e.response?.data));
+
       return Result.error(RemoteBaseModel(
-          message: error["massage"]!.message,
+          message: message,
           status: StatusModel.error,
-          data: "null"));
+          data: e.response?.data,
+          error: e));
     } on SocketException catch (e) {
+      JDRepoConsole.error("SocketException: ${e.message}");
       return Result.error(RemoteBaseModel(message: e.message));
     } on HttpException catch (e) {
+      JDRepoConsole.error("HttpException: ${e.message}");
       return Result.error(RemoteBaseModel(message: e.message));
     } catch (e, s) {
-      print('catch error s$s');
+      JDRepoConsole.error('Critical Error: $e',
+          context: LogContext(module: 'HttpClient', metadata: s));
       return Result.error(RemoteBaseModel(message: e.toString()));
     }
   }
@@ -223,6 +282,9 @@ class HttpClient {
   /// [queryParameters] are the query parameters.
   /// [body] is the request body.
   /// [cancelToken] is the cancel token for the request.
+  ///
+  /// The response should follow the format: { "success": bool, "message": string, "data": Any, "timestamp": string }
+  /// or be compatible with jodija server.
   Future<Result<RemoteBaseModel, RemoteBaseModel>> sendRequest({
     required HttpMethod method,
     required String url,
@@ -263,6 +325,15 @@ class HttpClient {
             cancelToken: cancelToken,
           );
           break;
+        case HttpMethod.PATCH:
+          response = await _client.patch(
+            url,
+            data: body,
+            queryParameters: queryParameters,
+            options: Options(headers: headers),
+            cancelToken: cancelToken,
+          );
+          break;
         case HttpMethod.DELETE:
           response = await _client.delete(
             url,
@@ -274,16 +345,33 @@ class HttpClient {
           break;
       }
       try {
+        final responseData = response.data;
+
+        // التحقق من حالة النجاح من داخل الـ JSON
+        if (responseData is Map && responseData['success'] == false) {
+          final errorMessage = responseData['message'] ?? "Unknown API Error";
+          JDRepoConsole.error("API Error Response: $errorMessage",
+              context:
+                  LogContext(module: 'HttpClient', metadata: responseData));
+
+          return Result.error(RemoteBaseModel(
+            message: errorMessage,
+            status: StatusModel.error,
+            data: responseData,
+          ));
+        }
+
         var data = RemoteBaseModel(
-            data: response.data ?? "",
+            data: responseData ?? "",
             status: StatusModel.success,
-            message: "");
+            message:
+                responseData is Map ? (responseData['message'] ?? "") : "");
         return Result.data(data);
       } on FormatException catch (e) {
-        debugPrint(e.toString());
+        JDRepoConsole.error("Format Error: ${e.message}");
         return Result.error(RemoteBaseModel(message: e.message));
       } catch (e) {
-        debugPrint(e.toString());
+        JDRepoConsole.error("Unexpected Error: $e");
         return Result.error(RemoteBaseModel(
             error: e,
             message: e.toString(),
@@ -291,18 +379,27 @@ class HttpClient {
             data: null));
       }
     } on DioError catch (e) {
-      print("e.response ${e}");
-      var error = {"massage": e};
+      String message = e.message ?? "Unknown Error";
+      if (e.response?.data != null && e.response?.data is Map) {
+        message = e.response?.data['message'] ?? message;
+      }
+
+      JDRepoConsole.error("DioError: ${e.message}",
+          context:
+              LogContext(module: 'HttpClient', metadata: e.response?.data));
+
       return Result.error(RemoteBaseModel(
-          message: error["massage"]!.message,
+          message: message,
           status: StatusModel.error,
-          data: "null"));
+          data: e.response?.data,
+          error: e));
     } on SocketException catch (e) {
       return Result.error(RemoteBaseModel(message: e.message));
     } on HttpException catch (e) {
       return Result.error(RemoteBaseModel(message: e.message));
     } catch (e, s) {
-      print('catch error s$s');
+      JDRepoConsole.error('Critical Error: $e',
+          context: LogContext(module: 'HttpClient', metadata: s));
       return Result.error(RemoteBaseModel(message: e.toString()));
     }
   }
@@ -315,6 +412,9 @@ class HttpClient {
   /// [queryParameters] are the query parameters.
   /// [body] is the request body.
   /// [cancelToken] is the cancel token for the request.
+  ///
+  /// The response should follow the format: { "success": bool, "message": string, "data": Any, "timestamp": string }
+  /// or be compatible with jodija server.
   Future<Map<String, dynamic>> sendRequestJsonMap({
     required HttpMethod method,
     required String url,
@@ -355,6 +455,15 @@ class HttpClient {
             cancelToken: cancelToken,
           );
           break;
+        case HttpMethod.PATCH:
+          response = await _client.patch(
+            url,
+            data: body,
+            queryParameters: queryParameters,
+            options: Options(headers: headers),
+            cancelToken: cancelToken,
+          );
+          break;
         case HttpMethod.DELETE:
           response = await _client.delete(
             url,
@@ -375,14 +484,19 @@ class HttpClient {
         throw e;
       }
     } on DioError catch (e) {
-      print("e.response ${e.error}");
+      JDRepoConsole.error("DioError JsonMap: ${e.message}",
+          context:
+              LogContext(module: 'HttpClient', metadata: e.response?.data));
       throw e;
     } on SocketException catch (e) {
+      JDRepoConsole.error("SocketException JsonMap: ${e.message}");
       throw e;
     } on HttpException catch (e) {
+      JDRepoConsole.error("HttpException JsonMap: ${e.message}");
       throw e;
     } catch (e, s) {
-      print('catch error s$s');
+      JDRepoConsole.error('Critical JsonMap Error: $e',
+          context: LogContext(module: 'HttpClient', metadata: s));
       throw e;
     }
   }
@@ -399,6 +513,9 @@ class HttpClient {
   /// [onSendProgress] is the callback for send progress.
   /// [onReceiveProgress] is the callback for receive progress.
   /// [cancelToken] is the cancel token for the request.
+  ///
+  /// The response should follow the format: { "success": bool, "message": string, "data": Any, "timestamp": string }
+  /// or be compatible with jodija server.
   Future<Result<RemoteBaseModel, T>> upload<T>({
     required String url,
     required String fileKey,
@@ -456,14 +573,22 @@ class HttpClient {
         return Result.error(RemoteBaseModel(message: e.toString()));
       }
     } on DioError catch (e) {
-      return Result.error(RemoteBaseModel(message: e.message));
+      String message = e.message ?? "Unknown Error";
+      if (e.response?.data != null && e.response?.data is Map) {
+        message = e.response?.data['message'] ?? message;
+      }
+      JDRepoConsole.error("DioError [Upload]: ${e.message}",
+          context:
+              LogContext(module: 'HttpClient', metadata: e.response?.data));
+      return Result.error(RemoteBaseModel(message: message));
     } on SocketException {
       return Result.error(RemoteBaseModel(message: SocketError().toString()));
     } on HttpException {
       return Result.error(
           RemoteBaseModel(message: ConnectionError().toString()));
     } catch (e, s) {
-      print('catch error s$s');
+      JDRepoConsole.error('Critical Upload Error: $e',
+          context: LogContext(module: 'HttpClient', metadata: s));
       return Result.error(RemoteBaseModel(message: e.toString()));
     }
   }
@@ -478,6 +603,9 @@ class HttpClient {
   /// [onSendProgress] is the callback for send progress.
   /// [onReceiveProgress] is the callback for receive progress.
   /// [cancelToken] is the cancel token for the request.
+  ///
+  /// The response should follow the format: { "success": bool, "message": string, "data": Any, "timestamp": string }
+  /// or be compatible with jodija server.
   Future<Result<RemoteBaseModel, Map<String, dynamic>>>
       uploadMapResultWithMap<T>({
     required String url,
@@ -507,11 +635,11 @@ class HttpClient {
           data: FormData.fromMap(dataMap),
           onSendProgress: onSendProgress ??
               (int sent, int total) {
-                print("send $sent $total");
+                jdRepoConsole("send $sent $total");
               },
           onReceiveProgress: onReceiveProgress ??
               (int sent, int total) {
-                print("rece $sent $total");
+                jdRepoConsole("rece $sent $total");
               },
           options: Options(headers: headers),
           cancelToken: cancelToken,
@@ -522,11 +650,11 @@ class HttpClient {
           data: FormData.fromMap(dataMap),
           onSendProgress: onSendProgress ??
               (int sent, int total) {
-                print("send $sent $total");
+                jdRepoConsole("send $sent $total");
               },
           onReceiveProgress: onReceiveProgress ??
               (int sent, int total) {
-                print("rece $sent $total");
+                jdRepoConsole("rece $sent $total");
               },
           options: Options(headers: headers),
           cancelToken: cancelToken,
@@ -539,14 +667,22 @@ class HttpClient {
     } catch (e) {
       return Result.error(RemoteBaseModel(message: e.toString()));
     } on DioError catch (e) {
-      return Result.error(RemoteBaseModel(message: e.message));
+      String message = e.message ?? "Unknown Error";
+      if (e.response?.data != null && e.response?.data is Map) {
+        message = e.response?.data['message'] ?? message;
+      }
+      JDRepoConsole.error("DioError [Upload]: ${e.message}",
+          context:
+              LogContext(module: 'HttpClient', metadata: e.response?.data));
+      return Result.error(RemoteBaseModel(message: message));
     } on SocketException {
       return Result.error(RemoteBaseModel(message: SocketError().toString()));
     } on HttpException {
       return Result.error(
           RemoteBaseModel(message: ConnectionError().toString()));
     } catch (e, s) {
-      print('catch error s$s');
+      JDRepoConsole.error('Critical Upload Error: $e',
+          context: LogContext(module: 'HttpClient', metadata: s));
       return Result.error(RemoteBaseModel(message: e.toString()));
     }
   }
@@ -561,6 +697,9 @@ class HttpClient {
   /// [onSendProgress] is the callback for send progress.
   /// [onReceiveProgress] is the callback for receive progress.
   /// [cancelToken] is the cancel token for the request.
+  ///
+  /// The response should follow the format: { "success": bool, "message": string, "data": Any, "timestamp": string }
+  /// or be compatible with jodija server.
   Future<Result<RemoteBaseModel, RemoteBaseModel>> uploadMapResult<T>({
     required String url,
     required String fileKey,
@@ -588,11 +727,11 @@ class HttpClient {
           data: FormData.fromMap(dataMap),
           onSendProgress: onSendProgress ??
               (int sent, int total) {
-                print("send $sent $total");
+                jdRepoConsole("send $sent $total");
               },
           onReceiveProgress: onReceiveProgress ??
               (int sent, int total) {
-                print("rece $sent $total");
+                jdRepoConsole("rece $sent $total");
               },
           options: Options(headers: headers),
           cancelToken: cancelToken,
@@ -603,33 +742,73 @@ class HttpClient {
           data: FormData.fromMap(dataMap),
           onSendProgress: onSendProgress ??
               (int sent, int total) {
-                print("send $sent $total");
+                jdRepoConsole("send $sent $total");
               },
           onReceiveProgress: onReceiveProgress ??
               (int sent, int total) {
-                print("rece $sent $total");
+                jdRepoConsole("rece $sent $total");
               },
           options: Options(headers: headers),
           cancelToken: cancelToken,
         );
       }
-      return Result.data(RemoteBaseModel(
-          data: response.data!,
-          status: StatusModel.success,
-          message: response.data!["message"]));
-    } on FormatException {
-      return Result.error(RemoteBaseModel(message: FormatError().toString()));
-    } catch (e) {
-      return Result.error(RemoteBaseModel(message: e.toString()));
+
+      try {
+        final responseData = response.data;
+
+        // التحقق من حالة النجاح من داخل الـ JSON
+        if (responseData is Map && responseData!['success'] == false) {
+          final errorMessage = responseData!['message'] ?? "Unknown API Error";
+          JDRepoConsole.error("API Error Response: $errorMessage",
+              context:
+                  LogContext(module: 'HttpClient', metadata: responseData));
+
+          return Result.error(RemoteBaseModel(
+            message: errorMessage,
+            status: StatusModel.error,
+            data: responseData,
+          ));
+        }
+
+        var data = RemoteBaseModel(
+            data: responseData ?? "",
+            status: StatusModel.success,
+            message:
+                responseData is Map ? (responseData!['message'] ?? "") : "");
+        return Result.data(data);
+      } on FormatException catch (e) {
+        JDRepoConsole.error("Format Error: ${e.message}");
+        return Result.error(RemoteBaseModel(message: e.message));
+      } catch (e) {
+        JDRepoConsole.error("Unexpected Error: $e");
+        return Result.error(RemoteBaseModel(
+            error: e,
+            message: e.toString(),
+            status: StatusModel.error,
+            data: null));
+      }
     } on DioError catch (e) {
+      String message = e.message ?? "Unknown Error";
+      if (e.response?.data != null && e.response?.data is Map) {
+        message = e.response?.data['message'] ?? message;
+      }
+
+      JDRepoConsole.error("DioError: ${e.message}",
+          context:
+              LogContext(module: 'HttpClient', metadata: e.response?.data));
+
+      return Result.error(RemoteBaseModel(
+          message: message,
+          status: StatusModel.error,
+          data: e.response?.data,
+          error: e));
+    } on SocketException catch (e) {
       return Result.error(RemoteBaseModel(message: e.message));
-    } on SocketException {
-      return Result.error(RemoteBaseModel(message: SocketError().toString()));
-    } on HttpException {
-      return Result.error(
-          RemoteBaseModel(message: ConnectionError().toString()));
+    } on HttpException catch (e) {
+      return Result.error(RemoteBaseModel(message: e.message));
     } catch (e, s) {
-      print('catch error s$s');
+      JDRepoConsole.error('Critical Error: $e',
+          context: LogContext(module: 'HttpClient', metadata: s));
       return Result.error(RemoteBaseModel(message: e.toString()));
     }
   }

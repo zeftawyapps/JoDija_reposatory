@@ -1,5 +1,6 @@
 import 'package:JoDija_reposatory/utilis/json_reader/json_asset_reader.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:JoDija_reposatory/utilis/functions/jd_repo_console.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'https/http_urls.dart';
@@ -43,7 +44,7 @@ abstract class DataSourceConfigration {
                 storageBucket: dev['storageBucket']));
       }
     } on Exception catch (e) {
-      print(e);
+      jdRepoConsole(e);
     }
   }
 
@@ -80,7 +81,7 @@ abstract class DataSourceConfigration {
                 storageBucket: dev['storageBucket']));
       }
     } on Exception catch (e) {
-      print(e);
+      jdRepoConsole(e);
     }
   }
 
