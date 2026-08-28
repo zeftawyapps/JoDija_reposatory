@@ -44,10 +44,12 @@ class HttpClient {
       baseUrl: this.baseUrl ?? "",
     );
     _client = Dio(_options);
-    _client.interceptors.add(PrettyDioLogger(
-      requestHeader: true,
-      requestBody: true,
-    ));
+    if (kDebugMode) {
+      _client.interceptors.add(PrettyDioLogger(
+        requestHeader: true,
+        requestBody: true,
+      ));
+    }
     var headderAuth = HttpHeader();
     if (headderAuth.langValue != null) {
       _client.options.headers[headderAuth.langKey] = headderAuth.langValue;
