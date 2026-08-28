@@ -1,279 +1,201 @@
-# Jodija Repository
+# Jodija Repository (`JoDija_reposatory`)
 
-## Overview
+**English** | [العربية](README.ar.md)
 
-Jodija Repository is a Flutter data management library that handles data flow between your application and backend services like REST APIs or Firebase. It standardizes the way data is processed: transforming incoming server data to match your application's business logic and formatting outgoing data as JSON for server communication.
+[![Version](https://img.shields.io/badge/version-1.7.0-blue.svg)](pubspec.yaml)
+[![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.0.0-02569B?logo=flutter)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-%3E%3D3.0.0-0175C2?logo=dart)](https://dart.dev)
+[![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2F%20Multi--Solution-green.svg)](documents/en/introduction_en.md)
 
-## Architecture
+**Jodija Repository** is an enterprise-grade Flutter/Dart data management, networking, and repository layer framework. It standardizes data flow, API communication, Firebase integration, structured logging, and state modeling for both **Single-Solution** and **Multi-Solution** architectures.
 
-Jodija uses a three-layer architecture that promotes separation of concerns, testability, and maintainability:
+---
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Application Business Logic               │
-│          (View Models, Use Cases, State Management)         │
-└───────────────────────────┬─────────────────────────────────┘
-                           │
-                           │ Data requests/responses
-                           ▼
-┌─────────────────────────────────────────────────────────────┐
-│                     Repository Layer                        │
-│                                                             │
-│  ┌─────────────────┐  ┌─────────────────┐  ┌──────────────┐ │
-│  │  AuthRepository │  │ ProfileRepository│  │ DataRepository│ │
-│  └────────┬────────┘  └────────┬────────┘  └───────┬──────┘ │
-└──────────┬────────────────────┬────────────────────┬────────┘
-           │                    │                    │
-           │                    │                    │
-┌──────────┼────────────────────┼────────────────────┼────────┐
-│          │  Data Source Connector Layer            │        │
-│          │                    │                    │        │
-│  ┌───────▼─────┐     ┌────────▼────┐      ┌────────▼────┐   │
-│  │ Firebase    │     │ HTTP         │      │ LocalStorage │   │
-│  │ Connectors  │     │ Connectors   │      │ Connectors   │   │
-│  └───────┬─────┘     └────────┬────┘      └────────┬────┘   │
-└──────────┼─────────────────────┼─────────────────────┼──────┘
-           │                     │                     │
-           │                     │                     │
-┌──────────┼─────────────────────┼─────────────────────┼──────┐
-│          │    Data Source Utility Layer              │      │
-│          │                     │                     │      │
-│  ┌───────▼─────┐     ┌─────────▼───┐      ┌─────────▼───┐   │
-│  │ Firebase    │     │ HTTP        │      │ File        │   │
-│  │ Utilities   │     │ Utilities   │      │ Utilities   │   │
-│  └─────────────┘     └─────────────┘      └─────────────┘   │
-└─────────────────────────────────────────────────────────────┘
-```
+## 💡 The Core Architectural Philosophy (فلسفة المكتبة الأساسية)
 
-### 1. Repository Layer
+The foundational philosophy of JoDija Repository was created to solve a critical software engineering challenge: **How to share domain business logic, data models, and API integrations across multiple applications without duplicating code or coupling UI to networking details.**
 
-This document outlines the architecture of a library divided into three key parts: the repository, data source connector, and data source util. This structure promotes separation of concerns, testability, and maintainability.
+```mermaid
+graph TD
+    subgraph UI_Solutions ["1. حلول واجهات المستخدم (UI Solutions)"]
+        UI1["📱 تطبيق العميل (Customer App)"]
+        UI2["🏪 تطبيق التاجر (Merchant App)"]
+        UI3["🖥️ لوحة التحكم الإدارية (Admin Dashboard)"]
+        UI4["🌐 تطبيق الويب (Customer Web)"]
+    end
 
-## 1. Repository Layer
+    subgraph Logic_Layer ["2. طبقة منطق الأعمال المشترك (Shared Business Logic)"]
+        Logic["🧠 matger front logic<br/>(MatgerLogicConfiguration + BLoCs + Repositories)"]
+    end
 
-- **Purpose:** Acts as an intermediary between the application's business logic (e.g., view models, use cases , state management ) and the data layer (data sources). It provides a clean and consistent API for accessing data, regardless of the data source.
+    subgraph Core_Data ["3. مكتبة مصدر البيانات الأساسية (Core Data Source Engine)"]
+        Repo["⚙️ JoDija_reposatory<br/>(DataSourceConfigration + HttpClient + Firebase + Error Handling)"]
+    end
 
-- **Responsibilities:**
+    subgraph Backend_Server ["4. الواجهة الخلفية الموحدة (Unified Backend API)"]
+        Server["🚀 matger express<br/>(REST API Endpoints + Image Hosting + Auth)"]
+    end
 
-  - **Data Abstraction:** Hides the complexities of data retrieval and storage.
-  - **Data Aggregation:** Can combine data from multiple data sources.
-  - **Caching:** May implement caching mechanisms to improve performance.
-  - **Error Handling:** Handles data-related errors and provides a consistent way to report them.
-  - **Business Logic:** May contain some business logic related to data manipulation.
+    UI1 --> Logic
+    UI2 --> Logic
+    UI3 --> Logic
+    UI4 --> Logic
 
-- **Example:**
-
-  - A `BaseAuthRepo` might provide methods like `getUserById(int id)`, `userLogIn`, `createUserAccount(User user)`, and `updateUserProfile(User user)`.
-  - The repository doesn't care if the data comes from a local database, a remote API, or a file. It just provides the data.
-
-- **Benefits:**
-  - **Testability:** Easily mock or stub the repository in unit tests.
-  - **Maintainability:** Changes to the data layer only require modifications in the repository layer.
-  - **Flexibility:** Easily add or remove data sources without affecting the rest of the application.
-
-## 2. Data Source Connector Layer
-
-- **Purpose:** Responsible for interacting with specific data sources (e.g., a database, a REST API, a file). It provides a low-level interface for reading and writing data.
-
-- **Responsibilities:**
-
-  - **Data Source Interaction:** Handles the specific details of communicating with a particular data source.
-  - **Data Mapping:** Maps data from the data source to the application's data models.
-  - **Error Handling:** Handles errors specific to the data source.
-
-- **Examples:**
-
-  - A `LocalDatabaseConnector` might use SQLite or Room to interact with a local database.
-  - A `RemoteApiConnector` might use Retrofit or HTTP to interact with a REST API.
-  - A `FirebaseConnections` might use Firebase to interact with a Firebase database.
-
-- **Benefits:**
-  - **Encapsulation:** Hides the implementation details of each data source.
-  - **Reusability:** Data source connectors can be reused across different parts of the application.
-  - **Testability:** Easily mock or stub data source connectors in unit tests.
-
-## 3. Data Source Util Layer
-
-- **Purpose:** Provides utility functions and helper classes used by the data source connectors. It contains common logic shared across multiple data sources.
-
-- **Responsibilities:**
-
-  - **Data Transformation:** Provides functions for transforming data between different formats.
-  - **Error Handling:** Provides common error handling logic.
-  - **Network Utilities:** Provides utilities for making network requests.
-  - **Database Utilities:** Provides utilities for interacting with databases.
-  - **File Utilities:** Provides utilities for working with files.
-
-- **Examples:**
-
-  - A `FirebaseAccount` might provide functions for creating, updating, and deleting user accounts in Firebase.
-  - A `JodijaHttpClient` might provide functions for making HTTP requests using Dio or http package.
-
-- **Benefits:**
-  - **Code Reusability:** Avoids code duplication by providing common logic in a single place.
-  - **Maintainability:** Makes it easier to update common logic across multiple data sources.
-  - **Consistency:** Ensures that data is handled consistently across the application.
-
-### How These Layers Work Together
-
-1. Business logic (view models, etc.) requests data from the Repository
-2. Repository determines which data source(s) to use
-3. Repository uses appropriate Data Source Connector to retrieve/store data
-4. Data Source Connector uses Utility classes for common tasks
-5. Data flows back up through the layers, potentially with transformations at each step
-
-## Application Types
-
-Jodija supports two types of application architectures:
-
-### 1. Multi-Solution Applications
-
-**Description:** Applications with multiple user interfaces across different platforms, all connected to the same backend.
-
-**Architecture:**
-
-```
-┌─────────────┐   ┌─────────────┐   ┌─────────────┐
-│ Mobile App  │   │  Web App    │   │ Desktop App │
-│  (Flutter)  │   │  (Flutter)  │   │  (Flutter)  │
-└──────┬──────┘   └──────┬──────┘   └──────┬──────┘
-       │                 │                 │
-       └─────────┬───────┴─────────┬───────┘
-                 │                 │
-         ┌───────┴─────────┐       │
-         │  Business Logic │       │
-         │     Package     │       │
-         └───────┬─────────┘       │
-                 │                 │
-                 ▼                 ▼
-         ┌─────────────────────────────┐
-         │     Jodija Repository       │
-         │    (YAML Configuration)     │
-         └─────────────────────────────┘
+    Logic --> Repo
+    Repo <--> Server
 ```
 
-This document outlines two primary types of app solutions, categorized by their architecture and scope.
+### 1. Multi-Solution Architecture (التطبيقات متعددة الحلول) - e.g., `matger front logic`
+- **The Problem**: In modern platforms like **Matger (متجر)**, you have multiple user-facing clients (Customer Mobile App, Merchant App, Web Dashboard, Delivery App) that all interact with the same database and share identical business rules.
+- **The Solution**: 
+  - **`JoDija_reposatory` (The Engine)**: Handles networking, caching, serialization, and error mapping.
+  - **`matger front logic` (The Shared Brain)**: Inherits `DataSourceConfigration`, manages state (BLoCs/Cubits), synchronizes auth tokens and `x-lang` language codes, and exposes clean use cases.
+  - **UI Solutions (The Presentation)**: Flutter apps for iOS, Android, Web, and Desktop focus 100% on UI/UX and consume `matger front logic`.
+  - **`matger express` (The Unified Backend)**: Serves all clients through a standard JSON contract and respects `x-lang` and `Authorization` headers.
 
-- Multiple UI platforms (mobile, web, desktop)
-- Shared business logic package
-- YAML-based configuration
+### 2. Single-Solution Architecture (التطبيقات أحادية الحل)
+- **Standalone Apps**: When building a single application (e.g. standalone mobile app), the app package depends directly on `JoDija_reposatory` and configures `DataSourceConfigration` inside its own startup lifecycle with zero boilerplate.
 
-### 2. Single-Solution Applications
+---
 
-**Description:** Applications with a primary UI (typically mobile) and possibly a control panel built with different technology.
+## 🌟 Core Features & Capabilities (المزايا والقدرات الأساسية)
 
-**Architecture:**
+### 1. ⚙️ Multi-Environment Configuration Engine (`DataSourceConfigration`)
+- **Seamless Environment Switching**: Effortlessly toggle between `local`, `remote_dev`, and `remote_prod` states.
+- **Dedicated Image Server Routing**: Independent resolution for API base URLs (`baseUrls`) and media/image server URLs (`imageBaseUrls`).
+- **JSON-Driven Setup**: Bootstrap complete networking and Firebase environments from a single asset file via `backendRoutedInit()`.
+- **Programmatic Override**: Direct runtime updates via `setToHttpUrlsEnveiroment()`.
 
-```
-┌─────────────┐   ┌─────────────────────┐
-│ Mobile App  │   │    Control Panel    │
-│  (Flutter)  │   │ (Web Technologies)  │
-└──────┬──────┘   └─────────┬───────────┘
-       │                    │
-       │           ┌────────┴────────┐
-       │           │ Integrated      │
-       └───────────► Business Logic  │
-                   └────────┬────────┘
-                           │
-                           ▼
-                   ┌───────────────┐
-                   │    Jodija     │
-                   │   Repository  │
-                   └───────────────┘
-```
+### 2. 🌐 Advanced HTTP Client with Dio (`HttpClient`)
+- **Full HTTP Method Suite**: Native support for `GET`, `POST`, `PUT`, `DELETE`, and `PATCH`.
+- **Automated Localization**: Dynamic language header injection (`x-lang: ar` / `x-lang: en`) managed globally via `HttpHeader().setLangHeader()`.
+- **Automatic JWT Bearer Token**: Seamless authentication header binding (`Authorization: Bearer <token>`).
+- **Multipart Uploads & Cancellations**: First-class handling of file uploads and request cancellation via `CancelToken`.
 
-- Single primary UI with optional control panel
-- Integrated business logic
-- YAML-based configuration
+### 3. 🛡️ Strongly-Typed Error Handling Hierarchy (`BaseError`)
+- Automatic conversion of HTTP status codes and connection failures into 13+ strongly typed error classes:
+  - `400 BadRequestError` • `401 UnauthorizedError` • `403 ForbiddenError`
+  - `404 NotFoundError` • `409 ConflictError` • `500 InternalServerError`
+  - `TimeoutError` • `ConnectionError` • `SocketError` • `FormatError` • `CancelError`
 
-## Getting Started
+### 4. 📦 Result Pattern State Encapsulation (`Result<Error, Data>`)
+- Eliminates unhandled runtime exceptions by encapsulating outcomes into type-safe `Result<T>` and `UserResult` objects.
 
-### Installation
+### 5. 🔥 Firebase Ecosystem Integration (Firestore, Storage, Auth, FCM)
+- **Firestore CRUD**: High-level and low-level Firestore connectors (`DataSourceFirebaseSource`, `FireStoreAction`).
+- **Real-Time Streaming**: Reactive Firestore streaming with automatic model mapping (`StreamFirebaseDataSource`).
+- **Storage Utilities**: Integrated image and file uploads to Firebase Storage (`StorageActions`).
+- **Authentication**: Pre-built providers for Google Sign-In (`GoogleAuthSoucre`) and Email/Password (`EmailPassowrdAuthSource`).
+- **Push Notifications**: Firebase Cloud Messaging setup and topic subscriptions (`FCMService`).
 
-Add Jodija Repository to your `pubspec.yaml`:
+### 6. 📊 Enterprise Logging & Performance Diagnostics (`JDRepoConsole`)
+- **Colorized Output**: Distinct console styling with timestamps and icons for 5 log levels (`ERROR`, `WARN`, `INFO`, `DEBUG`, `SUCCESS`).
+- **Execution Profiling**: Built-in performance timers (`JDRepoConsole.performance()`).
+- **Smart Release Mode**: Suppresses verbose debug logs in production (`kReleaseMode`) automatically.
+
+### 7. 📑 Dynamic Data Grid & Table Models (`Cell Models`)
+- Specialized data structures (`Cell<T>`, `RowofCells<T>`, `TableOfCells<T>`) for dashboards, data tables, and dynamic forms.
+
+---
+
+## 🚀 Quick Start
+
+### 1. Installation
+
+Add `JoDija_reposatory` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  jodija_repository:
+  JoDija_reposatory:
     git:
-      url: https://github.com/zeftawyapps/jodija_data_souce_module.git
+      url: https://github.com/zeftawyapps/JoDija_reposatory.git
 ```
 
-### Import
+### 2. Configuration (`assets/config/config.json`)
 
-```dart
-import 'package:jodija_repository/jodija.dart';
-```
+Create an environment configuration file:
 
-### Configuration
-
-#### For Multi-Solution Apps
-
-Create a configuration file in your Business Logic package:
-
-```dart
-import 'package:jodija_repository/jodija_configration.dart';
-
-class LogicConfiguration extends DataSourceConfigration {
-  /**
-   * Initializes the service environment configuration.
-   *
-   * @param envType The environment type ('prod' or 'dev')
-   * @param backendState The backend state ('local', 'remote_dev', 'remote_prod')
-   * @param appType The application type ('App' or 'Dashboard')
-   */
-  void setAppConfiguration(
-    ServiceEnvType envType,
-    SerViceBackendState backendState,
-    [SerViceAppType appType = SerViceAppType.App]
-  ) {
-    this.envType = envType == ServiceEnvType.prod ? EnvType.prod : EnvType.dev;
-    this.appType = appType == SerViceAppType.App ? AppType.App : AppType.DashBord;
-
-    switch (backendState) {
-      case SerViceBackendState.local:
-        this.backendState = BackendState.local;
-        break;
-      case SerViceBackendState.remote_dev:
-        this.backendState = BackendState.remote_dev;
-        break;
-      case SerViceBackendState.remote_prod:
-        this.backendState = BackendState.remote_prod;
-        break;
+```json
+{
+  "baseUrls": {
+    "local": "http://10.0.2.2:5000/api/v1",
+    "remote_dev": "https://dev-api.matger.com/api/v1",
+    "remote_prod": "https://api.matger.com/api/v1"
+  },
+  "imageBaseUrls": {
+    "local": "http://10.0.2.2:5000/",
+    "remote_dev": "https://dev-api.matger.com/",
+    "remote_prod": "https://api.matger.com/"
+  },
+  "firebaseConfig": {
+    "dev": {
+      "apiKey": "AIzaSyDev...",
+      "appId": "1:12345:android:dev",
+      "messagingSenderId": "123456789",
+      "projectId": "matger-dev",
+      "storageBucket": "matger-dev.appspot.com"
+    },
+    "prod": {
+      "apiKey": "AIzaSyProd...",
+      "appId": "1:12345:android:prod",
+      "messagingSenderId": "987654321",
+      "projectId": "matger-prod",
+      "storageBucket": "matger-prod.appspot.com"
     }
   }
-
-  BackendState isRemote() {
-    return backendState;
-  }
 }
-
-// Configuration enums
-enum ServiceEnvType { prod, dev }
-enum SerViceAppType { App, Dashboard }
-enum SerViceBackendState { local, remote_dev, remote_prod }
 ```
 
-Then create an app configuration in your UI solution:
+### 3. Bootstrap in App Startup
 
 ```dart
-class AppConfiguration extends LogicConfiguration {
-  // App-specific configuration options
+import 'package:flutter/material.dart';
+import 'package:JoDija_reposatory/jodija_configration.dart';
+import 'package:JoDija_reposatory/https/http_urls.dart';
+import 'package:JoDija_reposatory/utilis/functions/jd_repo_console.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 1. Initialize configuration from asset
+  final config = AppConfiguration();
+  config.envType = EnvType.dev;
+  config.backendState = BackendState.remote_dev;
+  config.appType = AppType.App;
+  
+  await config.backendRoutedInit('assets/config/config.json');
+
+  // 2. Set default language header
+  HttpHeader().setLangHeader(lang: 'ar');
+
+  JDRepoConsole.success('JoDija Repository successfully initialized');
+
+  runApp(const MyApp());
 }
+
+class AppConfiguration extends DataSourceConfigration {}
 ```
 
-#### For Single-Solution Apps
+---
 
-Create a configuration file in your app package:
+## 📖 Complete Documentation Portal
 
-```dart
-class AppConfiguration extends DataSourceConfigration {
-  // App-specific configuration options
-}
-```
+Explore detailed guides and reference documentation:
 
-## Documentation
+| Document | Description |
+| :--- | :--- |
+| 📄 **[Arabic Introduction (مقدمة باللغة العربية)](documents/ar/introduction_ar.md)** | الشرح الكامل لفلسفة المكتبة وطبقاتها باللغة العربية. |
+| 📄 **[English Introduction](documents/en/introduction_en.md)** | Overview of layered architecture and core principles. |
+| 🛠️ **[Matger Integration Guide (دليل التكامل مع متجر)](documents/ar/integration_matger_guide_ar.md)** | الدليل العملي لربط `matger front logic` مع `matger express`. |
+| 🛠️ **[English Matger Integration Guide](documents/en/integration_matger_guide.md)** | Multi-solution integration guide for Matger business logic & Express backend. |
+| ⚙️ **[DataSourceConfiguration](documents/en/classes/configration.md)** | Environment routing, image URLs, and Firebase initialization. |
+| 🌐 **[HttpClient & HttpHeader](documents/en/classes/utils/JodijaHttpClient.md)** | Network requests (GET, POST, PUT, DELETE, PATCH) and language/auth headers. |
+| 🖥️ **[JDRepoConsole Logging](documents/en/classes/utils/JDRepoConsole.md)** | Colored console logging, execution timing, and diagnostics. |
+| 🛡️ **[HTTP Error Hierarchy](documents/en/classes/utils/HttpErrors.md)** | Strongly typed `BaseError` subclasses and failure handling. |
+| 📚 **[Comprehensive Class Summary](documents/en/classes/class_summary.md)** | Full breakdown of all repository interfaces and connectors. |
 
-For detailed documentation on using Jodija Repository in your projects:
+---
 
-- [Class Documentation](documents/en/the%20head%20lines%20.md)
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

@@ -1,23 +1,34 @@
-## BaseDataModel Class
+# BaseEntityDataModel Class
 
-The `BaseDataModel` class is a base data model class that represents a data entity with an optional ID. 
+`BaseEntityDataModel` (also referenced as `BaseDataModel`) is the root abstract entity class for all domain and data models in the JoDija Repository library. Any model that is stored in Firebase Firestore or transmitted through HTTP endpoints extends this class.
 
+---
 
-### Properties
+## Properties
 
-- `id`: A `String?` that represents the unique identifier for the data entity.
-- `map`: A `Map<String, dynamic>?` that holds additional data for the model.
+- `id`: Unique identifier for the entity (`String?`).
+- `map`: Optional `Map<String, dynamic>?` holding auxiliary or serialized data.
 
-### Constructor
+---
 
-- `BaseDataModel({String? id})`: Constructs a `BaseDataModel` instance with an optional `id`.
+## Constructors
 
-### Factory Constructor
+### `BaseEntityDataModel({String? id})`
+Constructs a model instance with an optional identifier.
 
-- `BaseDataModel.fromJson(Map<String, dynamic> json, String? id)`: Creates a `BaseDataModel` instance from a JSON map and an optional `id`.
-  - `json`: A map containing the data to initialize the model.
-  - `id`: An optional identifier for the model.
+### `BaseEntityDataModel.fromJson(Map<String, dynamic> json, String? id)`
+Factory constructor to instantiate the entity from a JSON map.
 
-### Methods
+---
 
-- `toJson()`: Converts the `BaseDataModel` instance to a JSON map and returns a map containing the data of the model.
+## Methods
+
+### `Map<String, dynamic> toJson()`
+Converts the model instance into a JSON-compatible map for Firestore or HTTP request payloads.
+
+---
+
+## Subclasses
+
+- [`UsersBaseModel`](../implementations/UsersRepo.md): Base model for user profiles (`UserModule`, `ShardUserModel`).
+- Custom Domain Models (e.g. `ProductModel`, `OrderModel`, `CategoryModel`).

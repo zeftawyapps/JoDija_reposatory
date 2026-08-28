@@ -1,45 +1,48 @@
 # Jodija Data Source Module: Class Reference
 
-To understand this library, you need to know the following classes:
+To understand and work with this library, reference the following components:
 
-- [`Configrastion`](classes/configration.md): Configuration class for data sources.
-- `Results`: it has 3 classes:
-  - [`Result`](classes/results/result.md): Generic result wrapper.
-  - [`ResultDataHelper`](classes/results/result_data_model.md): Helper for result data handling.
+- **Configuration & Integration**:
+  - [`DataSourceConfiguration`](classes/configration.md): Configuration class for data sources, URLs, and environments.
+  - [`Matger Integration Guide`](integration_matger_guide.md): Guide for `matger front logic` & `matger express`.
+- **Results & Errors**:
+  - [`Result`](classes/results/result.md): Generic result wrapper (`Result<Error, Data>`).
   - [`UserResult`](classes/results/result_user_data.md): User-specific result data.
-- `Base Model`:
-- [`BaseDataModel`](classes/base_model/base_data_model.md): Base model for all data objects.
-- [`RemoteBaseModel`](classes/base_model/remote_base_model.md): Model for remote operations.
-- `Abstract Classes`:
-  - [`IBaseDataSourceRepo`](classes/abstract_classes/IBaseDataSourceRepo.md): Repository interface.
+  - [`HttpErrors`](classes/utils/HttpErrors.md): Typed error hierarchy (`BaseError`, `BadRequestError`, etc.).
+- **Base Models**:
+  - [`BaseEntityDataModel`](classes/base_model/base_data_model.md): Base model for all domain entities.
+  - [`RemoteBaseModel`](classes/base_model/remote_base_model.md): Base model for remote API payloads.
+  - [`Cell Models`](classes/base_model/cell_models.md): Grid and tabular models (`Cell`, `RowofCells`, `TableOfCells`).
+- **Abstract Interfaces**:
+  - [`IBaseDataSourceRepo`](classes/abstract_classes/IBaseDataSourceRepo.md): Repository interface for CRUD.
   - [`IBaseSource`](classes/abstract_classes/IBaseSource.md): Basic data source interface.
   - [`IBaseStream`](classes/abstract_classes/IBaseStream.md): Stream data interface.
-  - [`IBaseDataActionsSource`](classes/abstract_classes/IBaseDataActionsSource.md): Data actions interface.
-  - `Authentication`:
-    - `Abstract Classes`:
-      - [`IBaseAuthentication`](classes/abstract_classes/authentication/IBaseAuthentication.md): Base authentication interface.
-      - [`IBaseAccountActions`](classes/abstract_classes/authentication/IBaseAccountActions.md): Account actions interface.
-      - [`IFirebaseAuthentication`](classes/abstract_classes/authentication/IFirebaseAuthentication.md): Firebase authentication interface.
-      - [`IHttpAuthentication`](classes/abstract_classes/authentication/IHttpAuthentication.md): HTTP authentication interface.
-- `Repositories`:
-  - `Authentication`:
-    - [`BaseAuthRepo`](classes/implementations/BaseAuthRepo.md): Authentication repository.
-    - [`BaseProfilRebo`](classes/implementations/BaseProfilRebo.md): Profile repository.
-  - [`DataSourceRepo`](classes/implementations/DataSourceRepo.md): Data source repository.
-- `Sources`:
+  - [`IBaseDataActionsSource`](classes/abstract_classes/IBaseDataActionsSource.md): Data mutation interface.
+  - [`IBaseAuthentication`](classes/abstract_classes/authentication/IBaseAuthentication.md): Base authentication interface.
+  - [`IBaseAccountActions`](classes/abstract_classes/authentication/IBaseAccountActions.md): Account actions interface.
+  - [`IFirebaseAuthentication`](classes/abstract_classes/authentication/IFirebaseAuthentication.md): Firebase authentication interface.
+  - [`IHttpAuthentication`](classes/abstract_classes/authentication/IHttpAuthentication.md): HTTP authentication interface.
+- **Repositories**:
+  - [`DataSourceRepo`](classes/implementations/DataSourceRepo.md): Data source CRUD repository.
+  - [`LoadDataRepo`](classes/implementations/LoadDataRepo.md): Entity list loading repository.
+  - [`BaseAuthRepo`](classes/implementations/BaseAuthRepo.md): Authentication repository.
+  - [`BaseUsersRepo`](classes/implementations/UsersRepo.md): User management repository.
+  - [`BaseProfilRebo`](classes/implementations/BaseProfilRebo.md): Profile repository.
+- **Sources & Connectors**:
   - [`DataSourceFirebaseSource`](classes/implementations/DataSourceFirebaseSource.md): Firebase data source.
   - [`StreamFirebaseDataSource`](classes/implementations/StreamFirebaseDataSource.md): Firebase streaming data source.
-  - [`DataSourceDataActionsHttpSources`](classes/implementations/DataSourceDataActionsHttpSources.md): HTTP data source.
+  - [`DataSourceDataActionsHttpSources`](classes/implementations/DataSourceDataActionsHttpSources.md): HTTP CRUD data source.
+  - [`LoadDataHttpSources`](classes/implementations/LoadDataRepo.md): HTTP list data source.
   - [`AuthHttpSource`](classes/implementations/AuthHttpSource.md): HTTP authentication source.
   - [`EmailPassowrdAuthSource`](classes/implementations/EmailPassowrdAuthSource.md): Email/password authentication source.
   - [`GoogleAuthSoucre`](classes/implementations/GoogleAuthSoucre.md): Google authentication source.
-- `Utilities`:
-  - `Firebase`:
-    - [`FirebaseLoadingData`](classes/utils/FirebaseLoadingData.md): Firebase data loading utility.
-    - [`FirestoreAndStorageActions`](classes/utils/FirestoreAndStorageActions.md): Combined Firestore and Storage operations.
-    - [`FireStoreActions`](classes/utils/FireStoreActions.md): Firestore operations.
-    - [`StorageActions`](classes/utils/StorageActions.md): Storage operations.
-  - `HTTP`:
-    - [`HttpHeader`](classes/utils/HttpHeader.md): HTTP headers management utility.
-    - [`JodijaHttpClient`](classes/utils/JodijaHttpClient.md): HTTP client utility.
-    - [`HttpLoadingData`](classes/utils/HttpLoadingData.md): HTTP response data structure.
+- **Utilities**:
+  - [`JDRepoConsole`](classes/utils/JDRepoConsole.md): Colorized logging, diagnostics, and performance monitor.
+  - [`HttpHeader`](classes/utils/HttpHeader.md): HTTP headers manager for tokens and `x-lang` locale.
+  - [`HttpClient`](classes/utils/JodijaHttpClient.md): Dio HTTP client (GET, POST, PUT, DELETE, PATCH).
+  - [`HttpLoadingData`](classes/utils/HttpLoadingData.md): HTTP response data structure.
+  - [`FirebaseLoadingData`](classes/utils/FirebaseLoadingData.md): Firebase data loading utility.
+  - [`FirestoreAndStorageActions`](classes/utils/FirestoreAndStorageActions.md): Combined Firestore and Storage operations.
+  - [`FireStoreActions`](classes/utils/FireStoreActions.md): Firestore operations.
+  - [`StorageActions`](classes/utils/StorageActions.md): Storage operations.
+  - [`FCMService`](classes/utils/FCMService.md): Firebase Cloud Messaging service.

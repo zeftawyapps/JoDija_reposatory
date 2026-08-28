@@ -1,167 +1,112 @@
 # Jodija Data Source Module Documentation
 
-This document provides a comprehensive overview of all classes in the Jodija data source module, organized by their roles and relationships.
+This document provides a comprehensive overview of all classes in the Jodija Repository module, organized by their architectural roles and relationships.
+
+---
 
 ## Architecture Overview
 
-The Jodija Data Source Module follows a layered architecture:
+The Jodija Repository follows a layered architecture:
 
-1. **Repository Layer**: Provides high-level APIs for data operations
-2. **Source Layer**: Implements specific data source operations (Firebase, HTTP)
-3. **Utility Layer**: Provides lower-level functionality for data operations
+1. **Repository Layer**: Provides high-level APIs for business logic operations and UI consumption.
+2. **Source / Connector Layer**: Implements specific data source operations (Firebase Firestore/Storage, HTTP REST API).
+3. **Utility Layer**: Low-level networking, headers, logging, and error mapping functionality.
 
-## Abstract Interfaces
+---
+
+## 1. Abstract Interfaces
 
 ### Base Data Operations
+- [`IBaseDataSourceRepo`](abstract_classes/IBaseDataSourceRepo.md): Abstract repository for CRUD data source operations.
+- [`IBaseSource`](abstract_classes/IBaseSource.md): Abstract interface for basic data source operations.
+- [`IBaseStream`](abstract_classes/IBaseStream.md): Abstract interface for real-time streaming data.
+- [`IBaseDataActionsSource`](abstract_classes/IBaseDataActionsSource.md): Abstract interface for data source mutations.
+- [`IBaseLoadSource`](implementations/LoadDataRepo.md): Abstract interface for loading entity lists.
 
-- [`IBaseDataSourceRepo`](abstract_classes/IBaseDataSourceRepo.md): Abstract repository for data source operations
-- [`IBaseSource`](abstract_classes/IBaseSource.md): Abstract interface for basic data source operations
-- [`IBaseStream`](abstract_classes/IBaseStream.md): Abstract interface for streaming data
-- [`IBaseDataActionsSource`](abstract_classes/IBaseDataActionsSource.md): Abstract interface for data source actions
+### Authentication & Users
+- [`IBaseAuthentication`](abstract_classes/authentication/IBaseAuthentication.md): Abstract interface for authentication operations.
+- [`IBaseAccountActions`](abstract_classes/authentication/IBaseAccountActions.md): Abstract interface for account profile actions.
+- [`IFirebaseAuthentication`](abstract_classes/authentication/IFirebaseAuthentication.md): Firebase-specific authentication interface.
+- [`IHttpAuthentication`](abstract_classes/authentication/IHttpAuthentication.md): HTTP-specific authentication interface.
 
-### Authentication
+---
 
-- [`IBaseAuthentication`](abstract_classes/authentication/IBaseAuthentication.md): Abstract interface for authentication operations
-- [`IBaseAccountActions`](abstract_classes/authentication/IBaseAccountActions.md): Abstract interface for account actions
-- [`IFirebaseAuthentication`](abstract_classes/authentication/IFirebaseAuthentication.md): Abstract interface for Firebase authentication
-- [`IHttpAuthentication`](abstract_classes/authentication/IHttpAuthentication.md): Abstract interface for HTTP authentication
-
-## Implementations
+## 2. Implementations
 
 ### Repositories
+- [`DataSourceRepo`](implementations/DataSourceRepo.md): Standard CRUD repository implementation.
+- [`LoadDataRepo`](implementations/LoadDataRepo.md): Repository for fetching collections/lists of entities.
+- [`BaseAuthRepo`](implementations/BaseAuthRepo.md): Repository implementation for user login and signup.
+- [`BaseUsersRepo`](implementations/UsersRepo.md): Repository for managing users and user listings.
+- [`BaseProfilRebo`](implementations/BaseProfilRebo.md): Repository for managing the active user profile.
 
-- [`DataSourceRepo`](implementations/DataSourceRepo.md): Repository implementation for data sources
-- [`BaseAuthRepo`](implementations/BaseAuthRepo.md): Repository implementation for authentication
-- [`BaseProfilRebo`](implementations/BaseProfilRebo.md): Repository implementation for user profiles
-
-### Data Sources
-
-- [`DataSourceFirebaseSource`](implementations/DataSourceFirebaseSource.md): Firebase implementation of data source
-- [`StreamFirebaseDataSource`](implementations/StreamFirebaseDataSource.md): Firebase implementation of streaming data
-- [`DataSourceDataActionsHttpSources`](implementations/DataSourceDataActionsHttpSources.md): HTTP implementation of data actions
+### Data Sources & Connectors
+- [`DataSourceFirebaseSource`](implementations/DataSourceFirebaseSource.md): Firebase Firestore & Storage CRUD connector.
+- [`StreamFirebaseDataSource`](implementations/StreamFirebaseDataSource.md): Firebase Firestore real-time stream connector.
+- [`DataSourceDataActionsHttpSources`](implementations/DataSourceDataActionsHttpSources.md): HTTP REST API CRUD connector.
+- [`LoadDataHttpSources`](implementations/LoadDataRepo.md): HTTP REST API list-fetching connector.
 
 ### Authentication Sources
+- [`AuthHttpSource`](implementations/AuthHttpSource.md): HTTP implementation of authentication.
+- [`EmailPassowrdAuthSource`](implementations/EmailPassowrdAuthSource.md): Firebase Email/Password authentication.
+- [`GoogleAuthSoucre`](implementations/GoogleAuthSoucre.md): Firebase Google Sign-In authentication.
+- [`BaseUsersActionsSources`](implementations/UsersRepo.md): Firebase user management actions source.
+- [`ProfileActions`](implementations/UsersRepo.md): Firebase user profile mutation actions source.
 
-- [`AuthHttpSource`](implementations/AuthHttpSource.md): HTTP implementation of authentication
-- [`EmailPassowrdAuthSource`](implementations/EmailPassowrdAuthSource.md): Firebase email/password authentication
-- [`GoogleAuthSoucre`](implementations/GoogleAuthSoucre.md): Firebase Google authentication
+---
 
-## Utility Classes
+## 3. Configuration & Utilities
+
+### Configuration
+- [`DataSourceConfiguration`](configration.md): Manages environments (`EnvType`), backend routing (`BackendState`), `baseUrls`, `imageBaseUrls`, and Firebase setup.
+
+### Networking & HTTP Utilities
+- [`HttpClient`](utils/JodijaHttpClient.md): Dio-based HTTP client supporting GET, POST, PUT, DELETE, and PATCH with automatic error parsing.
+- [`HttpHeader`](utils/HttpHeader.md): Singleton manager for JWT tokens and `x-lang` localization headers.
+- [`HttpLoadingData`](utils/HttpLoadingData.md): Response wrapper for HTTP operations.
+- [`HttpErrors`](utils/HttpErrors.md): Hierarchy of typed errors (`BadRequestError`, `UnauthorizedError`, `InternalServerError`, etc.).
+
+### Logging & Diagnostics
+- [`JDRepoConsole`](utils/JDRepoConsole.md): Centralized, colorized logging utility with `LogContext`, `LogLevel`, and performance metrics.
 
 ### Firebase Utilities
+- [`FirebaseLoadingData`](utils/FirebaseLoadingData.md): Utility for reading data from Firebase Firestore.
+- [`FirestoreAndStorageActions`](utils/FirestoreAndStorageActions.md): Combined Firestore and Storage actions.
+- [`FireStoreActions`](utils/FireStoreActions.md): Firestore document and collection operations.
+- [`StorageActions`](utils/StorageActions.md): Firebase Storage file and image upload helper.
+- [`FCMService`](utils/FCMService.md): Firebase Cloud Messaging notification service.
 
-- [`FirebaseLoadingData`](utils/FirebaseLoadingData.md): Utility for loading data from Firebase
-- [`FirestoreAndStorageActions`](utils/FirestoreAndStorageActions.md): Utility for Firestore and Storage actions
-- [`FireStoreActions`](utils/FireStoreActions.md): Utility for Firestore actions
-- [`StorageActions`](utils/StorageActions.md): Utility for Firebase Storage actions
+---
 
-### HTTP Utilities
+## 4. Models & Results
 
-- [`JodijaHttpClient`](utils/JodijaHttpClient.md): HTTP client utility
-- [`HttpLoadingData`](utils/HttpLoadingData.md): Data structure for HTTP responses
+- [`BaseEntityDataModel`](base_model/base_data_model.md): Root entity model class.
+- [`RemoteBaseModel`](base_model/remote_base_model.md): Standard model for API responses.
+- [`Result`](results/result.md): Generic result container (`Result<Error, Data>`).
+- [`UserResult`](results/result_user_data.md): User-specific result container.
+- [`Cell Models`](base_model/cell_models.md): `Cell<T>`, `RowofCells<T>`, and `TableOfCells<T>`.
 
-## Class Relationships
-
-### Repository-Source Relationships
-
-- `DataSourceRepo` uses `IBaseDataActionsSource` implementations
-- `BaseAuthRepo` uses `IBaseAuthentication` implementations
-- `BaseProfilRebo` uses `IBaseAccountActions` implementations
-
-### Interface-Implementation Relationships
-
-- `IBaseDataActionsSource` is implemented by:
-
-  - `DataSourceFirebaseSource`
-  - `DataSourceDataActionsHttpSources`
-
-- `IBaseStream` is implemented by:
-
-  - `StreamFirebaseDataSource`
-
-- `IFirebaseAuthentication` is implemented by:
-
-  - `EmailPassowrdAuthSource`
-  - `GoogleAuthSoucre`
-
-- `IHttpAuthentication` is implemented by:
-  - `AuthHttpSource`
-
-### Utility Usage
-
-- `DataSourceFirebaseSource` uses:
-
-  - `FirebaseLoadingData`
-  - `FirestoreAndStorageActions`
-
-- `AuthHttpSource` uses:
-  - `JodijaHttpClient`
-  - `HttpLoadingData`
+---
 
 ## Usage Patterns
 
-### Firebase Data Access Pattern
-
-1. Create a data model that extends `BaseDataModel`
-2. Create a `DataSourceFirebaseSource` instance with the model and path
-3. Create a `DataSourceRepo` with the source
-4. Use the repository to perform CRUD operations
+### Multi-Solution Pattern (`matger front logic`)
 
 ```dart
-// Create a source
-var source = DataSourceFirebaseSource.insert(
-  dataModel: myModel,
-  path: 'collection_path'
+// 1. Initialize shared logic config in App
+await MatgerLogicConfiguration().initializeApp(
+  configAssetPath: 'assets/config/config.json',
+  env: EnvType.dev,
+  backend: BackendState.remote_dev,
+  app: AppType.App,
+  defaultLanguage: 'ar',
 );
 
-// Create a repository
+// 2. Perform CRUD operations via Repository
+var source = DataSourceDataActionsHttpSources<ProductModel>.inputs(
+  dataModyle: newProduct,
+  url: 'products',
+);
 var repo = DataSourceRepo(inputSource: source);
-
-// Perform operations
 var result = await repo.addData();
 ```
-
-### HTTP Data Access Pattern
-
-1. Create a data model that extends `BaseDataModel`
-2. Create a `DataSourceDataActionsHttpSources` instance with the model and URL
-3. Create a `DataSourceRepo` with the source
-4. Use the repository to perform CRUD operations
-
-```dart
-// Create a source
-var source = DataSourceDataActionsHttpSources.inputs(
-  dataModyle: myModel,
-  url: 'api/endpoint'
-);
-
-// Create a repository
-var repo = DataSourceRepo(inputSource: source);
-
-// Perform operations
-var result = await repo.addData();
-```
-
-### Authentication Pattern
-
-1. Create an authentication source (Firebase or HTTP)
-2. Create a `BaseAuthRepo` with the source
-3. Use the repository for authentication operations
-
-```dart
-// Create an authentication source
-var authSource = EmailPassowrdAuthSource(
-  email: 'user@example.com',
-  password: 'password123'
-);
-
-// Create a repository
-var authRepo = BaseAuthRepo(authSource);
-
-// Perform authentication
-var result = await authRepo.logIn();
-```
-
-## Conclusion
-
-The Jodija Data Source Module provides a flexible and extensible architecture for data operations. By separating interfaces from implementations, it allows for easy switching between data sources (Firebase, HTTP) without changing the application logic.

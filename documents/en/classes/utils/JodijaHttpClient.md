@@ -1,73 +1,68 @@
-# JodijaHttpClient
+# HttpClient (formerly JodijaHttpClient)
 
-`JodijaHttpClient` is a utility class that provides HTTP client functionality for making network requests. It uses the Dio package for HTTP operations and handles common request/response processing.
+`HttpClient` is a centralized HTTP client utility class that manages network requests using the `Dio` package. It handles JSON serialization, request and response headers (including auth tokens and `x-lang` language codes), logging, timeouts, file uploads, and transforms Dio exceptions into strongly-typed [`BaseError`](HttpErrors.md) instances.
+
+---
 
 ## Properties
 
-- `_instance`: The singleton instance of the class.
-
-  - Type: `JodijaHttpClient`
-  - Static
-  - Private
-
-- `_dio`: The Dio HTTP client instance.
-
+- `baseUrl`: The base URL for all HTTP requests (defaults to `HttpUrlsEnveiroment().baseUrl`).
+  - Type: `String?`
+- `userToken`: Whether to automatically attach the authentication token from `HttpHeader`.
+  - Type: `bool?` (default: `false`)
+- `instance`: Returns the underlying configured `Dio` client instance.
   - Type: `Dio`
-  - Private
 
-- `baseUrl`: The base URL for all HTTP requests.
-
-  - Type: `String`
-
-- `userToken`: Whether to include the user token in requests.
-  - Type: `bool`
+---
 
 ## Constructors
 
-### JodijaHttpClient({bool userToken = false, String baseUrl = ""})
+### `HttpClient({String? baseUrl, bool? userToken = false})`
 
-Creates a new instance of `JodijaHttpClient`. Uses the singleton pattern.
+Creates or configures an `HttpClient` instance.
 
 **Parameters**:
+- `baseUrl`: Optional custom base URL. If omitted, uses `HttpUrlsEnveiroment().baseUrl`.
+- `userToken`: If `true`, reads the token from `HttpHeader().usertoken` and adds the `Authorization: Bearer <token>` header.
 
-- `userToken`: Whether to include the user token in requests (default: `false`).
-- `baseUrl`: The base URL for all requests (default: `""`).
+---
 
-### JodijaHttpClient.\_internal()
-
-Internal constructor for the singleton pattern.
-
-## Methods
-
-### sendRequestResultWithMap()
-
-Sends an HTTP request and returns the result with a Map.
+## Supported HTTP Methods (`HttpMethod`)
 
 ```dart
-Future<HttpLoadingData> sendRequestResultWithMap({
+enum HttpMethod { 
+  GET, 
+  POST, 
+  PUT, 
+  DELETE, 
+  PATCH 
+}
+```
+
+---
+
+## Primary Request Methods
+
+### 1. `sendRequestValue<T>()`
+
+Sends an HTTP request and parses the response into type `T`.
+
+```dart
+Future<T> sendRequestValue<T>({
   required HttpMethod method,
   required String url,
-  Map<String, dynamic>? body,
-  Map<String, String>? parameters,
   Map<String, dynamic>? headers,
+  Map<String, dynamic>? queryParameters,
+  Map<String, dynamic>? body,
   required CancelToken cancelToken,
 });
 ```
 
-**Parameters**:
+---
 
-- `method`: The HTTP method to use (GET, POST, PUT, DELETE).
-- `url`: The endpoint URL.
-- `body`: Optional request body.
-- `parameters`: Optional URL parameters.
-- `headers`: Optional HTTP headers.
-- `cancelToken`: Token for canceling the request.
+### 2. `sendRequestResult<T>()`
 
-**Returns**: A `Future` that completes with an `HttpLoadingData` object.
-
-### sendRequestResult()
-
-Sends an HTTP request and returns the result.
+Sends an HTTP request and returns an encapsulated `HttpLoadingData<T>` containing either data or a typed `BaseError`.
 
 ```dart
 Future<HttpLoadingData<T>> sendRequestResult<T>({
@@ -80,118 +75,44 @@ Future<HttpLoadingData<T>> sendRequestResult<T>({
 });
 ```
 
-**Parameters**:
+---
 
-- `method`: The HTTP method to use (GET, POST, PUT, DELETE).
-- `url`: The endpoint URL.
-- `body`: Optional request body.
-- `parameters`: Optional URL parameters.
-- `headers`: Optional HTTP headers.
-- `cancelToken`: Token for canceling the request.
+## Language & Authentication Headers Integration
 
-**Returns**: A `Future` that completes with an `HttpLoadingData<T>` object.
-
-## Private Methods
-
-### \_createDio()
-
-Creates and configures a Dio instance.
+`HttpClient` automatically integrates with [`HttpHeader`](HttpHeader.md):
 
 ```dart
-Dio _createDio({required bool userToken});
+// 1. Set language globally in app
+HttpHeader().setLangHeader(lang: 'ar');
+
+// 2. Set auth token on user login
+HttpHeader().setAuthHeader('jwt_token_here');
+
+// 3. Make request - HttpClient automatically attaches 'x-lang: ar' and 'Authorization'
+final client = HttpClient(userToken: true);
 ```
 
-**Parameters**:
-
-- `userToken`: Whether to include the user token in requests.
-
-**Returns**: A configured `Dio` instance.
-
-## Usage Example
-
-```dart
-// Create an HTTP client instance
-final httpClient = JodijaHttpClient(userToken: true, baseUrl: 'https://api.example.com');
-
-// Make a GET request
-var result = await httpClient.sendRequestResultWithMap(
-  method: HttpMethod.GET,
-  url: '/users',
-  parameters: {'page': '1', 'limit': '10'},
-  cancelToken: CancelToken()
-);
-
-if (result.data != null) {
-  print('Success: ${result.data}');
-} else {
-  print('Error: ${result.error}');
-}
-
-// Make a POST request
-var createResult = await httpClient.sendRequestResultWithMap(
-  method: HttpMethod.POST,
-  url: '/users',
-  body: {
-    'name': 'John Doe',
-    'email': 'john@example.com'
-  },
-  cancelToken: CancelToken()
-);
-
-if (createResult.data != null) {
-  print('User created: ${createResult.data}');
-} else {
-  print('Error: ${createResult.error}');
-}
-```
+---
 
 ## Error Handling
 
-The class handles HTTP errors and wraps them in the `HttpLoadingData` class:
+All Dio errors are intercepted and mapped into specialized error classes:
+- Status `400` $\rightarrow$ `BadRequestError`
+- Status `401` $\rightarrow$ `UnauthorizedError`
+- Status `403` $\rightarrow$ `ForbiddenError`
+- Status `404` $\rightarrow$ `NotFoundError`
+- Status `409` $\rightarrow$ `ConflictError`
+- Status `500` $\rightarrow$ `InternalServerError`
+- Timeout $\rightarrow$ `TimeoutError`
+- Network/Offline $\rightarrow$ `ConnectionError` / `SocketError`
 
-```dart
-try {
-  var result = await httpClient.sendRequestResultWithMap(
-    method: HttpMethod.GET,
-    url: '/users',
-    cancelToken: CancelToken()
-  );
+See [`HttpErrors`](HttpErrors.md) for full documentation on error structures.
 
-  // Check for errors
-  if (result.error != null) {
-    print('Error: ${result.error.message}');
-    print('Status code: ${result.error.statusCode}');
-  } else {
-    print('Success!');
-  }
-} catch (e) {
-  print('Unexpected error: $e');
-}
-```
-
-## Authentication
-
-The class can automatically include authentication tokens in requests when `userToken` is set to `true`:
-
-```dart
-// First set the auth header with HttpHeader class
-HttpHeader().setAuthHeader('your-auth-token');
-
-// Then create a client with userToken: true
-final httpClient = JodijaHttpClient(userToken: true);
-
-// The request will include the authentication header automatically
-var result = await httpClient.sendRequestResultWithMap(
-  method: HttpMethod.GET,
-  url: '/protected-resource',
-  cancelToken: CancelToken()
-);
-```
+---
 
 ## Related Classes
 
-- `HttpLoadingData`: Data structure for HTTP response.
-- `HttpMethod`: Enum defining HTTP methods (GET, POST, PUT, DELETE).
-- `HttpHeader`: Utility for setting HTTP headers, particularly authentication.
-- `DataSourceDataActionsHttpSources`: Uses `JodijaHttpClient` for data operations.
-- `AuthHttpSource`: Uses `JodijaHttpClient` for authentication operations.
+- [`HttpHeader`](HttpHeader.md): Manages tokens and language keys.
+- [`HttpUrlsEnveiroment`](HttpHeader.md): Stores global `baseUrl` and `imageBaseUrl`.
+- [`DataSourceDataActionsHttpSources`](../implementations/DataSourceDataActionsHttpSources.md): Uses `HttpClient` for CRUD operations.
+- [`LoadDataHttpSources`](../implementations/LoadDataRepo.md): Uses `HttpClient` for list loading operations.
