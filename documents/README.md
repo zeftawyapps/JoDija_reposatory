@@ -1,6 +1,14 @@
-# JoDija Repository Documentation Portals / بوابات توثيق مستودع جوديجا
+<div align="center">
+
+<img src="assets/jodija_logo.png" alt="JoDija Logo" width="160" style="border-radius: 16px; margin-bottom: 12px;" />
+
+# 🚀 JoDija Repository Documentation Portals / بوابات توثيق مستودع جوديجا
+
+### *Simplifying Flutter Workflows And Universal Cross-Platform Solutions*
 
 Please choose your preferred language / الرجاء اختيار لغة التوثيق المناسبة:
+
+</div>
 
 ---
 

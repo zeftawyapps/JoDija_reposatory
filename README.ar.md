@@ -1,15 +1,26 @@
-# مستودع جوديجا (`JoDija_reposatory`)
+<div align="center">
 
-[English Version](README.md) | **العربية**
+<img src="assets/jodija_logo.png" alt="شعار جوديجا - JoDija" width="180" style="border-radius: 20px; margin-bottom: 12px;" />
 
-[![Version](https://img.shields.io/badge/version-1.7.0-blue.svg)](pubspec.yaml)
+# 🚀 مستودع جوديجا (`JoDija_reposatory`)
+
+### *Simplifying Flutter Workflows And Universal Cross-Platform Solutions*
+
+**إطار عمل شامل واحترافي لإدارة تدفق البيانات والشبكات وطبقة المستودع (Repository Layer) لتطبيقات Flutter و Dart للحلول الأحادية والأنظمة متعددة الحلول.**
+
+[![Version](https://img.shields.io/badge/الإصدار-1.7.0-blue.svg)](pubspec.yaml)
 [![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.0.0-02569B?logo=flutter)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-%3E%3D3.0.0-0175C2?logo=dart)](https://dart.dev)
 [![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2F%20Multi--Solution-green.svg)](documents/ar/introduction_ar.md)
 
-**مستودع جوديجا (JoDija Repository)** هو إطار عمل شامل لإدارة تدفق البيانات والشبكات وطبقة المستودع (Repository Layer) لتطبيقات Flutter و Dart. تم تصميمه لتوحيد وتجريد الاتصال بالخوادم عبر الـ APIs أو منصات السحابة مثل Firebase، وتسجيل الأحداث، وإدارة الحالات لكل من **التطبيقات أحادية الحل (Single-Solution)** و **التطبيقات متعددة الحلول (Multi-Solution)**.
+---
+
+### 🌐 اللغة / Language
+[🇺🇸 **English Version (README.md)**](README.md) • **العربية** • [📚 **بوابة التوثيق الكاملة (documents/README.md)**](documents/README.md)
 
 ---
+
+</div>
 
 ## 💡 الفلسفة المعمارية الأساسية للمكتبة
 
@@ -107,6 +118,7 @@ dependencies:
   JoDija_reposatory:
     git:
       url: https://github.com/zeftawyapps/JoDija_reposatory.git
+      ref: v1.7.0
 ```
 
 ### 2. إعداد ملف البيئات (`assets/config/config.json`)

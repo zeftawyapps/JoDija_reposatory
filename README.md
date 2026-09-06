@@ -1,15 +1,26 @@
-# Jodija Repository (`JoDija_reposatory`)
+<div align="center">
 
-**English** | [العربية](README.ar.md)
+<img src="assets/jodija_logo.png" alt="JoDija Logo" width="180" style="border-radius: 20px; margin-bottom: 12px;" />
+
+# 🚀 Jodija Repository (`JoDija_reposatory`)
+
+### *Simplifying Flutter Workflows And Universal Cross-Platform Solutions*
+
+**An enterprise-grade Flutter/Dart data management, networking, and repository layer framework for Single-Solution and Multi-Solution architectures.**
 
 [![Version](https://img.shields.io/badge/version-1.7.0-blue.svg)](pubspec.yaml)
 [![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.0.0-02569B?logo=flutter)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-%3E%3D3.0.0-0175C2?logo=dart)](https://dart.dev)
 [![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2F%20Multi--Solution-green.svg)](documents/en/introduction_en.md)
 
-**Jodija Repository** is an enterprise-grade Flutter/Dart data management, networking, and repository layer framework. It standardizes data flow, API communication, Firebase integration, structured logging, and state modeling for both **Single-Solution** and **Multi-Solution** architectures.
+---
+
+### 🌐 Language / اللغة
+**English** • [🇸🇦 **العربية (README.ar.md)**](README.ar.md) • [📚 **Documentation Portal (documents/README.md)**](documents/README.md)
 
 ---
+
+</div>
 
 ## 💡 The Core Architectural Philosophy (فلسفة المكتبة الأساسية)
 
@@ -109,6 +120,7 @@ dependencies:
   JoDija_reposatory:
     git:
       url: https://github.com/zeftawyapps/JoDija_reposatory.git
+      ref: v1.7.0
 ```
 
 ### 2. Configuration (`assets/config/config.json`)

@@ -74,6 +74,7 @@ dependencies:
   JoDija_reposatory:
     git:
       url: https://github.com/zeftawyapps/JoDija_reposatory.git
+      ref: v1.7.0
 ```
 
 ### 2. Imports
