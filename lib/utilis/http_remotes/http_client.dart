@@ -48,6 +48,7 @@ class HttpClient {
       _client.interceptors.add(PrettyDioLogger(
         requestHeader: true,
         requestBody: true,
+        responseBody: false,
       ));
     }
     var headderAuth = HttpHeader();
