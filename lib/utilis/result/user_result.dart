@@ -48,7 +48,7 @@ class UserResult<Error extends RemoteBaseModel, Data> {
   }
 
   /// Executes the appropriate function based on the presence of data or error
-  fold({
+  Function fold({
     required UserResult Function(Error error) onError,
     required UserResult Function(Data data) onData,
   }) {

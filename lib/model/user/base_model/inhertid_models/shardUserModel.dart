@@ -12,11 +12,11 @@ class ShardUserModel extends UsersBaseModel {
   /// Constructs a `ShardUserModel` with optional parameters for password, uid, name, email, and token.
   ShardUserModel({
     this.pass,
-    String? uid,
-    String? name,
-    String? email,
-    String? token,
-  }) : super(email: email, uid: uid, name: name, token: token);
+    super.uid,
+    super.name,
+    super.email,
+    super.token,
+  });
 
   @override
   Map<String, dynamic> toJson() {

@@ -28,10 +28,10 @@ class UserModule extends UsersBaseModel {
     this.phone,
     this.type = 0,
     String? id,
-    String? name,
-    String? token = "",
-    String? email,
-  }) : super(email: email, uid: id, name: name, token: token);
+    super.name,
+    super.token = "",
+    super.email,
+  }) : super(uid: id);
 
   /// Constructs a `UserModule` instance from a JSON map.
   ///

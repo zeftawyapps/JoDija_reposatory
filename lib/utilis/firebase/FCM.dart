@@ -62,6 +62,7 @@ class FCMService {
       }
 
       // Get the token
+      // ignore: deprecated_member_use
       String? token = await messaging.getToken();
       if (kDebugMode) {
         jdRepoConsole("FCM Token: $token");

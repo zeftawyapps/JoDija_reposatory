@@ -1,5 +1,5 @@
 import 'package:jodija_repository/utilis/models/base_data_model.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:meta/meta.dart';
 
 import 'interface_userModel.dart';
 /// A base model class for user data.

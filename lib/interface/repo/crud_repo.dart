@@ -8,7 +8,7 @@ import '../../utilis/models/remote_base_model.dart';
 /// and provides a helper for result data handling. The type parameter
 /// `T` represents the type of data model.
 ///
-/// \param <T> The type of data model that extends `BaseDataModel`.
+/// Type parameter `T` represents the data model extending `BaseEntityDataModel`.
 abstract class IBaseDataSourceRepo<T extends BaseEntityDataModel> {
 
   /// Adds data to the data source.

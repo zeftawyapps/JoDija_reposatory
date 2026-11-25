@@ -15,6 +15,9 @@ pubspec.lock
 .packages
 **/doc/api/
 
+# Exclude internal workspace upgrade report from public pub.dev archive
+documents/ar/flutter_upgrade_compatibility_report_ar.md
+
 # Exclude local tooling and IDE metadata
 .fvm/
 .fvmrc

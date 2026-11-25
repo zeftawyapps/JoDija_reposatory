@@ -85,7 +85,7 @@ abstract class DataSourceConfigration {
     }
   }
 
-  setToHttpUrlsEnveiroment({required String baseUrl, String? imageBaseUrl}) {
+  void setToHttpUrlsEnveiroment({required String baseUrl, String? imageBaseUrl}) {
     HttpUrlsEnveiroment(baseUrl: baseUrl, imageBaseUrl: imageBaseUrl);
   }
 

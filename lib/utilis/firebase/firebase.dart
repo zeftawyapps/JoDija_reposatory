@@ -17,7 +17,7 @@ class FirebaseLoadingData {
     return _fireStore.collection(collection);
   }
 
-  /// Loads data from the specified collection and returns it as a Future<QuerySnapshot>.
+  /// Loads data from the specified collection and returns it as a `Future<QuerySnapshot>`.
   ///
   /// [collection] - The name of the collection.
   Future<QuerySnapshot> loadDataAsFuture(String collection) async {
@@ -26,7 +26,7 @@ class FirebaseLoadingData {
     return await firebaseCollection.get();
   }
 
-  /// Loads all data from the specified path and returns it as a Future<T>.
+  /// Loads all data from the specified path and returns it as a `Future<T>`.
   ///
   /// [path] - The path to the data.
   /// [builder] - The function to build the data.
@@ -39,7 +39,7 @@ class FirebaseLoadingData {
     return snapshots.then((snapshot) => builder(snapshot.data(), snapshot.id));
   }
 
-  /// Loads single data from the specified path and returns it as a Future<T>.
+  /// Loads single data from the specified path and returns it as a `Future<T>`.
   ///
   /// [path] - The path to the data.
   /// [builder] - The function to build the data.
@@ -52,7 +52,7 @@ class FirebaseLoadingData {
     return snapshots.then((snapshot) => builder(snapshot.data(), snapshot.id));
   }
 
-  /// Streams data with a query from the specified path and returns it as a Stream<List<T>>.
+  /// Streams data with a query from the specified path and returns it as a `Stream<List<T>>`.
   ///
   /// [path] - The path to the data.
   /// [builder] - The function to build the data.
@@ -84,7 +84,7 @@ class FirebaseLoadingData {
     });
   }
 
-  /// Streams single data from the specified path and id and returns it as a Stream<T>.
+  /// Streams single data from the specified path and id and returns it as a `Stream<T>`.
   ///
   /// [path] - The path to the data.
   /// [id] - The id of the data.
@@ -99,7 +99,7 @@ class FirebaseLoadingData {
     return snapshots.map((snapshot) => builder(snapshot.data(), snapshot.id));
   }
 
-  /// Loads data with a query from the specified path and returns it as a Future<List<T>>.
+  /// Loads data with a query from the specified path and returns it as a `Future<List<T>>`.
   ///
   /// [path] - The path to the data.
   /// [builder] - The function to build the data.
@@ -132,7 +132,7 @@ class FirebaseLoadingData {
     });
   }
 
-  /// Streams all data from the specified path and returns it as a Stream<List<T>>.
+  /// Streams all data from the specified path and returns it as a `Stream<List<T>>`.
   ///
   /// [path] - The path to the data.
   /// [builder] - The function to build the data.
@@ -194,7 +194,7 @@ class FirebaseLoadingData {
     return getlist;
   }
 
-  /// Loads single document data from the specified collection and id and returns it as a Future<Map<String, dynamic>>.
+  /// Loads single document data from the specified collection and id and returns it as a `Future<Map<String, dynamic>>`.
   ///
   /// [collectin] - The name of the collection.
   /// [id] - The id of the document.

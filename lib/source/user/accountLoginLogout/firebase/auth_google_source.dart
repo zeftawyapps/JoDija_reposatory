@@ -8,10 +8,24 @@ import '../../../../utilis/firebase/firebase_account.dart';
 
 
 class GoogleAuthSoucre extends IFirebaseAuthentication {
-  FirebaseAccount? _accountRegist;
+  static bool _isInitialized = false;
 
-  GoogleAuthSoucre() {
+  FirebaseAccount? _accountRegist;
+  final String? clientId;
+  final String? serverClientId;
+
+  GoogleAuthSoucre({this.clientId, this.serverClientId}) {
     _accountRegist = FirebaseAccount();
+  }
+
+  Future<void> _ensureInitialized() async {
+    if (!_isInitialized) {
+      await GoogleSignIn.instance.initialize(
+        clientId: clientId,
+        serverClientId: serverClientId,
+      );
+      _isInitialized = true;
+    }
   }
 
   @override
@@ -43,29 +57,22 @@ class GoogleAuthSoucre extends IFirebaseAuthentication {
       FirebaseAuth auth = FirebaseAuth.instance;
       UserCredential? user;
 
-      final GoogleSignIn googleSignIn = GoogleSignIn();
+      await _ensureInitialized();
+      final GoogleSignInAccount googleSignInAccount =
+          await GoogleSignIn.instance.authenticate();
 
-      GoogleSignInAccount? googleSignInAccount =
-      await googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          googleSignInAccount.authentication;
 
-      if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        idToken: googleSignInAuthentication.idToken,
+      );
 
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleSignInAuthentication.accessToken,
-          idToken: googleSignInAuthentication.idToken,
-        );
+      final UserCredential userCredential =
+          await auth.signInWithCredential(credential);
 
-
-          final UserCredential userCredential = await auth.signInWithCredential(
-              credential);
-
-          user = userCredential;
-        return user;
-      }else {
-        throw Exception('error');
-      }
+      user = userCredential;
+      return user;
         } on FirebaseAuthException catch (e) {
           if (e.code == 'account-exists-with-different-credential') {
            throw Exception('account-exists-with-different-credential');

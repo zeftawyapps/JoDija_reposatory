@@ -29,9 +29,9 @@ class JsonAssetReader {
   ///
   /// This getter reads the file from the asset and decodes the JSON data.
   /// Returns a [Map] containing the JSON data.
-  get data async {
+  Future<Map<String, dynamic>> get data async {
     _data = await _readFileFromAsset(_path) as Map<String, dynamic>;
-    return _data;
+    return _data!;
   }
 
   /// Reads the file from the asset and decodes the JSON data.

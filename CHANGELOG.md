@@ -6,6 +6,7 @@
 * Strongly-typed HTTP error hierarchy (`BaseError` and subclasses) with `Result` and `UserResult` encapsulations.
 * Firebase ecosystem integration for Firestore CRUD/streaming, Firebase Storage, Email/Password & Google Sign-In authentication, and FCM notifications.
 * Structured console logging and profiling via `JDRepoConsole` and dynamic table/cell models.
+* Upgraded dependencies for latest Flutter/Dart compatibility: removed unused direct dependencies (`flutter_bloc`, `intl`, `dartz`, `firebase_auth_web`, `firebase_core_web`, `freezed_annotation`), migrated `GoogleAuthSoucre` to `google_sign_in` v7, widened Firebase constraints (`firebase_core >=3.4.1 <6.0.0`, etc.), and updated `flutter_lints` to `^6.0.0`.
 * Added `jodija_repository.dart` barrel export, `example/` project, and static analysis cleanup.
 
 ## 0.0.1

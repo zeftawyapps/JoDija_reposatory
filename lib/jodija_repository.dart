@@ -1,7 +1,7 @@
 /// A Flutter data repository and networking framework for single and
 /// multi-solution architectures with Dio HTTP client, Firebase integration,
 /// and strongly-typed error handling.
-library jodija_repository;
+library;
 
 // Configuration & Entry
 export 'jodija.dart';
