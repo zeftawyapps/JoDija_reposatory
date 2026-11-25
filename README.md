@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/zeftawyapps/JoDija_reposatory/main/assets/jodija_logo.png" alt="JoDija Logo" width="180" style="border-radius: 20px; margin-bottom: 12px;" />
+<img src="https://raw.githubusercontent.com/zeftawyapps/JoDija_reposatory/master/assets/jodija_logo.png" alt="JoDija Logo" width="180" style="border-radius: 20px; margin-bottom: 12px;" />
 
 # 🚀 JoDija Repository (`jodija_repository`)
 
