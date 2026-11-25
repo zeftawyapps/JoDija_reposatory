@@ -1,4 +1,4 @@
-import 'package:JoDija_reposatory/utilis/models/base_data_model.dart';
+import 'package:jodija_repository/utilis/models/base_data_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'interface_userModel.dart';
@@ -9,9 +9,9 @@ import 'interface_userModel.dart';
 /// methods for JSON serialization and deserialization.
 class UsersBaseModel implements IuserModel  , BaseEntityDataModel{
   static const String idKey = "uid";
-  static const String? nameKey = "name";
-  static const String? emailKey = "email";
-  static const String? tokenKey = "token";
+  static const String nameKey = "name";
+  static const String emailKey = "email";
+  static const String tokenKey = "token";
 
   String? uid;
   String? name;
@@ -34,24 +34,24 @@ class UsersBaseModel implements IuserModel  , BaseEntityDataModel{
   ///
   /// \param json A map containing the JSON data.
   UsersBaseModel.formJson(Map<String, dynamic> json) {
-    uid = json['uid'] == null ? null : json['uid'];
-    name = json['name'] == null ? null : json['name'];
-    email = json['email'] == null ? null : json['email'];
-    token = json['token'] == null ? "" : json['token'];
+    uid = json['uid'];
+    name = json['name'];
+    email = json['email'];
+    token = json['token'] ?? "";
    id = uid; 
     uMap = json;
     map = json; 
   }
  //  formJson With MetaData 
   UsersBaseModel.formJsonWithMetaData(Map<String, dynamic> json) {
-    uid = json['uid'] == null ? null : json['uid'];
-    name = json['name'] == null ? null : json['name'];
-    email = json['email'] == null ? null : json['email'];
-    token = json['token'] == null ? "" : json['token'];
+    uid = json['uid'];
+    name = json['name'];
+    email = json['email'];
+    token = json['token'] ?? "";
     id = uid; 
     uMap = json;
     map = json; 
-    isArchived =   json['isArchived'] == null ? false : json['isArchived'];
+    isArchived =   json['isArchived'] ?? false;
     createdAt = DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now();
     updatedAt = DateTime.tryParse(json['updatedAt'] ?? '') ?? DateTime.now();
   }
@@ -60,33 +60,33 @@ class UsersBaseModel implements IuserModel  , BaseEntityDataModel{
   /// Converts the `UsersBaseModel` instance to a JSON map.
   ///
   /// \returns A map containing the JSON data.
+  @override
   @mustBeOverridden
   Map<String, dynamic> toJson() {
-    final _data = uMap;
-    _data['uid'] = uid;
-    _data['name'] = name;
-    _data['email'] = email;
-    _data['token'] = token;
-    map =_data ; 
-    return _data;
+    final data = uMap;
+    data['uid'] = uid;
+    data['name'] = name;
+    data['email'] = email;
+    data['token'] = token;
+    map =data ; 
+    return data;
   }
   // tojson With metaData
-  @override
   Map<String, dynamic> toJsonWithMetaData() {
-    final _data = toJson();
-    _data['uid'] = uid;
-    _data['name'] = name;
-    _data['email'] = email;
-    _data['token'] = token;
-    _data['isArchived'] = isArchived;
-    _data['createdAt'] = createdAt;
-    _data['updatedAt'] = updatedAt;
-     map =_data ; 
-    return _data;
+    final data = toJson();
+    data['uid'] = uid;
+    data['name'] = name;
+    data['email'] = email;
+    data['token'] = token;
+    data['isArchived'] = isArchived;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+     map =data ; 
+    return data;
   }
 
   @override
-  Map<String, dynamic> uMap = Map();
+  Map<String, dynamic> uMap = {};
   
   @override
   String? id;

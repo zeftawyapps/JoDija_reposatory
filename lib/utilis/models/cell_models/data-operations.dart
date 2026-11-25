@@ -17,7 +17,7 @@ T? model ;
   TableOfCells.RowInstance(
       this.listOfRows) {
 
-  this.mapList =   getListmap(listOfRows);
+  mapList =   getListmap(listOfRows);
   } // Model.Cells(this.cells) {rowofCells = RowofCells(cells!);}
 
   List <RowofCells> getDatarow(List<Map<String , dynamic >> listMaps){
@@ -61,11 +61,6 @@ T? model ;
       keylist!.add(map[keycell.name]);
 
     } ).toList();
-
-    List<dynamic>? distinctIds = listMaps.toSet().toList();
-
-    int i = 0 ;
-
   }
 
   List< Map<dynamic, int >> countBy ( List<Map<String , dynamic >> data , Cell keycell ){
@@ -74,7 +69,7 @@ T? model ;
     List<dynamic>d = unicGrubs(data, keycell);
     int i = 0 ;  int c = d.length;
     do{
-      Map<dynamic, int > m =Map<dynamic, int>() ;
+      Map<dynamic, int > m =<dynamic, int>{} ;
       int cc =   data.where((e) => e[keycell.name] == d[i]).length;
       m.addAll( {d[i]:cc}) ;
       newdata.add(m);
@@ -90,7 +85,7 @@ T? model ;
     List<dynamic>d = unicGrubs(data, keycell);
     int i = 0 ;  int c = d.length;
     do{
-      Map<dynamic, double > m =Map<dynamic, double>() ;
+      Map<dynamic, double > m =<dynamic, double>{} ;
       String v = d[i];
       double sum = 0 ;
       for(int i = 0;i<data.length;i++){
@@ -102,7 +97,7 @@ T? model ;
       newdata.add(m);
       i++;
     }while(i<c);
-    print(newdata);
+    jdRepoConsole(newdata);
     return newdata ;
   }
 

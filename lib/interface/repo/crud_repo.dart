@@ -1,6 +1,5 @@
-import 'package:JoDija_reposatory/interface/sources/i_json_base_source.dart';
-import 'package:JoDija_reposatory/utilis/models/base_data_model.dart';
-import 'package:JoDija_reposatory/utilis/result/result_data_indecator.dart';
+import 'package:jodija_repository/utilis/models/base_data_model.dart';
+import 'package:jodija_repository/utilis/result/result_data_indecator.dart';
 import '../../utilis/models/remote_base_model.dart';
 
 /// An abstract repository class for data source operations.
@@ -11,8 +10,6 @@ import '../../utilis/models/remote_base_model.dart';
 ///
 /// \param <T> The type of data model that extends `BaseDataModel`.
 abstract class IBaseDataSourceRepo<T extends BaseEntityDataModel> {
-  /// The input source for data actions.
-  IBaseDataActionsSource<T>? _inputSource;
 
   /// Adds data to the data source.
   ///

@@ -1,4 +1,9 @@
 include: package:flutter_lints/flutter.yaml
 
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+# Preserve backwards compatibility for legacy public API identifiers & file names
+linter:
+  rules:
+    file_names: false
+    non_constant_identifier_names: false
+    constant_identifier_names: false
+    avoid_types_as_parameter_names: false

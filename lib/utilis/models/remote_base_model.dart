@@ -1,4 +1,4 @@
-import 'package:JoDija_reposatory/utilis/models/staus_model.dart';
+import 'package:jodija_repository/utilis/models/staus_model.dart';
 
 /// A generic class that represents a remote data model.
 ///
@@ -47,11 +47,11 @@ class RemoteBaseModel<T> {
   ///
   /// \returns A map containing the data of the model.
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['status'] = status;
-    _data['message'] = message;
-    _data['data'] = data;
-    _data['error'] = error;
-    return _data;
+    final data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    data['data'] = data;
+    data['error'] = error;
+    return data;
   }
 }

@@ -1,5 +1,5 @@
 
- import 'package:JoDija_reposatory/model/user/base_model/base_user_module.dart';
+ import 'package:jodija_repository/model/user/base_model/base_user_module.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../functions/jd_repo_console.dart';
 
@@ -63,7 +63,7 @@ class FirebaseAccount {
   Future<UsersBaseModel> changePassword(String email ,   String oldPassword, String newPassword) async {
     try {
       // First, log in the user to verify their current credentials
-      final user = await this.logIn(email, oldPassword);
+      final user = await logIn(email, oldPassword);
       
       // Re-authenticate the user with their old password for additional security
       final cred = EmailAuthProvider.credential(
@@ -74,7 +74,7 @@ class FirebaseAccount {
 
       // If re-authentication is successful, update the password
       await user.user?.updatePassword(newPassword);
-      final updatedUser = await FirebaseAuth.instance.currentUser;
+      final updatedUser = FirebaseAuth.instance.currentUser;
 
       jdRepoConsole('Password updated successfully!');
       // Show a success message to the user.

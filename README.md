@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="assets/jodija_logo.png" alt="JoDija Logo" width="180" style="border-radius: 20px; margin-bottom: 12px;" />
+<img src="https://raw.githubusercontent.com/zeftawyapps/JoDija_reposatory/main/assets/jodija_logo.png" alt="JoDija Logo" width="180" style="border-radius: 20px; margin-bottom: 12px;" />
 
-# 🚀 Jodija Repository (`JoDija_reposatory`)
+# 🚀 JoDija Repository (`jodija_repository`)
 
 ### *Simplifying Flutter Workflows And Universal Cross-Platform Solutions*
 
@@ -113,14 +113,11 @@ graph TD
 
 ### 1. Installation
 
-Add `JoDija_reposatory` to your `pubspec.yaml`:
+Add `jodija_repository` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  JoDija_reposatory:
-    git:
-      url: https://github.com/zeftawyapps/JoDija_reposatory.git
-      ref: v1.7.0
+  jodija_repository: ^1.7.0
 ```
 
 ### 2. Configuration (`assets/config/config.json`)
@@ -162,9 +159,7 @@ Create an environment configuration file:
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:JoDija_reposatory/jodija_configration.dart';
-import 'package:JoDija_reposatory/https/http_urls.dart';
-import 'package:JoDija_reposatory/utilis/functions/jd_repo_console.dart';
+import 'package:jodija_repository/jodija_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

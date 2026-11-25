@@ -1,6 +1,6 @@
-import 'package:JoDija_reposatory/utilis/models/remote_base_model.dart';
+import 'package:jodija_repository/utilis/models/remote_base_model.dart';
 
-import 'package:JoDija_reposatory/utilis/result/result.dart';
+import 'package:jodija_repository/utilis/result/result.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../interface/sources/i_json_base_source.dart';
@@ -197,11 +197,11 @@ class DataSourceFirebaseSource<T extends BaseEntityDataModel>
   Future<Result<RemoteBaseModel, RemoteBaseModel<List<T>>>>
       getDataList() async {
     try {
-      this.dataBuilder ??=
+      dataBuilder ??=
           (data, documentId) => BaseEntityDataModel.fromJson(data!, documentId) as T;
       var product = await _firebaseLoadingData.loadDataWithQuery<T>(
-          queryBuilder: _query, path: _path, builder: this.dataBuilder!);
-      return Result.data(RemoteBaseModel(data: product as List<T>));
+          queryBuilder: _query, path: _path, builder: dataBuilder!);
+      return Result.data(RemoteBaseModel(data: product));
     } on Exception catch (e) {
       return Result.error(RemoteBaseModel(message: e.toString()));
     }
@@ -217,7 +217,7 @@ class DataSourceFirebaseSource<T extends BaseEntityDataModel>
   Future<Result<RemoteBaseModel, RemoteBaseModel<T>>> getSingleData(
       String id) async {
     try {
-      var buid = this.dataBuilder ??
+      var buid = dataBuilder ??
           (data, documentId) => BaseEntityDataModel.fromJson(data!, documentId) as T;
 
       var data = await _firebaseLoadingData.loadSingleDocData(_path, id);

@@ -2,8 +2,8 @@
 /// A singleton class to manage HTTP headers for authentication.
 class HttpHeader {
   String _usertoken = '';
-  String _contentType = '';
-  String _contentTypeKey = '';
+  final String _contentType = '';
+  final String _contentTypeKey = '';
   String _tokenKey = '';
   String _tokenType = '';
   String _langKey = 'x-lang';

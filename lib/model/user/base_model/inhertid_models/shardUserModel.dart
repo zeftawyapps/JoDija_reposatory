@@ -17,4 +17,11 @@ class ShardUserModel extends UsersBaseModel {
     String? email,
     String? token,
   }) : super(email: email, uid: uid, name: name, token: token);
+
+  @override
+  Map<String, dynamic> toJson() {
+    final data = super.toJson();
+    data[passKey] = pass;
+    return data;
+  }
 }

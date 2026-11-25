@@ -1,11 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 /// A class that provides various Firestore actions such as adding, editing, and deleting documents.
 class FireStoreAction {
   String firestoreDocmentid = "";
@@ -154,7 +149,7 @@ class FireStoreAction {
           .doc(docId)
           .collection(subCollection);
       await firebaseCollection.add(mymap).then((value) {
-        this.firestoreDocmentid = value.id;
+        firestoreDocmentid = value.id;
       });
     } else {
       firestoreDocmentid = id;
@@ -182,7 +177,7 @@ class FireStoreAction {
       CollectionReference firebaseCollection;
       firebaseCollection = FirebaseFirestore.instance.collection(path);
       await firebaseCollection.add(mymap).then((value) {
-        this.firestoreDocmentid = value.id;
+        firestoreDocmentid = value.id;
       });
     } else {
       firestoreDocmentid = id;

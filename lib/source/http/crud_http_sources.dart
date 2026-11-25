@@ -61,13 +61,12 @@ class DataSourceDataActionsHttpSources<T extends BaseEntityDataModel>
   /// Standard constructor for [DataSourceDataActionsHttpSources].
   DataSourceDataActionsHttpSources(
       {String? baseUrl = "",
-      required String url,
+      required this.url,
       this.query,
       this.params,
       this.dataBuilder}) {
     this.baseUrl =
         (baseUrl == null || baseUrl.isEmpty) ? ApiUrls.BASE_URL : baseUrl;
-    this.url = url;
   }
 
   /// Helper method to build the request URL with an optional ID.

@@ -9,12 +9,10 @@ import '../../utilis/result/result.dart';
 /// This class provides methods to retrieve user data using the provided
 /// user actions sources.
 class BaseUsersRepo {
-  final UserModule _usersApi;
-
   /// Constructs a `BaseUsersRepo` instance.
   ///
   /// \param usersApi The user module for API interactions.
-  BaseUsersRepo(this._usersApi);
+  BaseUsersRepo(UserModule usersApi);
 
   /// Retrieves a list of users from Firebase.
   ///

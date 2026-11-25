@@ -9,15 +9,15 @@ class BaseEntityDataModel {
 
 
   /// A map to hold additional data for the model.
-  Map<String, dynamic>? map = Map();
+  Map<String, dynamic>? map = {};
 
   /// Constructs a [BaseEntityDataModel] instance with an optional [id].
-  BaseEntityDataModel({String? id , bool? isArchived, DateTime? createdAt, DateTime? updatedAt}) {
-    this.id = id;
-    this.isArchived = isArchived;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
+  BaseEntityDataModel({
+    this.id,
+    this.isArchived,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   /// Creates a [BaseEntityDataModel] instance from a JSON map and an optional [id].
   ///

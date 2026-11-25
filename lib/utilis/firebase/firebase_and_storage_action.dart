@@ -1,7 +1,4 @@
-import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 
 import 'firestore_inputs.dart';
 import 'storage.dart';
@@ -260,7 +257,7 @@ class FirestoreAndStorageActions extends FireStoreAction with StorageActions {
             editDataCloudFirestore(
                 path: path,
                 id: id,
-                mymap: {imgfield!: value});
+                mymap: {imgfield: value});
           });
         });
       }

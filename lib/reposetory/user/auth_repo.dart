@@ -1,6 +1,6 @@
-import 'package:JoDija_reposatory/https/http_urls.dart';
-import 'package:JoDija_reposatory/source/user/accountLoginLogout/firebase/proflle_actions.dart';
-import 'package:JoDija_reposatory/utilis/result/result.dart';
+import 'package:jodija_repository/https/http_urls.dart';
+import 'package:jodija_repository/source/user/accountLoginLogout/firebase/proflle_actions.dart';
+import 'package:jodija_repository/utilis/result/result.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../interface/user/base/account.dart';
@@ -90,7 +90,7 @@ class BaseAuthRepo {
   Future<Result<RemoteBaseModel, UsersBaseModel>> _logInFirebase() async {
     try {
       var user = await _account.logIn();
-      var data = await _accountActions!.getDataByDoc(user.uid!);
+      var data = await _accountActions.getDataByDoc(user.uid!);
       UsersBaseModel usersModel = UsersBaseModel.formJson(data);
       HttpHeader().setAuthHeader(user.token ?? "");
       usersModel.token = user.token;
@@ -135,16 +135,15 @@ class BaseAuthRepo {
       _createAccountFirebase() async {
     try {
       var user = await _account.createAccount();
-      var profileMapData = await _accountActions!.getDataByDoc(user.uid!);
-      if (profileMapData.isEmpty || profileMapData.length == 0) {
-        await _accountActions!
+      var profileMapData = await _accountActions.getDataByDoc(user.uid!);
+      if (profileMapData.isEmpty || profileMapData.isEmpty) {
+        await _accountActions
             .createProfileData(id: user.uid!, data: user.toJson());
         HttpHeader().setAuthHeader(user.token ?? "");
       } else {
         user = UsersBaseModel.formJson(profileMapData);
       }
-      String token = user!.token!;
-      HttpHeader().setAuthHeader(user.token! ?? "");
+      HttpHeader().setAuthHeader(user.token ?? "");
       return Result.data(user);
     } on FirebaseException catch (e) {
       return Result.error(RemoteBaseModel(
@@ -161,14 +160,14 @@ class BaseAuthRepo {
     try {
       var user = await _account.createAccount();
       String userNameFromEmail = user.email!.split("@").first;
-      String name = usersModel.name ?? user.name ?? "$userNameFromEmail";
+      String name = usersModel.name ?? user.name ?? userNameFromEmail;
       UsersBaseModel busersModel =
           UsersBaseModel(uid: user.uid, email: user.email, name: name);
       usersModel.uid = busersModel.uid;
       usersModel.email = busersModel.email;
       usersModel.name = busersModel.name;
       usersModel.token = user.token;
-      await _accountActions!
+      await _accountActions
           .createProfileData(id: usersModel.uid!, data: usersModel.toJson());
       HttpHeader().setAuthHeader(user.token ?? "");
       return Result.data(usersModel);
@@ -187,7 +186,7 @@ class BaseAuthRepo {
     try {
       var user = await _account.createAccount(body: usersModel.toJson());
       String userNameFromEmail = user.email!.split("@").first;
-      String name = usersModel.name ?? user.name ?? "$userNameFromEmail";
+      String name = usersModel.name ?? user.name ?? userNameFromEmail;
       UsersBaseModel busersModel =
           UsersBaseModel(uid: user.uid, email: user.email, name: name);
       HttpHeader().setAuthHeader(user.token ?? "");
@@ -242,24 +241,6 @@ class BaseAuthRepo {
           message: handilExcepstons(e.code), status: StatusModel.error));
     }
   }
-
-  /// Changes password using HTTP authentication.
-  ///
-  /// [email] - The email address of the user.
-  /// [oldPassword] - The current password for verification.
-  /// [newPassword] - The new password to set.
-  /// 
-  /// Returns a `Result` with success message or error details.
-  Future<Result<RemoteBaseModel, String >> _changePasswordHttp(
-   String email ,    String oldPassword, String newPassword) async {
-    try {
-      await _account.changePassword( email ,  oldPassword, newPassword);
-      return Result.data("done");
-    } catch (e) {
-      return Result.error(
-          RemoteBaseModel(message: e.toString(), status: StatusModel.error));
-    }
-  } 
 
   /// Changes password using Firebase authentication.
   ///

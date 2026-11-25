@@ -1,4 +1,4 @@
-import 'package:JoDija_reposatory/utilis/result/result.dart';
+import 'package:jodija_repository/utilis/result/result.dart';
 
 import '../models/base_data_model.dart';
 import '../models/remote_base_model.dart';

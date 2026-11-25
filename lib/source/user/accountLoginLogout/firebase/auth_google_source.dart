@@ -76,6 +76,7 @@ class GoogleAuthSoucre extends IFirebaseAuthentication {
         } catch (e) {
           throw Exception('error');
         }
+    return null;
       }
       
         @override

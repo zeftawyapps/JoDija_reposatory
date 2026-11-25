@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../constes/collections.dart';
 import '../../../../interface/user/base/actions.dart';
-import '../../../../model/user/base_model/base_user_module.dart';
 import '../../../../utilis/firebase/firebase.dart';
 import '../../../../utilis/firebase/firebase_and_storage_action.dart';
 import '../../../../utilis/firebase/firestore_inputs.dart';
@@ -10,8 +9,8 @@ import '../../../../utilis/firebase/firestore_inputs.dart';
 class ProfileActions implements IBaseAccountActions {
 
 
-  FirestoreAndStorageActions? _firestoreAndStorageActions =   FirestoreAndStorageActions() ;
-  FireStoreAction? _fireStoreAction = FireStoreAction();
+  final FirestoreAndStorageActions _firestoreAndStorageActions =   FirestoreAndStorageActions() ;
+  final FireStoreAction _fireStoreAction = FireStoreAction();
   FirebaseLoadingData? _firebaseLoadingData = FirebaseLoadingData();
 
 String path = CollectionsName.usersAccountData;
@@ -21,7 +20,7 @@ String path = CollectionsName.usersAccountData;
   @override
   Future createProfileData(
       {required String id, required Map<String, dynamic> data}) async {
-    await _fireStoreAction!.addDataCloudFirestore(
+    await _fireStoreAction.addDataCloudFirestore(
         id: id, path: path, mymap: data);
   }
 
@@ -39,7 +38,6 @@ String path = CollectionsName.usersAccountData;
   }
 
 
-  @override
   Future<Map<String, dynamic>> SearchDataById(String uid) async {
     CollectionReference firebaseCollection;
     firebaseCollection =
@@ -62,7 +60,7 @@ String path = CollectionsName.usersAccountData;
       {required String id,    Map<String, dynamic>? mapData ,
       Object ? file
       }) async {
-    await _firestoreAndStorageActions!.editeDataCloudFirestorWithUpload(
+    await _firestoreAndStorageActions.editeDataCloudFirestorWithUpload(
         collection:  path ,
         id: id,
         mymap: mapData!,

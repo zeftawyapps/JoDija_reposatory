@@ -51,7 +51,7 @@ mixin StorageActions {
     filepath = '$_directory/$_filename';
     try {
       return await firebase_storage.FirebaseStorage.instance
-          .ref('$filepath')
+          .ref(filepath)
           .putData(await file.readAsBytes());
     } on FirebaseException catch (e) {
       e.code;
@@ -78,8 +78,8 @@ mixin StorageActions {
     filepath = '$_directory/$_filename';
     try {
       return await firebase_storage.FirebaseStorage.instance
-          .ref('$filepath')
-          .putData(await file);
+          .ref(filepath)
+          .putData(file);
     } on FirebaseException catch (e) {
       e.code;
     }
@@ -99,13 +99,13 @@ mixin StorageActions {
 
     _filename = filename;
 
-    _filename = '$_filename';
+    _filename = _filename;
     filepath = '$_directory/$_filename';
     try {
       return await firebase_storage.FirebaseStorage.instance
-          .ref('$filepath')
+          .ref(filepath)
           .delete();
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       // e.g, e.code == 'canceled'
     }
   }
@@ -119,7 +119,7 @@ mixin StorageActions {
       return await firebase_storage.FirebaseStorage.instance
           .refFromURL(url)
           .delete();
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       // e.g, e.code == 'canceled'
     }
   }

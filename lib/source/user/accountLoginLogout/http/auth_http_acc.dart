@@ -6,8 +6,6 @@ import '../../../../model/user/base_model/base_user_module.dart';
 import '../../../../utilis/http_remotes/http_client.dart';
 import '../../../../utilis/http_remotes/http_methos_enum.dart';
 import '../../../../utilis/models/staus_model.dart';
-import '../../../../utilis/models/staus_model.dart';
-import '../../../../utilis/functions/jd_repo_console.dart';
 
 /// HTTP-based implementation of authentication source.
 /// 
@@ -98,16 +96,14 @@ class AuthHttpSource implements IHttpAuthentication {
   /// - [changePasswordUrl]: Custom endpoint for password change (defaults to "change-password")
   AuthHttpSource({
     String? baseUrl = "", 
-    required String email, 
-    required String pass,
+    required String this.email, 
+    required String this.pass,
     String? loginUrl,
     String? createAccountUrl,
     String? logoutUrl,
     String? changePasswordUrl,
   }) {
     this.baseUrl = baseUrl ?? ApiUrls.BASE_URL;
-    this.email = email;
-    this.pass = pass;
     this.loginUrl = loginUrl ?? "login";
     this.createAccountUrl = createAccountUrl ?? "register";
     this.logoutUrl = logoutUrl ?? "logout";
@@ -143,7 +139,7 @@ class AuthHttpSource implements IHttpAuthentication {
     
     var result = await HttpClient(userToken: true).sendRequest(
         method: HttpMethod.POST,
-        url: baseUrl + "/" + createAccountUrl,
+        url: "$baseUrl/$createAccountUrl",
         body: allBody,
         cancelToken: CancelToken());
     
@@ -181,7 +177,7 @@ class AuthHttpSource implements IHttpAuthentication {
   Future<UsersBaseModel> logIn() async {
     var result = await HttpClient(userToken: true).sendRequest(
         method: HttpMethod.POST,
-        url: baseUrl + "/" + loginUrl,
+        url: "$baseUrl/$loginUrl",
         body: {"email": email , "password": pass},
         cancelToken: CancelToken());
 
@@ -222,7 +218,7 @@ class AuthHttpSource implements IHttpAuthentication {
   Future<void> logOut() async {
     var result = await HttpClient(userToken: true).sendRequest(
         method: HttpMethod.POST,
-        url: baseUrl + "/" + logoutUrl,
+        url: "$baseUrl/$logoutUrl",
         body: {"email": email , "password": pass},
         cancelToken: CancelToken());
     
@@ -266,7 +262,7 @@ class AuthHttpSource implements IHttpAuthentication {
   Future<UsersBaseModel> changePassword(String email, String oldPassword, String newPassword) async {
     var result = await HttpClient(userToken: true).sendRequest(
         method: HttpMethod.POST,
-        url: baseUrl + "/" + changePasswordUrl,
+        url: "$baseUrl/$changePasswordUrl",
         body: {
           "email": email,
           "oldPassword": oldPassword,

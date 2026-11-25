@@ -1,8 +1,6 @@
-import 'package:JoDija_reposatory/interface/sources/i_base_stream.dart';
-import 'package:JoDija_reposatory/utilis/models/base_data_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:jodija_repository/interface/sources/i_base_stream.dart';
+import 'package:jodija_repository/utilis/models/base_data_model.dart';
 
-import '../../interface/sources/i_base_source.dart';
 import '../../utilis/firebase/firebase.dart';
 
 /// A data source class for streaming data from Firebase Firestore.
@@ -51,9 +49,10 @@ class StreamFirebaseDataSource<T extends BaseEntityDataModel>
   ///
   /// Returns:
   /// - A [Stream] of [List] of [T] containing the streamed data items.
+  @override
   Stream<List<T>> streamData() async* {
 
-    var varbuilder = this.builder ??
+    var varbuilder = builder ??
         (json, docId) => BaseEntityDataModel.fromJson(json ?? {}, docId) as T;
 
     var dataResult = _fireStore.streamAllData(

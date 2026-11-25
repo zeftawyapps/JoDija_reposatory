@@ -37,28 +37,29 @@ class UserModule extends UsersBaseModel {
   ///
   /// \param json A map containing the JSON data.
   UserModule.formJson(Map<String, dynamic> json) {
-    uid = json['uid'] == null ? null : json['uid'];
-    name = json['name'] == null ? null : json['name'];
-    email = json['email'] == null ? null : json['email'];
-    address = json['address'] == null ? null : json['address'];
-    phone = json['phone'] == null ? null : json['phone'];
-    type = json['type'] == null ? 0 : json['type'];
-    token = json['token'] == null ? "" : json['token'];
+    uid = json['uid'];
+    name = json['name'];
+    email = json['email'];
+    address = json['address'];
+    phone = json['phone'];
+    type = json['type'] ?? 0;
+    token = json['token'] ?? "";
   }
 
   /// Converts the `UserModule` instance to a JSON map.
   ///
   /// \returns A map containing the JSON data.
+  @override
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['uid'] = uid;
-    _data['name'] = name;
-    _data['email'] = email;
-    _data['address'] = address;
-    _data['phone'] = phone;
-    _data['type'] = type ?? 0;
-    _data['token'] = token;
+    final data = <String, dynamic>{};
+    data['uid'] = uid;
+    data['name'] = name;
+    data['email'] = email;
+    data['address'] = address;
+    data['phone'] = phone;
+    data['type'] = type ?? 0;
+    data['token'] = token;
 
-    return _data;
+    return data;
   }
 }

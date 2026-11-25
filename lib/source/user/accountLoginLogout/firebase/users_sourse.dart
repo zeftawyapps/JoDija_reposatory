@@ -1,28 +1,17 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../../../constes/collections.dart';
 import '../../../../model/user/base_model/inhertid_models/user_model.dart';
 import '../../../../utilis/firebase/firebase.dart';
-import '../../../../utilis/firebase/firebase_and_storage_action.dart';
-import '../../../../utilis/firebase/firestore_inputs.dart';
 
 
 class BaseUsersActionsSources  {
-  FirestoreAndStorageActions? _firestoreAndStorageActions;
-  FireStoreAction? _fireStoreAction;
-  FirebaseLoadingData? _firebaseLoadingData;
-
   File? file;
   Map<String, dynamic>? data;
-String path = CollectionsName.usersAccountData;
-  BaseUsersActionsSources({this.path =  CollectionsName.usersAccountData} ) {
-    _fireStoreAction = FireStoreAction();
-    _firebaseLoadingData = FirebaseLoadingData();
-    _firestoreAndStorageActions = FirestoreAndStorageActions();
-  }
+  String path = CollectionsName.usersAccountData;
+  BaseUsersActionsSources({this.path = CollectionsName.usersAccountData});
 
   // get users
   Future<List<UserModule>> getUsers() async {

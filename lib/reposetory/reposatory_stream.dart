@@ -1,5 +1,4 @@
 // created class
-import 'package:JoDija_reposatory/utilis/result/result.dart';
 
 import '../interface/sources/i_base_stream.dart';
 import '../utilis/models/base_data_model.dart';

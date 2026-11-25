@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:JoDija_reposatory/utilis/models/base_data_model.dart';
+import 'package:jodija_repository/utilis/models/base_data_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -124,7 +124,6 @@ class FirebaseLoadingData {
               snapshot.id,
             ),
           )
-          .where((value) => value != null)
           .toList();
       if (sort != null) {
         result.sort(sort);
@@ -184,7 +183,7 @@ class FirebaseLoadingData {
 
     QuerySnapshot qs = snapshot;
     qs.docs.map((doc) {
-      Map<String, dynamic> docmap = Map();
+      Map<String, dynamic> docmap = {};
       docmap = doc.data()! as Map<String, dynamic>;
       if (idcell != null) {
         docmap.addAll({idcell: doc.id});

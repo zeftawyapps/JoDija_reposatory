@@ -22,7 +22,7 @@ class JsonAssetReader {
   ///
   /// The [path] parameter specifies the path to the asset file.
   JsonAssetReader({required String path}) {
-    this._path = path;
+    _path = path;
   }
 
   /// Asynchronously gets the parsed JSON data.

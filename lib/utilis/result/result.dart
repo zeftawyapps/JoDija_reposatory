@@ -63,12 +63,12 @@ class Result<Error extends RemoteBaseModel, Data> {
 
     else if (hasDataOnly) {
       if (onData != null) {
-        onData(data!);
+        onData(data as Data);
       }
     }
 
     else if (onErrorWithData != null) {
-      onErrorWithData(data!, error!);
+      onErrorWithData(data as Data, error!);
     }
 
   }

@@ -41,8 +41,8 @@ class LoadDataHttpSources<T extends BaseEntityDataModel>
     this.id,
     this.dataBuilder,
   }) {
-    if (this.baseUrl.isEmpty) {
-      this.baseUrl = ApiUrls.BASE_URL;
+    if (baseUrl.isEmpty) {
+      baseUrl = ApiUrls.BASE_URL;
     }
   }
 

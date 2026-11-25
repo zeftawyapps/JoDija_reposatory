@@ -1,6 +1,6 @@
-import 'package:JoDija_reposatory/utilis/json_reader/json_asset_reader.dart';
+import 'package:jodija_repository/utilis/json_reader/json_asset_reader.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:JoDija_reposatory/utilis/functions/jd_repo_console.dart';
+import 'package:jodija_repository/utilis/functions/jd_repo_console.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'https/http_urls.dart';
@@ -24,7 +24,7 @@ abstract class DataSourceConfigration {
 
       var data = await JsonAssetReader(path: path).data;
       var firebaseConfig = data['firebaseConfig'];
-      if (this.envType == EnvType.prod) {
+      if (envType == EnvType.prod) {
         var prod = firebaseConfig['prod'];
         await Firebase.initializeApp(
             options: FirebaseOptions(
@@ -61,7 +61,7 @@ abstract class DataSourceConfigration {
 
       var data = path;
       var firebaseConfig = data['firebaseConfig'];
-      if (this.envType == EnvType.prod) {
+      if (envType == EnvType.prod) {
         var prod = firebaseConfig['prod'];
         await Firebase.initializeApp(
             options: FirebaseOptions(
@@ -146,26 +146,11 @@ abstract class DataSourceConfigration {
     HttpUrlsEnveiroment(baseUrl: BaseUrl, imageBaseUrl: ImageBaseUrl);
   }
 
-  AppType _appType = AppType.App;
+  AppType appType = AppType.App;
 
-  BackendState _backendState = BackendState.remote_dev;
+  BackendState backendState = BackendState.remote_dev;
 
-  EnvType _envType = EnvType.dev;
-
-  AppType get appType => _appType;
-  set appType(AppType value) {
-    _appType = value;
-  }
-
-  BackendState get backendState => _backendState;
-  set backendState(BackendState value) {
-    _backendState = value;
-  }
-
-  EnvType get envType => _envType;
-  set envType(EnvType value) {
-    _envType = value;
-  }
+  EnvType envType = EnvType.dev;
 }
 
 enum AppType { DashBord, App }

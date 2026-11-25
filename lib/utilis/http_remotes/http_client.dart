@@ -1,19 +1,12 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../../https/http_urls.dart';
 import '../errors/http_errors/errors/connection_error.dart';
-import '../errors/http_errors/errors/forbidden_error.dart';
 import '../errors/http_errors/errors/format_error.dart';
-import '../errors/http_errors/errors/internal_server_error.dart';
-import '../errors/http_errors/errors/not_found_error.dart';
 import '../errors/http_errors/errors/socket_error.dart';
-import '../errors/http_errors/errors/timeout_error.dart';
-import '../errors/http_errors/errors/unauthorized_error.dart';
-import '../errors/http_errors/errors/unknown_error.dart';
 import '../models/remote_base_model.dart';
 import '../models/staus_model.dart';
 import '../result/result.dart';
@@ -36,14 +29,14 @@ class HttpClient {
   /// [userToken] indicates whether to use a user token for authorization.
   HttpClient({String? baseUrl, this.userToken = false}) {
     this.baseUrl = baseUrl ?? HttpUrlsEnveiroment().baseUrl;
-    BaseOptions _options = BaseOptions(
-      connectTimeout: Duration(milliseconds: 60000),
-      receiveTimeout: Duration(milliseconds: 60000),
-      sendTimeout: kIsWeb ? null : Duration(milliseconds: 60000),
+    BaseOptions options = BaseOptions(
+      connectTimeout: const Duration(milliseconds: 60000),
+      receiveTimeout: const Duration(milliseconds: 60000),
+      sendTimeout: kIsWeb ? null : const Duration(milliseconds: 60000),
       responseType: ResponseType.json,
       baseUrl: this.baseUrl ?? "",
     );
-    _client = Dio(_options);
+    _client = Dio(options);
     if (kDebugMode) {
       _client.interceptors.add(PrettyDioLogger(
         requestHeader: true,
@@ -82,9 +75,7 @@ class HttpClient {
     required CancelToken cancelToken,
   }) async {
     Response response;
-    if (headers == null) {
-      headers = _client.options.headers ?? {};
-    }
+    headers ??= _client.options.headers;
     try {
       switch (method) {
         case HttpMethod.GET:
@@ -135,7 +126,7 @@ class HttpClient {
 
       return response.data;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -160,9 +151,7 @@ class HttpClient {
     required CancelToken cancelToken,
   }) async {
     Response<Map<String, dynamic>> response;
-    if (headers == null) {
-      headers = _client.options.headers ?? {};
-    }
+    headers ??= _client.options.headers;
     try {
       switch (method) {
         case HttpMethod.GET:
@@ -247,7 +236,7 @@ class HttpClient {
             status: StatusModel.error,
             data: null));
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       // استخراج رسالة الخطأ العربية من الـ Response إذا وجدت
       String message = e.message ?? "Unknown Error";
       if (e.response?.data != null && e.response?.data is Map) {
@@ -297,9 +286,7 @@ class HttpClient {
     required CancelToken cancelToken,
   }) async {
     Response response;
-    if (headers == null) {
-      headers = _client.options.headers ?? {};
-    }
+    headers ??= _client.options.headers;
     try {
       switch (method) {
         case HttpMethod.GET:
@@ -381,7 +368,7 @@ class HttpClient {
             status: StatusModel.error,
             data: null));
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       String message = e.message ?? "Unknown Error";
       if (e.response?.data != null && e.response?.data is Map) {
         message = e.response?.data['message'] ?? message;
@@ -427,9 +414,7 @@ class HttpClient {
     required CancelToken cancelToken,
   }) async {
     Response<Map<String, dynamic>> response;
-    if (headers == null) {
-      headers = _client.options.headers ?? {};
-    }
+    headers ??= _client.options.headers;
     try {
       switch (method) {
         case HttpMethod.GET:
@@ -478,29 +463,29 @@ class HttpClient {
           break;
       }
       try {
-        return response.data! as Map<String, dynamic>;
+        return response.data!;
       } on FormatException catch (e) {
         debugPrint(e.toString());
-        throw e;
+        rethrow;
       } catch (e) {
         debugPrint(e.toString());
-        throw e;
+        rethrow;
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       JDRepoConsole.error("DioError JsonMap: ${e.message}",
           context:
               LogContext(module: 'HttpClient', metadata: e.response?.data));
-      throw e;
+      rethrow;
     } on SocketException catch (e) {
       JDRepoConsole.error("SocketException JsonMap: ${e.message}");
-      throw e;
+      rethrow;
     } on HttpException catch (e) {
       JDRepoConsole.error("HttpException JsonMap: ${e.message}");
-      throw e;
+      rethrow;
     } catch (e, s) {
       JDRepoConsole.error('Critical JsonMap Error: $e',
           context: LogContext(module: 'HttpClient', metadata: s));
-      throw e;
+      rethrow;
     }
   }
 
@@ -544,9 +529,7 @@ class HttpClient {
       )
     });
     try {
-      if (headers == null) {
-        headers = _client.options.headers ?? {};
-      }
+      headers ??= _client.options.headers;
       Response<T> response;
       if (isUpdate) {
         response = await _client.put(
@@ -569,13 +552,13 @@ class HttpClient {
       }
 
       try {
-        return Result.data(response.data!);
+        return Result.data(response.data as T);
       } on FormatException {
         return Result.error(RemoteBaseModel(message: FormatError().toString()));
       } catch (e) {
         return Result.error(RemoteBaseModel(message: e.toString()));
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       String message = e.message ?? "Unknown Error";
       if (e.response?.data != null && e.response?.data is Map) {
         message = e.response?.data['message'] ?? message;
@@ -627,9 +610,7 @@ class HttpClient {
     }
     dataMap.addAll({fileKey: file});
     try {
-      if (headers == null) {
-        headers = _client.options.headers ?? {};
-      }
+      headers ??= _client.options.headers;
 
       Response<Map<String, dynamic>> response;
       if (isUpdate) {
@@ -667,9 +648,7 @@ class HttpClient {
       return Result.data(response.data!);
     } on FormatException {
       return Result.error(RemoteBaseModel(message: FormatError().toString()));
-    } catch (e) {
-      return Result.error(RemoteBaseModel(message: e.toString()));
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       String message = e.message ?? "Unknown Error";
       if (e.response?.data != null && e.response?.data is Map) {
         message = e.response?.data['message'] ?? message;
@@ -718,9 +697,7 @@ class HttpClient {
     if (data != null) {
       dataMap.addAll(data);
     }
-    if (headers == null) {
-      headers = _client.options.headers ?? {};
-    }
+    headers ??= _client.options.headers;
     dataMap.addAll({fileKey: file});
     try {
       Response<Map<String, dynamic>> response;
@@ -761,7 +738,7 @@ class HttpClient {
 
         // التحقق من حالة النجاح من داخل الـ JSON
         if (responseData is Map && responseData!['success'] == false) {
-          final errorMessage = responseData!['message'] ?? "Unknown API Error";
+          final errorMessage = responseData['message'] ?? "Unknown API Error";
           JDRepoConsole.error("API Error Response: $errorMessage",
               context:
                   LogContext(module: 'HttpClient', metadata: responseData));
@@ -790,7 +767,7 @@ class HttpClient {
             status: StatusModel.error,
             data: null));
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       String message = e.message ?? "Unknown Error";
       if (e.response?.data != null && e.response?.data is Map) {
         message = e.response?.data['message'] ?? message;

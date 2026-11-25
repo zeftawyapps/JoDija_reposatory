@@ -40,9 +40,9 @@ class UserResult<Error extends RemoteBaseModel, Data> {
   }
 
   /// Forwards the error if present, else forwards the data
-  factory UserResult.forward(UserResult _result, Data? data) {
-    if (_result.hasErrorOnly) {
-      return UserResult.error(_result.error as Error);
+  factory UserResult.forward(UserResult result, Data? data) {
+    if (result.hasErrorOnly) {
+      return UserResult.error(result.error as Error);
     }
     return UserResult.data(data);
   }
@@ -76,10 +76,10 @@ class UserResult<Error extends RemoteBaseModel, Data> {
       }
     } else if (hasDataOnly) {
       if (onData != null) {
-        onData(data!);
+        onData(data as Data);
       }
     } else if (onErrorWithData != null) {
-      onErrorWithData(data!, error!);
+      onErrorWithData(data as Data, error!);
     }
   }
 }

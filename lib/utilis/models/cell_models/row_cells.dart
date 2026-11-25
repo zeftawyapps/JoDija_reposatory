@@ -7,15 +7,13 @@ class RowofCells<T extends Model >{
   Map<String  , dynamic>  rowMap ={};
   T? modle;
   RowofCells(this.cells) {
-    int _ling = cells.length;
-    for(int i = 0 ;i<_ling;i++){
+    int ling = cells.length;
+    for(int i = 0 ;i<ling;i++){
       rowMap.addAll(cells[i].toMap());
     }
 
   }
-  RowofCells.model(T model){
-
-  }
+  RowofCells.model(T model);
 
   void addMap(Map<String ,dynamic> map ){
     rowMap.addAll(map);
