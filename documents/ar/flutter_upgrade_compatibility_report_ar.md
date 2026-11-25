@@ -55,13 +55,13 @@
    - تم ترقية `google_sign_in` إلى `^7.2.0` وتحديث `auth_google_source.dart` ورفع `flutter_lints` إلى `^6.0.0` وتحديث `.fvmrc` إلى `stable`.
    - تم اجتياز `flutter analyze` و`flutter test` و`flutter pub publish --dry-run` بدون أخطاء.
 
-2. **مراجعة وتحديث `jodija_tamplites`:**
-   - التحقق من توافق `flutter_bloc ^8.1.1` و`go_router ^13.0.0` و`image_cropper ^11.0.0` مع أحدث إصدار Flutter وتحديث `.fvmrc`.
+2. **✅ [تم التنفيذ] مراجعة وتحديث `jodija_tamplites`:**
+   - تم التحقق من خلو `jodija_tamplites` (v3.1.0) من أي أخطاء برمجية على Flutter `3.51` وتحديث `.fvmrc` إلى `stable`.
 
-3. **تحديث مشاريع `shahbandar-v1`:**
-   - تحديث اسم الاعتمادية والـ imports من `JoDija_reposatory` إلى `jodija_repository` في `shahbandar_core_logic _front`.
-   - تحديث اسم الاعتمادية والـ imports من `JoDija_tamplites` إلى `jodija_tamplites` في `shabandar-client-app` و`shahbandar-mangement-app`.
-   - تحديث `.fvmrc` وتشغيل `flutter pub get` و`flutter analyze`.
+3. **✅ [تم التنفيذ محلياً على فرع `upgrading-tools`] تحديث مشاريع `shahbandar-v1`:**
+   - تم إنشاء فرع `upgrading-tools` في المستودعات الستة داخل `shahbandar-v1`.
+   - تم تحديث الاعتمادية والـ imports في `shahbandar_core_logic _front` (72 ملفاً) إلى `jodija_repository` واجتياز `flutter analyze` بصفر أخطاء.
+   - تم تحديث الاعتمادية والـ imports في `shabandar-client-app` (86 ملفاً) و`shahbandar-mangement-app` (207 ملفات) إلى `jodija_tamplites` وتحديث `.fvmrc` إلى `stable` واجتياز الفحص.
 
 4. **تحديث `darElEzz`:**
    - الانتقال من `git` إلى `pub.dev` لـ `jodija_repository` و`jodija_tamplites` وتحديث الـ imports.
