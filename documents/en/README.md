@@ -46,4 +46,3 @@ Welcome to the official **English Documentation Portal** for `JoDija_reposatory`
 
 ### 🔍 Quick Class Catalog
 - **[Complete Class Summary](classes/class_summary.md)**: Detailed breakdown of all interfaces and implementations.
-- **[The Headlines](the%20head%20lines%20.md)**: High-level architecture and class relationships.

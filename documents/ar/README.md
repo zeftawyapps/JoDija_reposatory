@@ -30,8 +30,8 @@
 - **[مستودع المصادقة (BaseAuthRepo)](../en/classes/implementations/BaseAuthRepo.md)**: تسجيل الدخول وإنشاء الحسابات.
 - **[مستودع المستخدمين (BaseUsersRepo)](../en/classes/implementations/UsersRepo.md)**: إدارة المستخدمين وحساباتهم.
 - **[مستودع الملف الشخصي (BaseProfilRebo)](../en/classes/implementations/BaseProfilRebo.md)**: إدارة بيانات الملف الشخصي.
-- **[موصل الـ REST API](file:///Users/moaz/Desktop/delta/tools/JoDija_reposatory/documents/en/classes/implementations/DataSourceDataActionsHttpSources.md)**: التواصل مع خوادم الـ REST.
-- **[موصل الـ Firebase Firestore](file:///Users/moaz/Desktop/delta/tools/JoDija_reposatory/documents/en/classes/implementations/DataSourceFirebaseSource.md)**: التواصل مع قواعد بيانات Firestore.
+- **[موصل الـ REST API](../en/classes/implementations/DataSourceDataActionsHttpSources.md)**: التواصل مع خوادم الـ REST.
+- **[موصل الـ Firebase Firestore](../en/classes/implementations/DataSourceFirebaseSource.md)**: التواصل مع قواعد بيانات Firestore.
 - **[موصل البث المباشر (StreamFirebaseDataSource)](../en/classes/implementations/StreamFirebaseDataSource.md)**: البث اللحظي للبيانات.
 
 ---
@@ -46,4 +46,3 @@
 
 ### 🔍 الفهرس المرجعي
 - **[الفهرس التفصيلي لجميع الفئات](../en/classes/class_summary.md)**
-- **[العناوين الرئيسية](../en/the%20head%20lines%20.md)**

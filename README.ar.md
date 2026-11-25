@@ -1,206 +1,149 @@
-<div align="center">
+![JoDija Logo](https://raw.githubusercontent.com/zeftawyapps/JoDija_reposatory/master/assets/jodija_logo.png)
 
-<img src="assets/jodija_logo.png" alt="شعار جوديجا - JoDija" width="180" style="border-radius: 20px; margin-bottom: 12px;" />
+# مستودع بيانات جوديجا (`jodija_repository`)
 
-# 🚀 مستودع جوديجا (`JoDija_reposatory`)
+[![pub package](https://img.shields.io/pub/v/jodija_repository.svg)](https://pub.dev/packages/jodija_repository)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/zeftawyapps/JoDija_reposatory/blob/master/LICENSE)
 
-### *Simplifying Flutter Workflows And Universal Cross-Platform Solutions*
+إطار عمل موحّد لإدارة **مستودعات البيانات (Repositories)، طلبات الشبكة عبر Dio، وخدمات Firebase** لتطبيقات Flutter على جميع المنصات (**Android, iOS, Web, macOS, Windows, Linux**).
 
-**إطار عمل شامل واحترافي لإدارة تدفق البيانات والشبكات وطبقة المستودع (Repository Layer) لتطبيقات Flutter و Dart للحلول الأحادية والأنظمة متعددة الحلول.**
-
-[![Version](https://img.shields.io/badge/الإصدار-1.7.0-blue.svg)](pubspec.yaml)
-[![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.0.0-02569B?logo=flutter)](https://flutter.dev)
-[![Dart](https://img.shields.io/badge/Dart-%3E%3D3.0.0-0175C2?logo=dart)](https://dart.dev)
-[![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2F%20Multi--Solution-green.svg)](documents/ar/introduction_ar.md)
+🌐 **English Version:** [🇬🇧 Read in English (README.md)](https://github.com/zeftawyapps/JoDija_reposatory/blob/master/README.md) • [📚 بوابة التوثيق الكاملة](https://github.com/zeftawyapps/JoDija_reposatory/blob/master/documents/ar/README.md)
 
 ---
 
-### 🌐 اللغة / Language
-[🇺🇸 **English Version (README.md)**](README.md) • **العربية** • [📚 **بوابة التوثيق الكاملة (documents/README.md)**](documents/README.md)
+## ماذا تقدم لك مكتبة `jodija_repository`؟
+
+سواء كنت تبني **تطبيقاً مستقلاً واحداً** أو **منظومة متعددة التطبيقات** (تطبيق عميل + تطبيق تاجر + لوحة تحكم تشترك في حزمة منطق أعمال واحدة)، توفر لك المكتبة طبقة بيانات جاهزة وموحّدة دون تكرار أكواد `Dio` أو التوكن أو معالجة الأخطاء:
+
+* **إدارة البيئات (`DataSourceConfigration`):** التبديل الفوري بين بيئات `local` و`remote_dev` و`remote_prod` لروابط الـ API وروابط الصور.
+* **عميل شبكة متكامل (`HttpClient`):** يدعم `GET`, `POST`, `PUT`, `PATCH`, `DELETE` ورفع الملفات `MultipartFile` وحقن التوكن (`Authorization: Bearer`) واللغة (`x-lang`) تلقائياً.
+* **معالجة أخطاء ونتائج آمنة (`Result` و`BaseError`):** تغليف جميع العمليات داخل `Result<RemoteBaseModel, Data>` بدلاً من الـ Exceptions العشوائية.
+* **موصلات Firebase جاهزة:** عمليات CRUD على Firestore (`DataSourceFirebaseSource`)، البث اللحظي (`StreamFirebaseDataSource`)، رفع الملفات (`StorageActions`)، وتسجيل الدخول عبر البريد أو Google (`BaseAuthRepo`).
 
 ---
 
-</div>
-
-## 💡 الفلسفة المعمارية الأساسية للمكتبة
-
-تم بناء الفلسفة المعمارية لمستودع جوديجا للإجابة على تحدٍ هندسي أساسي: **كيف نشارك منطق الأعمال (Business Logic)، ونماذج البيانات (Data Models)، وتكامل الـ APIs عبر عدة تطبيقات ومنصات دون تكرار الأكواد ودون ربط الواجهات بتفاصيل الشبكات وقواعد البيانات؟**
-
-```mermaid
-graph TD
-    subgraph UI_Solutions ["1. حلول واجهات المستخدم (UI Solutions)"]
-        UI1["📱 تطبيق العميل (Customer App)"]
-        UI2["🏪 تطبيق التاجر (Merchant App)"]
-        UI3["🖥️ لوحة التحكم الإدارية (Admin Dashboard)"]
-        UI4["🌐 تطبيق الويب (Customer Web)"]
-    end
-
-    subgraph Logic_Layer ["2. طبقة منطق الأعمال المشترك (Shared Business Logic)"]
-        Logic["🧠 matger front logic<br/>(MatgerLogicConfiguration + BLoCs + Repositories)"]
-    end
-
-    subgraph Core_Data ["3. مكتبة مصدر البيانات الأساسية (Core Data Source Engine)"]
-        Repo["⚙️ JoDija_reposatory<br/>(DataSourceConfigration + HttpClient + Firebase + Error Handling)"]
-    end
-
-    subgraph Backend_Server ["4. الواجهة الخلفية الموحدة (Unified Backend API)"]
-        Server["🚀 matger express<br/>(REST API Endpoints + Image Hosting + Auth)"]
-    end
-
-    UI1 --> Logic
-    UI2 --> Logic
-    UI3 --> Logic
-    UI4 --> Logic
-
-    Logic --> Repo
-    Repo <--> Server
-```
-
-### 1. معمارية تعدد الحلول (Multi-Solution Architecture) - نموذج `matger front logic`
-- **المشكلة**: في الأنظمة الكبيرة مثل منصة **متجر (Matger)**، توجد عدة واجهات مستقلة (تطبيق عميل، تطبيق تاجر، لوحة تحكم، ويب) تشترك جميعها في نفس الخادم ونفس قواعد العمل.
-- **الحل**:
-  - **`JoDija_reposatory` (المحرك الأساسي)**: يعزل تفاصيل الشبكات، والـ Caching، والـ Serialization، ومعالجة الأخطاء.
-  - **`matger front logic` (العقل المشترك)**: يرث `DataSourceConfigration`، ويدير الحالات (BLoCs)، ويزامن التوكن وترويسة اللغة `x-lang` لكافة الواجهات.
-  - **حلول واجهات المستخدم (UI Solutions)**: تطبيقات Flutter لكل منصة تركز بنسبة 100% على الـ UI/UX وتعتمد على `matger front logic`.
-  - **`matger express` (الواجهة الخلفية الموحدة)**: خادم Express موحد يقدم الـ Endpoints بعقد JSON موحد ويستجيب لترويسات اللغة `x-lang` والمصادقة `Authorization`.
-
-### 2. معمارية الحل الأحادي (Single-Solution Architecture)
-- **التطبيقات المستقلة**: في حال بناء تطبيق بواجهة واحدة فقط (مثل تطبيق جوال مستقل)، تعتمد حزمة التطبيق مباشرة على `JoDija_reposatory` وتقوم بتهيئة `DataSourceConfigration` داخل التطبيق نفسه بدون طبقات وسيطة.
-
----
-
-## 🌟 المزايا والقدرات الأساسية للمكتبة
-
-### 1. ⚙️ محرك إدارة البيئات المتعددة (`DataSourceConfigration`)
-- **التبديل السلس بين البيئات**: التبديل الفوري بين حالات `local` و `remote_dev` و `remote_prod`.
-- **دعم خوادم الصور المنفصلة**: دعم عناوين مستقلة لخادم الـ API (`baseUrls`) وخادم الصور والوسائط (`imageBaseUrls`).
-- **التهيئة عبر ملف JSON**: تهيئة الروابط والـ Firebase بملف asset واحد عبر دالة `backendRoutedInit()`.
-- **الضبط البرمجي المباشر**: إمكانية التعديل أثناء التشغيل عبر `setToHttpUrlsEnveiroment()`.
-
-### 2. 🌐 عميل HTTP متقدم مع Dio (`HttpClient`)
-- **دعم الطرق الخمس**: دعم كامل لـ `GET`, `POST`, `PUT`, `DELETE`, و `PATCH`.
-- **الحقن التلقائي لترويسة اللغة**: إرسال `x-lang: ar` أو `x-lang: en` تلقائياً مع كل طلب عبر `HttpHeader().setLangHeader()`.
-- **ربط توكن المصادقة التلقائي**: إرفاق `Authorization: Bearer <token>` تلقائياً عند تفعيل `userToken: true`.
-- **رفع الملفات والصور وإلغاء الطلبات**: دعم قوي للـ Multipart والـ `CancelToken`.
-
-### 3. 🛡️ منظومة معالجة الأخطاء الصارمة (`BaseError`)
-- تصنيف كافة أخطاء الخادم والشبكة إلى 13 كلاس خطأ متخصص:
-  - `400 BadRequestError` • `401 UnauthorizedError` • `403 ForbiddenError`
-  - `404 NotFoundError` • `409 ConflictError` • `500 InternalServerError`
-  - `TimeoutError` • `ConnectionError` • `SocketError` • `FormatError` • `CancelError`
-
-### 4. 📦 نمط تغليف الحالات (`Result<Error, Data>`)
-- منع انهيار التطبيق أثناء التشغيل عبر كبسلة النتائج في كائنات `Result<T>` و `UserResult` الآمنة.
-
-### 5. 🔥 التكامل مع منظومة Firebase (Firestore, Storage, Auth, FCM)
-- **عمليات Firestore**: موصلات جاهزة للـ CRUD والـ Real-time Streaming (`StreamFirebaseDataSource`).
-- **التخزين السحابي**: رفع وإدارة الصور والملفات عبر `StorageActions`.
-- **المصادقة**: دعم جاهز للمصادقة عبر Google و Email/Password.
-- **الإشعارات الفورية**: إعداد واستقبال إشعارات Firebase Cloud Messaging عبر `FCMService`.
-
-### 6. 📊 نظام التسجيل المتقدم وتتبع الأداء (`JDRepoConsole`)
-- مخرجات ملونة ومؤرخة بـ 5 مستويات (`ERROR`, `WARN`, `INFO`, `DEBUG`, `SUCCESS`).
-- قياس أزمنة التنفيذ بالمللي ثانية (`JDRepoConsole.performance()`).
-- تثبيط السجلات غير الضرورية تلقائياً في وضع الإنتاج (`kReleaseMode`).
-
-### 7. 📑 نماذج الجداول والخلايا الديناميكية (`Cell Models`)
-- هياكل بيانات متخصصة (`Cell<T>`, `RowofCells<T>`, `TableOfCells<T>`) للجداول وشاشات الإدارة.
-
----
-
-## 🚀 البدء السريع (Quick Start)
+## البدء السريع (خطوة بخطوة)
 
 ### 1. التثبيت
-أضف المكتبة إلى ملف `pubspec.yaml`:
+
+```bash
+flutter pub add jodija_repository
+```
+
+أو في ملف `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  JoDija_reposatory:
-    git:
-      url: https://github.com/zeftawyapps/JoDija_reposatory.git
-      ref: v1.7.0
+  jodija_repository: ^1.7.2
 ```
 
-### 2. إعداد ملف البيئات (`assets/config/config.json`)
+---
 
-```json
-{
-  "baseUrls": {
-    "local": "http://10.0.2.2:5000/api/v1",
-    "remote_dev": "https://dev-api.matger.com/api/v1",
-    "remote_prod": "https://api.matger.com/api/v1"
-  },
-  "imageBaseUrls": {
-    "local": "http://10.0.2.2:5000/",
-    "remote_dev": "https://dev-api.matger.com/",
-    "remote_prod": "https://api.matger.com/"
-  },
-  "firebaseConfig": {
-    "dev": {
-      "apiKey": "AIzaSyDev...",
-      "appId": "1:12345:android:dev",
-      "messagingSenderId": "123456789",
-      "projectId": "matger-dev",
-      "storageBucket": "matger-dev.appspot.com"
-    },
-    "prod": {
-      "apiKey": "AIzaSyProd...",
-      "appId": "1:12345:android:prod",
-      "messagingSenderId": "987654321",
-      "projectId": "matger-prod",
-      "storageBucket": "matger-prod.appspot.com"
-    }
-  }
-}
-```
-
-### 3. التهيئة عند إقلاع التطبيق
+### 2. تهيئة الروابط والترويسات عند بدء التطبيق
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:JoDija_reposatory/jodija_configration.dart';
-import 'package:JoDija_reposatory/https/http_urls.dart';
-import 'package:JoDija_reposatory/utilis/functions/jd_repo_console.dart';
+import 'package:jodija_repository/jodija_repository.dart';
 
-void main() async {
+class AppConfig extends DataSourceConfigration {}
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 1. تهيئة الإعدادات من ملف الـ JSON
-  final config = AppConfiguration();
-  config.envType = EnvType.dev;
-  config.backendState = BackendState.remote_dev;
-  config.appType = AppType.App;
-  
-  await config.backendRoutedInit('assets/config/config.json');
+  final config = AppConfig()
+    ..envType = EnvType.dev
+    ..backendState = BackendState.remote_dev
+    ..appType = AppType.App;
 
-  // 2. ضبط ترويسة اللغة الافتراضية
+  config.setToHttpUrlsEnveiroment(
+    baseUrl: 'https://api.example.com/api/v1',
+    imageBaseUrl: 'https://cdn.example.com/',
+  );
+
+  // ضبط لغة الطلبات الافتراضية (يرسل ترويسة x-lang: ar تلقائياً)
   HttpHeader().setLangHeader(lang: 'ar');
-
-  JDRepoConsole.success('تمت تهيئة مستودع جوديجا بنجاح');
 
   runApp(const MyApp());
 }
-
-class AppConfiguration extends DataSourceConfigration {}
 ```
 
 ---
 
-## 📖 بوابة التوثيق الكاملة
+### 3. إنشاء نموذج البيانات (`BaseEntityDataModel`)
 
-| الوثيقة | الوصف |
-| :--- | :--- |
-| 📄 **[المقدمة الشاملة باللغة العربية](documents/ar/introduction_ar.md)** | الشرح المفصل لفلسفة المكتبة المعمارية وطبقاتها. |
-| 🛠️ **[دليل التكامل مع متجر](documents/ar/integration_matger_guide_ar.md)** | الدليل العملي لربط `matger front logic` مع `matger express`. |
-| 🌐 **[English Documentation Portal](documents/en/README.md)** | بوابة التوثيق باللغة الإنجليزية. |
-| ⚙️ **[فئات التهيئة (Configuration)](documents/en/classes/configration.md)** | توثيق إدارة البيئات والروابط والـ Firebase. |
-| 🌐 **[عميل الـ HTTP والترويسات](documents/en/classes/utils/JodijaHttpClient.md)** | طلبات الشبكة وترويسات اللغة والمصادقة. |
-| 🖥️ **[نظام التسجيل (JDRepoConsole)](documents/en/classes/utils/JDRepoConsole.md)** | السجلات الملونة وتتبع الأداء. |
-| 🛡️ **[هرمية معالجة الأخطاء (HttpErrors)](documents/en/classes/utils/HttpErrors.md)** | كلاسات أخطاء الشبكة والتعامل مع الاستجابات. |
-| 📚 **[فهرس وتفاصيل جميع الفئات](documents/en/classes/class_summary.md)** | الفهرس المرجعي لكافة الكلاسات والـ Interfaces. |
+```dart
+import 'package:jodija_repository/jodija_repository.dart';
+
+class ProductModel extends BaseEntityDataModel {
+  final String title;
+  final double price;
+
+  ProductModel({
+    super.id,
+    required this.title,
+    required this.price,
+  });
+
+  factory ProductModel.fromJson(Map<String, dynamic> json, String? docId) {
+    return ProductModel(
+      id: docId ?? json['id']?.toString(),
+      title: json['title'] as String? ?? '',
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'price': price,
+      };
+}
+```
 
 ---
 
-## 📄 الترخيص (License)
+### 4. جلب وإضافة البيانات عبر REST API (`DataSourceRepo`)
 
-هذا المشروع مرخص بموجب ترخيص MIT - راجع ملف [LICENSE](LICENSE) لمزيد من التفاصيل.
+```dart
+// جلب قائمة المنتجات (GET /products)
+final source = DataSourceDataActionsHttpSources<ProductModel>(
+  url: 'products',
+  dataBuilder: (json, id) => ProductModel.fromJson(json, id),
+);
+final repo = DataSourceRepo<ProductModel>(inputSource: source);
+
+final result = await repo.getListData();
+if (result.hasDataOnly) {
+  final products = result.data?.data ?? [];
+  JDRepoConsole.success('تم جلب ${products.length} منتج');
+} else {
+  JDRepoConsole.error('حدث خطأ: ${result.error?.message}');
+}
+```
+
+---
+
+### 5. المصادقة وتسجيل الدخول (`BaseAuthRepo`)
+
+```dart
+// تسجيل الدخول عبر REST API
+final authRepo = BaseAuthRepo(
+  AuthHttpSource(email: 'user@example.com', pass: 'secret123'),
+);
+final loginResult = await authRepo.logIn();
+
+if (loginResult.hasDataOnly) {
+  HttpHeader().setAuthHeader(loginResult.data!.token ?? '');
+}
+```
+
+---
+
+## فهرس التوثيق التفصيلي
+
+* [مقدمة الفلسفة المعمارية (عربي)](https://github.com/zeftawyapps/JoDija_reposatory/blob/master/documents/ar/introduction_ar.md)
+* [دليل التكامل للمشاريع متعددة التطبيقات (عربي)](https://github.com/zeftawyapps/JoDija_reposatory/blob/master/documents/ar/integration_matger_guide_ar.md)
+* [شرح DataSourceConfiguration](https://github.com/zeftawyapps/JoDija_reposatory/blob/master/documents/en/classes/configration.md)
+* [شرح HttpClient و HttpHeader](https://github.com/zeftawyapps/JoDija_reposatory/blob/master/documents/en/classes/utils/JodijaHttpClient.md)
+* [الفهرس المرجعي الكامل للكلاسات](https://github.com/zeftawyapps/JoDija_reposatory/blob/master/documents/en/classes/class_summary.md)

@@ -1,6 +1,6 @@
 name: jodija_repository
 description: A Flutter data repository and networking framework for single and multi-solution architectures with Dio HTTP client, Firebase integration, and typed error handling.
-version: 1.7.1
+version: 1.7.2
 homepage: https://github.com/zeftawyapps/JoDija_reposatory
 repository: https://github.com/zeftawyapps/JoDija_reposatory
 issue_tracker: https://github.com/zeftawyapps/JoDija_reposatory/issues

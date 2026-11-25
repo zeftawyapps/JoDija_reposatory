@@ -1,3 +1,7 @@
+## 1.7.2
+
+* Rewrote `README.md` and `README.ar.md` with clear architecture diagrams, end-to-end Dart usage examples (Models, REST CRUD, Dio `HttpClient`, Firestore, Authentication), and direct GitHub documentation links compatible with `pub.dev`.
+
 ## 1.7.1
 
 * Added full **Web & Wasm** compatibility by replacing unconditional `dart:io` imports with conditional imports (`if (dart.library.io)`) and declaring all 6 supported Flutter platforms (`android`, `ios`, `linux`, `macos`, `web`, `windows`) in `pubspec.yaml`.
