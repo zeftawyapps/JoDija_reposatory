@@ -63,8 +63,8 @@
    - تم تحديث الاعتمادية والـ imports في `shahbandar_core_logic _front` (72 ملفاً) إلى `jodija_repository` واجتياز `flutter analyze` بصفر أخطاء.
    - تم تحديث الاعتمادية والـ imports في `shabandar-client-app` (86 ملفاً) و`shahbandar-mangement-app` (207 ملفات) إلى `jodija_tamplites` وتحديث `.fvmrc` إلى `stable` واجتياز الفحص.
 
-4. **تحديث `darElEzz`:**
-   - الانتقال من `git` إلى `pub.dev` لـ `jodija_repository` و`jodija_tamplites` وتحديث الـ imports.
+4. **✅ [تم التنفيذ] تحديث `darElEzz`:**
+   - تم ترحيل `pubspec.yaml` و20 ملفاً (في `lib` و`test` و`integration_test`) إلى `jodija_repository` و`jodija_tamplites` واجتياز `flutter analyze` بصفر أخطاء.
 
-5. **مراجعة `imarati-app-main`:**
-   - تشغيل `flutter pub outdated` و`flutter analyze` على أحدث إصدار Flutter، وتحديث الحزم القديمة (`flutter_localization`، `month_year_picker`، `google_fonts`، `file_picker`، وحزم Firebase عند الحاجة).
+5. **✅ [تم الفحص والتحقق] مراجعة `imarati-app-main`:**
+   - تم تشغيل `flutter pub get` و`flutter analyze` على Flutter `3.51` / Dart `3.11.1` واجتاز الفحص بصفر أخطاء وصفر تحذيرات!
