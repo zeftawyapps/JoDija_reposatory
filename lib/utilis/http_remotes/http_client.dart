@@ -1,4 +1,4 @@
-import 'dart:io';
+import '../platform/io_stub.dart' if (dart.library.io) 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http_parser/http_parser.dart';

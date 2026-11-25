@@ -1,4 +1,5 @@
-import 'dart:io';
+import '../../../../utilis/platform/io_stub.dart'
+    if (dart.library.io) 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 

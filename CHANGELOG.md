@@ -1,3 +1,7 @@
+## 1.7.1
+
+* Added full **Web & Wasm** compatibility by replacing unconditional `dart:io` imports with conditional imports (`if (dart.library.io)`) and declaring all 6 supported Flutter platforms (`android`, `ios`, `linux`, `macos`, `web`, `windows`) in `pubspec.yaml`.
+
 ## 1.7.0
 
 * Prepared package for `pub.dev` publication under the name `jodija_repository`.

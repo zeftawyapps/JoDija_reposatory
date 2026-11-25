@@ -8,7 +8,7 @@
 
 **An enterprise-grade Flutter/Dart data management, networking, and repository layer framework for Single-Solution and Multi-Solution architectures.**
 
-[![Version](https://img.shields.io/badge/version-1.7.0-blue.svg)](pubspec.yaml)
+[![Version](https://img.shields.io/badge/version-1.7.1-blue.svg)](pubspec.yaml)
 [![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.0.0-02569B?logo=flutter)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-%3E%3D3.0.0-0175C2?logo=dart)](https://dart.dev)
 [![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2F%20Multi--Solution-green.svg)](documents/en/introduction_en.md)
@@ -117,7 +117,7 @@ Add `jodija_repository` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  jodija_repository: ^1.7.0
+  jodija_repository: ^1.7.1
 ```
 
 ### 2. Configuration (`assets/config/config.json`)
