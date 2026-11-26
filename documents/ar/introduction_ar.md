@@ -3,7 +3,7 @@
 [English Version](../en/introduction_en.md) | **العربية**
 
 ## ما هو مستودع جوديجا؟
-يدير `JoDija_reposatory` تدفق البيانات التي نستقبلها أو نرسلها إلى الخوادم عبر واجهات برمجة التطبيقات (APIs) أو منصات السحابة مثل Firebase. يعيد تشكيل البيانات لتتوافق مع منطق الأعمال لعرضها للمستخدم إذا كانت البيانات قادمة من الخادم، أو يقوم بتنسيقها كـ JSON عند إرسالها إلى الخوادم، مع توفير معالجة أخطاء مركزية وتسجيل أحداث متقدم.
+يدير `jodija_repository` تدفق البيانات التي نستقبلها أو نرسلها إلى الخوادم عبر واجهات برمجة التطبيقات (APIs) أو منصات السحابة مثل Firebase. يعيد تشكيل البيانات لتتوافق مع منطق الأعمال لعرضها للمستخدم إذا كانت البيانات قادمة من الخادم، أو يقوم بتنسيقها كـ JSON عند إرسالها إلى الخوادم، مع توفير معالجة أخطاء مركزية وتسجيل أحداث متقدم.
 
 ---
 
@@ -45,21 +45,21 @@ graph TD
 
 ## أنواع حلول التطبيقات (Single vs Multi-Solution)
 
-بُنيت فلسفة مكتبة `JoDija_reposatory` لتلائم نوعين رئيسيين من بنية المشاريع:
+بُنيت فلسفة مكتبة `jodija_repository` لتلائم نوعين رئيسيين من بنية المشاريع:
 
 ### 1. التطبيقات متعددة الحلول (Multi-Solution Applications) - مثل `matger front logic`
 - **الوصف:** عندما يتكون النظام من عدة واجهات أمامية لمنصات مختلفة (تطبيق جوال للعميل، تطبيق جوال للتاجر، لوحة تحكم ويب إدارية، موقع إلكتروني) تشترك جميعها في نفس الخادم ونفس قواعد العمل.
 - **الهندسة المتبعة:**
   1. **حلول واجهات المستخدم (UI Solutions):** تطبيقات Flutter لكل منصة تركز فقط على الـ UI.
   2. **حزمة منطق الأعمال المشترك (مثل `matger front logic`):** تحتوي على الـ BLoCs والـ Repositories وترث `DataSourceConfigration`.
-  3. **مصدر بيانات جوديجا (`JoDija_reposatory`):** الحزمة الأساسية للتعامل مع البيانات والشبكة.
+  3. **مصدر بيانات جوديجا (`jodija_repository`):** الحزمة الأساسية للتعامل مع البيانات والشبكة.
   4. **الواجهة الخلفية الموحدة (مثل `matger express`):** خادم موحد يستقبل الطلبات ويرسل استجابات بصيغة قياسية.
 - **الميزة:** أي تعديل في منطق الأعمال أو استدعاءات الـ API يتم في حزمة `front logic` وينعكس فوراً على جميع التطبيقات دون تكرار الكود.
 
 ### 2. التطبيقات أحادية الحل (Single-Solution Applications)
 - **الوصف:** التطبيقات التي تحتوي على واجهة مستخدم واحدة فقط (مثل تطبيق جوال مستقل).
 - **الهندسة المتبعة:**
-  - تعتمد حزمة التطبيق مباشرة على `JoDija_reposatory`.
+  - تعتمد حزمة التطبيق مباشرة على `jodija_repository`.
   - يتم تهيئة `DataSourceConfigration` داخل حزمة التطبيق نفسها دون الحاجة لحزمة منطق أعمال وسيطة.
 
 ---
@@ -71,7 +71,7 @@ graph TD
 
 ```yaml
 dependencies:
-  JoDija_reposatory:
+  jodija_repository:
     git:
       url: https://github.com/zeftawyapps/JoDija_reposatory.git
       ref: v1.7.0
@@ -79,9 +79,9 @@ dependencies:
 
 ### 2. الاستيراد
 ```dart
-import 'package:JoDija_reposatory/jodija_configration.dart';
-import 'package:JoDija_reposatory/https/http_urls.dart';
-import 'package:JoDija_reposatory/reposetory/repsatory.dart';
+import 'package:jodija_repository/jodija_configration.dart';
+import 'package:jodija_repository/https/http_urls.dart';
+import 'package:jodija_repository/reposetory/repsatory.dart';
 ```
 
 ### 3. التهيئة (Configuration)

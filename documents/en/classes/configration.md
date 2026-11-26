@@ -140,8 +140,8 @@ enum BackendState {
 In multi-solution architectures, extend `DataSourceConfigration` inside your shared business logic package:
 
 ```dart
-import 'package:JoDija_reposatory/jodija_configration.dart';
-import 'package:JoDija_reposatory/https/http_urls.dart';
+import 'package:jodija_repository/jodija_configration.dart';
+import 'package:jodija_repository/https/http_urls.dart';
 
 class MatgerLogicConfiguration extends DataSourceConfigration {
   static final MatgerLogicConfiguration _instance = MatgerLogicConfiguration._internal();

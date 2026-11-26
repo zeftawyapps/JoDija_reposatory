@@ -1,4 +1,4 @@
-# دليل التكامل الشامل: بين مكتبة المستودع (JoDija_reposatory) وحزمة منطق الأعمال (matger front logic) وخادم (matger express)
+# دليل التكامل الشامل: بين مكتبة المستودع (jodija_repository) وحزمة منطق الأعمال (matger front logic) وخادم (matger express)
 
 [English Version](../en/integration_matger_guide.md) | **العربية**
 
@@ -31,7 +31,7 @@ graph TD
     end
 
     subgraph Core_Data ["3. مكتبة مصدر البيانات الأساسية"]
-        C["JoDija_reposatory<br/>(DataSourceConfigration + HttpClient + Firebase)"]
+        C["jodija_repository<br/>(DataSourceConfigration + HttpClient + Firebase)"]
     end
 
     subgraph Backend_Server ["4. خادم الـ Backend الموحد"]
@@ -52,8 +52,8 @@ graph TD
 
 | الطبقة | الحزمة / المشروع | المسؤوليات |
 | :--- | :--- | :--- |
-| **طبقة مصدر البيانات (Core Data Layer)** | `JoDija_reposatory` | - تجريد طلبات الشبكة (`HttpClient`) وتخزين Firebase.<br/>- تحويل الـ JSON إلى نماذج `BaseEntityDataModel`.<br/>- معالجة الأخطاء الموحدة (`BaseError` و `Result`).<br/>- إدارة بيئات الـ URLs والـ Headers والـ Console. |
-| **طبقة منطق الأعمال (Shared Logic Layer)** | `matger front logic` | - وراثة `DataSourceConfigration` لإدارة إعدادات المتجر.<br/>- توفير الـ BLoCs/Cubits وقواعد الأعمال المشتركة.<br/>- مزامنة التوكن واللغة عبر `HttpHeader`.<br/>- استهلاك الـ Repositories من `JoDija_reposatory`. |
+| **طبقة مصدر البيانات (Core Data Layer)** | `jodija_repository` | - تجريد طلبات الشبكة (`HttpClient`) وتخزين Firebase.<br/>- تحويل الـ JSON إلى نماذج `BaseEntityDataModel`.<br/>- معالجة الأخطاء الموحدة (`BaseError` و `Result`).<br/>- إدارة بيئات الـ URLs والـ Headers والـ Console. |
+| **طبقة منطق الأعمال (Shared Logic Layer)** | `matger front logic` | - وراثة `DataSourceConfigration` لإدارة إعدادات المتجر.<br/>- توفير الـ BLoCs/Cubits وقواعد الأعمال المشتركة.<br/>- مزامنة التوكن واللغة عبر `HttpHeader`.<br/>- استهلاك الـ Repositories من `jodija_repository`. |
 | **حلول واجهات المستخدم (UI Solutions)** | تطبيقات Flutter المتعددة | - بناء الـ Widgets وتجربة المستخدم (UI/UX).<br/>- الاستماع إلى الـ BLoC States وعرض البيانات.<br/>- تزويد `matger front logic` بملف الـ `config.json` المناسب للمنصة. |
 | **الواجهة الخلفية الموحدة (Backend API)** | `matger express` | - توفير الـ Endpoints وفق عقد الـ API الموحد.<br/>- قراءة ترويسة اللغة `x-lang` والتوثيق `Authorization`.<br/>- تقديم مسارات الصور والملفات المرفوعة (`imageBaseUrls`). |
 
@@ -101,9 +101,9 @@ graph TD
 في حزمة `matger front logic`، ننشئ كلاس التهيئة المركزي:
 
 ```dart
-import 'package:JoDija_reposatory/jodija_configration.dart';
-import 'package:JoDija_reposatory/https/http_urls.dart';
-import 'package:JoDija_reposatory/utilis/functions/jd_repo_console.dart';
+import 'package:jodija_repository/jodija_configration.dart';
+import 'package:jodija_repository/https/http_urls.dart';
+import 'package:jodija_repository/utilis/functions/jd_repo_console.dart';
 
 class MatgerLogicConfiguration extends DataSourceConfigration {
   static final MatgerLogicConfiguration _instance = MatgerLogicConfiguration._internal();
@@ -185,7 +185,7 @@ void main() async {
 
 ### الخطوة 4: التوافق مع خادم `matger express` (Express.js Backend API)
 
-لكي يعمل خادم `matger express` بسلاسة مع `JoDija_reposatory` و `matger front logic`، يجب أن يلتزم بالقواعد التالية:
+لكي يعمل خادم `matger express` بسلاسة مع `jodija_repository` و `matger front logic`، يجب أن يلتزم بالقواعد التالية:
 
 #### 1. هيكل الاستجابة الموحد (Unified JSON Response Contract)
 يجب أن ترجع جميع الـ endpoints بصيغة قياسية تقبلها نماذج `RemoteBaseModel` و `HttpClient`:

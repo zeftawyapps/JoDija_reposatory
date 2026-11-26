@@ -1,3 +1,10 @@
+analyzer:
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - macos/**
+    - linux/**
 include: package:flutter_lints/flutter.yaml
 
 # Preserve backwards compatibility for legacy public API identifiers & file names

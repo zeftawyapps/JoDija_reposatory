@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:jodija_repository/utilis/models/base_data_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 /// A class that handles loading data from Firebase.
 class FirebaseLoadingData {

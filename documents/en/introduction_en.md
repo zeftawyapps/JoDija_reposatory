@@ -3,7 +3,7 @@
 **English** | [النسخة العربية](../ar/introduction_ar.md)
 
 ## What is JoDija Repository?
-`JoDija_reposatory` manages the data flow received from or sent to backend servers via REST APIs or cloud platforms like Firebase. It transforms data to align with domain business logic when displaying to users, or formats it as JSON when sending to servers, with centralized error handling and structured logging.
+`jodija_repository` manages the data flow received from or sent to backend servers via REST APIs or cloud platforms like Firebase. It transforms data to align with domain business logic when displaying to users, or formats it as JSON when sending to servers, with centralized error handling and structured logging.
 
 ---
 
@@ -52,14 +52,14 @@ JoDija Repository was fundamentally architected around two core solution types:
 - **Architecture Layers:**
   1. **UI Client Solutions:** Platform-specific Flutter apps focusing exclusively on UI/UX.
   2. **Shared Business Logic Package (`matger front logic`):** Contains BLoCs, use cases, models, and extends `DataSourceConfigration`.
-  3. **Core Data Module (`JoDija_reposatory`):** The foundational data access engine.
+  3. **Core Data Module (`jodija_repository`):** The foundational data access engine.
   4. **Unified Backend Server (`matger express`):** Single API server handling requests and returning standard response formats.
 - **Key Advantage:** Business logic updates in `front logic` immediately apply to all client solutions without code duplication.
 
 ### 2. Single-Solution Applications
 - **Description:** Standalone applications with a single frontend interface.
 - **Architecture Layers:**
-  - The UI app directly depends on `JoDija_reposatory`.
+  - The UI app directly depends on `jodija_repository`.
   - `DataSourceConfigration` is configured directly within the application package without requiring an intermediate logic package.
 
 ---
@@ -67,11 +67,11 @@ JoDija Repository was fundamentally architected around two core solution types:
 ## Getting Started
 
 ### 1. Installation
-Add `JoDija_reposatory` to your `pubspec.yaml`:
+Add `jodija_repository` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  JoDija_reposatory:
+  jodija_repository:
     git:
       url: https://github.com/zeftawyapps/JoDija_reposatory.git
       ref: v1.7.0
@@ -79,9 +79,9 @@ dependencies:
 
 ### 2. Imports
 ```dart
-import 'package:JoDija_reposatory/jodija_configration.dart';
-import 'package:JoDija_reposatory/https/http_urls.dart';
-import 'package:JoDija_reposatory/reposetory/repsatory.dart';
+import 'package:jodija_repository/jodija_configration.dart';
+import 'package:jodija_repository/https/http_urls.dart';
+import 'package:jodija_repository/reposetory/repsatory.dart';
 ```
 
 ### 3. Configuration

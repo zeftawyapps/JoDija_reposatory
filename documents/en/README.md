@@ -2,7 +2,7 @@
 
 **English** | [النسخة العربية](../ar/README.md)
 
-Welcome to the official **English Documentation Portal** for `JoDija_reposatory`.
+Welcome to the official **English Documentation Portal** for `jodija_repository`.
 
 ---
 

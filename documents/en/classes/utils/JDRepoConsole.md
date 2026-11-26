@@ -75,7 +75,7 @@ jdRepoConsole(exceptionObject, context: LogContext(module: 'Auth'));
 ## Example Usage in `matger front logic`
 
 ```dart
-import 'package:JoDija_reposatory/utilis/functions/jd_repo_console.dart';
+import 'package:jodija_repository/utilis/functions/jd_repo_console.dart';
 
 class ProductRepository {
   Future<void> fetchProducts() async {

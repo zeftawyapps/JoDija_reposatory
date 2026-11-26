@@ -31,7 +31,7 @@ graph TD
     end
 
     subgraph Core_Data ["3. Core Data Source Library"]
-        C["JoDija_reposatory<br/>(DataSourceConfigration + HttpClient + Firebase)"]
+        C["jodija_repository<br/>(DataSourceConfigration + HttpClient + Firebase)"]
     end
 
     subgraph Backend_Server ["4. Unified Backend Server"]
@@ -52,7 +52,7 @@ graph TD
 
 | Layer | Package / Module | Primary Responsibilities |
 | :--- | :--- | :--- |
-| **Core Data Layer** | `JoDija_reposatory` | - Abstracts HTTP (`HttpClient`) and Firebase calls.<br/>- Parses JSON into `BaseEntityDataModel` entities.<br/>- Standardizes error handling (`BaseError`, `Result`).<br/>- Manages environment URLs, Image URLs, and Console logging. |
+| **Core Data Layer** | `jodija_repository` | - Abstracts HTTP (`HttpClient`) and Firebase calls.<br/>- Parses JSON into `BaseEntityDataModel` entities.<br/>- Standardizes error handling (`BaseError`, `Result`).<br/>- Manages environment URLs, Image URLs, and Console logging. |
 | **Shared Logic Layer** | `matger front logic` | - Inherits `DataSourceConfigration` for store-wide settings.<br/>- Exposes reusable BLoCs/Cubits and domain use cases.<br/>- Synchronizes JWT tokens and localization via `HttpHeader`.<br/>- Injects repositories into UI clients. |
 | **UI Client Solutions** | Multi-Platform Flutter Apps | - Renders UI widgets and user experience (UI/UX).<br/>- Consumes BLoC states.<br/>- Supplies the appropriate `config.json` file for the platform. |
 | **Backend API** | `matger express` | - Implements REST endpoints adhering to the standard response contract.<br/>- Inspects `x-lang` and `Authorization` headers.<br/>- Serves uploaded media via `imageBaseUrls`. |
@@ -101,9 +101,9 @@ Every UI application includes an asset configuration file defining environment e
 In the `matger front logic` package, create the centralized configuration singleton:
 
 ```dart
-import 'package:JoDija_reposatory/jodija_configration.dart';
-import 'package:JoDija_reposatory/https/http_urls.dart';
-import 'package:JoDija_reposatory/utilis/functions/jd_repo_console.dart';
+import 'package:jodija_repository/jodija_configration.dart';
+import 'package:jodija_repository/https/http_urls.dart';
+import 'package:jodija_repository/utilis/functions/jd_repo_console.dart';
 
 class MatgerLogicConfiguration extends DataSourceConfigration {
   static final MatgerLogicConfiguration _instance = MatgerLogicConfiguration._internal();
@@ -185,7 +185,7 @@ void main() async {
 
 ### Step 4: Compliance with `matger express` (Backend Server API)
 
-To integrate seamlessly with `JoDija_reposatory` and `matger front logic`, `matger express` must satisfy the following contract:
+To integrate seamlessly with `jodija_repository` and `matger front logic`, `matger express` must satisfy the following contract:
 
 #### 1. Standard Response JSON Contract
 All endpoints must return JSON in a schema compatible with `RemoteBaseModel`:

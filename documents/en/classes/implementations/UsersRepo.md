@@ -60,8 +60,8 @@ classDiagram
 ## Usage Example
 
 ```dart
-import 'package:JoDija_reposatory/reposetory/user/users_repo.dart';
-import 'package:JoDija_reposatory/source/user/accountLoginLogout/firebase/users_sourse.dart';
+import 'package:jodija_repository/reposetory/user/users_repo.dart';
+import 'package:jodija_repository/source/user/accountLoginLogout/firebase/users_sourse.dart';
 
 void loadUsers() async {
   final usersSource = BaseUsersActionsSources();

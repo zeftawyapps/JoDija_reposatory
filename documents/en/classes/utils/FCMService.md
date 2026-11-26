@@ -36,7 +36,7 @@ class FCMService {
 ## Usage Example
 
 ```dart
-import 'package:JoDija_reposatory/utilis/firebase/FCM.dart';
+import 'package:jodija_repository/utilis/firebase/FCM.dart';
 
 void setupNotifications() async {
   final fcm = FCMService();

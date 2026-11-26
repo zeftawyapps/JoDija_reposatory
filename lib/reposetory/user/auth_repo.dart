@@ -35,9 +35,9 @@ class BaseAuthRepo {
   Future<Result<RemoteBaseModel, UsersBaseModel>> logIn() async {
     try {
       if (_account is IHttpAuthentication) {
-        return _logInHttp();
+        return await _logInHttp();
       } else {
-        return _logInFirebase();
+        return await _logInFirebase();
       }
     } on FirebaseException catch (e) {
       return Result.error(RemoteBaseModel(
@@ -51,9 +51,9 @@ class BaseAuthRepo {
   Future<Result<RemoteBaseModel, UsersBaseModel>> createAccount() async {
     try {
       if (_account is IHttpAuthentication) {
-        return _createAccountHttp();
+        return await _createAccountHttp();
       } else {
-        return _createAccountFirebase();
+        return await _createAccountFirebase();
       }
     } on FirebaseException catch (e) {
       return Result.error(RemoteBaseModel(
@@ -69,9 +69,9 @@ class BaseAuthRepo {
       UsersBaseModel usersModel) async {
     try {
       if (_account is IHttpAuthentication) {
-        return _createAccountAndProfileHttp(usersModel);
+        return await _createAccountAndProfileHttp(usersModel);
       } else {
-        return _createAccountAndProfileFirebase(usersModel);
+        return await _createAccountAndProfileFirebase(usersModel);
       }
     } on FirebaseException catch (e) {
       return Result.error(RemoteBaseModel(

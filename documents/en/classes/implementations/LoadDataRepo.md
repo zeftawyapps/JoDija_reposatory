@@ -51,9 +51,9 @@ Future<Result<RemoteBaseModel, List<T>>> loadData() async
 ## Usage Example
 
 ```dart
-import 'package:JoDija_reposatory/reposetory/load_data_reposatory.dart';
-import 'package:JoDija_reposatory/source/http/load_http_sources.dart';
-import 'package:JoDija_reposatory/utilis/models/base_data_model.dart';
+import 'package:jodija_repository/reposetory/load_data_reposatory.dart';
+import 'package:jodija_repository/source/http/load_http_sources.dart';
+import 'package:jodija_repository/utilis/models/base_data_model.dart';
 
 class ProductModel extends BaseEntityDataModel {
   final String id;

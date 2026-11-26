@@ -2,10 +2,11 @@
 # This is a generated file; do not edit or check into version control.
 export "FLUTTER_ROOT=/Users/moaz/Public/flutter"
 export "FLUTTER_APPLICATION_PATH=/Users/moaz/Desktop/delta/tools/JoDija_reposatory"
+export "FLUTTER_FRAMEWORK_SWIFT_PACKAGE_PATH=/Users/moaz/Desktop/delta/tools/JoDija_reposatory/macos/Flutter/ephemeral/Packages/.packages/FlutterFramework"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
-export "FLUTTER_BUILD_NAME=1.7.1"
-export "FLUTTER_BUILD_NUMBER=1.7.1"
+export "FLUTTER_BUILD_NAME=1.7.2"
+export "FLUTTER_BUILD_NUMBER=1.7.2"
 export "DART_OBFUSCATION=false"
 export "TRACK_WIDGET_CREATION=true"
 export "TREE_SHAKE_ICONS=false"
